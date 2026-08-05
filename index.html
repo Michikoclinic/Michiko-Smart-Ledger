@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#fff7ef">
   <title>Michiko Smart Ledger</title>
-  <link rel="stylesheet" href="github-pages/styles.css?v=20260805e">
+  <link rel="stylesheet" href="github-pages/styles.css?v=20260805f">
 </head>
 <body>
   <header class="topbar" id="top">
@@ -31,7 +31,7 @@
 
     <section class="ledger-card" id="ledger">
       <div class="table-scroll"><table>
-        <thead><tr><th>HN</th><th>คนไข้</th><th class="details">รายละเอียด</th><th>เงินสด</th><th>SCB</th><th>LP</th><th>บัตรเครดิต</th><th>Member</th><th>มัดจำ</th><th>ค้างชำระ</th><th>หมายเหตุ</th></tr></thead>
+        <thead><tr><th>HN</th><th>คนไข้</th><th class="details">รายละเอียด</th><th>เงินสด</th><th>SCB</th><th>LP</th><th>บัตร KBank</th><th>บัตร BBL</th><th>บัตร KTC</th><th>Member</th><th>มัดจำ</th><th>ค้างชำระ</th><th>หมายเหตุ</th></tr></thead>
         <tbody id="ledgerRows"></tbody>
         <tfoot id="ledgerTotal"></tfoot>
       </table></div>
@@ -39,14 +39,24 @@
 
     <section class="summary" id="daily"><div class="section-head"><div><p class="eyebrow">DAILY SUMMARY</p><h2>สรุปยอดประจำวัน</h2></div><span id="dailyDate">15 สิงหาคม 2569</span></div><div class="summary-grid" id="dailyCards"></div></section>
 
-    <section class="summary" id="monthly"><div class="section-head"><div><p class="eyebrow">MONTH TO DATE</p><h2>ยอดสะสมประจำเดือน</h2></div><span>1–15 สิงหาคม 2569 · สะสมต่อเนื่องถึงสิ้นเดือน</span></div><div class="month-scroll"><table><thead><tr><th>ยอดรับรวม</th><th>เงินสด</th><th>โอน SCB</th><th>โอน LP</th><th>บัตรเครดิต</th><th>Member</th><th>มัดจำ</th><th>ค้างชำระ</th></tr></thead><tbody id="monthTotals"></tbody></table></div></section>
+    <section class="summary" id="monthly"><div class="section-head"><div><p class="eyebrow">MONTH TO DATE</p><h2>ยอดสะสมประจำเดือน</h2></div><span>สะสมต่อเนื่องถึงสิ้นเดือน</span></div><div class="month-scroll"><table><thead><tr><th>ยอดรับรวม</th><th>เงินสด</th><th>โอน SCB</th><th>โอน LP</th><th>บัตร KBank</th><th>บัตร BBL</th><th>บัตร KTC</th><th>Member</th><th>มัดจำ</th><th>ค้างชำระ</th></tr></thead><tbody id="monthTotals"></tbody></table></div></section>
 
     <div class="print-action"><button id="printButton" aria-label="ปริ้นสมุดรายวัน"><span class="print-icon" aria-hidden="true">🖨️</span> ปริ้น</button></div>
-    <footer><span>Michiko Smart Ledger</span><span>ข้อมูลตัวอย่างสำหรับตรวจสอบหน้าจอ</span></footer>
+    <footer><span>Michiko Smart Ledger</span><span>กรุณาปริ้นหรือบันทึก PDF ก่อนปิดหรือรีเฟรชหน้า</span></footer>
   </main>
 
-  <div class="modal" id="modal" hidden><section class="dialog"><button class="close" id="closeButton" aria-label="ปิด">×</button><p class="eyebrow">NEW ENTRY</p><h2>เพิ่มรายการวันนี้</h2><form id="entryForm"><div class="form-grid"><label><span>HN *</span><input name="hn" required></label><label><span>ชื่อคนไข้ *</span><input name="patient" required></label></div><label><span>รายละเอียด *</span><textarea name="detail" rows="4" required></textarea></label><label><span>เงินสด</span><input name="cash" type="number" min="0"></label><div class="form-actions"><button type="button" id="cancelButton">ยกเลิก</button><button class="primary" type="submit">เพิ่มรายการ</button></div></form></section></div>
-  <script src="github-pages/app.js?v=20260805e"></script>
+  <div class="modal" id="modal" hidden><section class="dialog"><button class="close" id="closeButton" aria-label="ปิด">×</button><p class="eyebrow">NEW ENTRY</p><h2>เพิ่มรายการวันนี้</h2><form id="entryForm"><div class="form-grid"><label><span>HN *</span><input name="hn" required></label><label><span>ชื่อคนไข้ *</span><input name="patient" required></label></div><label><span>รายละเอียด *</span><textarea name="detail" rows="3" required></textarea></label><fieldset class="payment-section"><legend>เลือกวิธีการชำระเงิน</legend><p>เลือกได้มากกว่าหนึ่งช่องทาง แล้วใส่ยอดเฉพาะช่องที่เลือก</p><div class="payment-grid">
+    <label class="payment-option"><span><input type="checkbox" data-payment="cash"> เงินสด</span><input class="payment-amount" name="cash" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
+    <label class="payment-option"><span><input type="checkbox" data-payment="scb"> โอน SCB</span><input class="payment-amount" name="scb" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
+    <label class="payment-option"><span><input type="checkbox" data-payment="lp"> โอน LP</span><input class="payment-amount" name="lp" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
+    <label class="payment-option"><span><input type="checkbox" data-payment="cardKbank"> บัตรเครดิต · กสิกร</span><input class="payment-amount" name="cardKbank" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
+    <label class="payment-option"><span><input type="checkbox" data-payment="cardBbl"> บัตรเครดิต · กรุงเทพ</span><input class="payment-amount" name="cardBbl" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
+    <label class="payment-option"><span><input type="checkbox" data-payment="cardKtc"> บัตรเครดิต · KTC</span><input class="payment-amount" name="cardKtc" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
+    <label class="payment-option"><span><input type="checkbox" data-payment="member"> ใช้ Member</span><input class="payment-amount" name="member" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
+    <label class="payment-option"><span><input type="checkbox" data-payment="deposit"> ใช้มัดจำ</span><input class="payment-amount" name="deposit" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
+    <label class="payment-option"><span><input type="checkbox" data-payment="outstanding"> ค้างชำระ</span><input class="payment-amount" name="outstanding" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
+  </div></fieldset><div class="form-actions"><button type="button" id="cancelButton">ยกเลิก</button><button class="primary" type="submit">เพิ่มรายการ</button></div></form></section></div>
+  <script src="github-pages/app.js?v=20260805f"></script>
 </body>
 </html>
 

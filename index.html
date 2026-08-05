@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#fff7ef">
   <title>Michiko Smart Ledger</title>
-  <link rel="stylesheet" href="github-pages/styles.css?v=20260805c">
+  <link rel="stylesheet" href="github-pages/styles.css?v=20260805d">
 </head>
 <body>
   <header class="topbar" id="top">
@@ -22,12 +22,12 @@
 
     <section class="toolbar">
       <label><span>สาขา</span><select id="branch"><option>พหลโยธิน 21</option><option>EmSphere</option></select></label>
-      <div class="date-box"><button aria-label="วันก่อนหน้า">‹</button><div><small>วันเสาร์</small><b>15 สิงหาคม 2569</b></div><button aria-label="วันถัดไป">›</button></div>
+      <div class="date-box"><button id="previousDate" type="button" aria-label="วันก่อนหน้า">‹</button><label class="date-control"><small id="weekdayLabel">วันเสาร์</small><input id="ledgerDate" type="date" value="2026-08-15" aria-label="เลือกวันที่สมุดรายวัน"></label><button id="nextDate" type="button" aria-label="วันถัดไป">›</button></div>
       <label class="search"><span>⌕</span><input id="search" placeholder="ค้นหา HN, ชื่อ หรือรายละเอียด"></label>
     </section>
 
     <div class="ledger-meta"><span><i></i> เปิดรับรายการ <b id="branchName">พหลโยธิน 21</b></span><span><b id="rowCount">0</b> รายการ</span></div>
-    <section class="print-heading"><img src="github-pages/michiko-logo.png" alt="Michiko Aesthetics"><div><h2>สมุดรายวัน</h2><p>เอกสารสำหรับฝ่ายบัญชี</p></div><time class="print-date" datetime="2026-08-15">วันที่ 15 สิงหาคม 2569</time></section>
+    <section class="print-heading"><img src="github-pages/michiko-logo.png" alt="Michiko Aesthetics"><div><h2>สมุดรายวัน</h2><p>เอกสารสำหรับฝ่ายบัญชี</p></div><time class="print-date" id="printDate" datetime="2026-08-15">วันที่ 15 สิงหาคม 2569</time></section>
 
     <section class="ledger-card" id="ledger">
       <div class="table-scroll"><table>
@@ -37,7 +37,7 @@
       </table></div>
     </section>
 
-    <section class="summary" id="daily"><div class="section-head"><div><p class="eyebrow">DAILY SUMMARY</p><h2>สรุปยอดประจำวัน</h2></div><span>15 สิงหาคม 2569</span></div><div class="summary-grid" id="dailyCards"></div></section>
+    <section class="summary" id="daily"><div class="section-head"><div><p class="eyebrow">DAILY SUMMARY</p><h2>สรุปยอดประจำวัน</h2></div><span id="dailyDate">15 สิงหาคม 2569</span></div><div class="summary-grid" id="dailyCards"></div></section>
 
     <section class="summary" id="monthly"><div class="section-head"><div><p class="eyebrow">MONTH TO DATE</p><h2>ยอดสะสมประจำเดือน</h2></div><span>1–15 สิงหาคม 2569 · สะสมต่อเนื่องถึงสิ้นเดือน</span></div><div class="month-scroll"><table><thead><tr><th>ยอดรับรวม</th><th>เงินสด</th><th>โอน SCB</th><th>โอน LP</th><th>บัตรเครดิต</th><th>Member</th><th>มัดจำ</th><th>ค้างชำระ</th></tr></thead><tbody id="monthTotals"></tbody></table></div></section>
 
@@ -46,7 +46,7 @@
   </main>
 
   <div class="modal" id="modal" hidden><section class="dialog"><button class="close" id="closeButton" aria-label="ปิด">×</button><p class="eyebrow">NEW ENTRY</p><h2>เพิ่มรายการวันนี้</h2><form id="entryForm"><div class="form-grid"><label><span>HN *</span><input name="hn" required></label><label><span>ชื่อคนไข้ *</span><input name="patient" required></label></div><label><span>รายละเอียด *</span><textarea name="detail" rows="4" required></textarea></label><label><span>เงินสด</span><input name="cash" type="number" min="0"></label><div class="form-actions"><button type="button" id="cancelButton">ยกเลิก</button><button class="primary" type="submit">เพิ่มรายการ</button></div></form></section></div>
-  <script src="github-pages/app.js"></script>
+  <script src="github-pages/app.js?v=20260805d"></script>
 </body>
 </html>
 

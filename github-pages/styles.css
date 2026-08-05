@@ -42,3 +42,7 @@
 .ledger-card td.detail .payment-total-line{display:block;margin:5px 0 1px!important;padding:4px 6px!important;text-align:center!important;font-weight:800;border:1px solid #b6983f!important;background:#fff0a8!important;background-image:linear-gradient(#fff0a8,#fff0a8)!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color:#3f302b!important}
 .ledger-card td:nth-child(2),.ledger-card td:nth-child(3),.ledger-card td:nth-child(14){overflow-wrap:anywhere}
 }
+
+/* Strong payment-total highlight for screen and print */
+td.detail .payment-total-line{display:block!important;margin:6px 0 2px!important;padding:5px 8px!important;text-align:center!important;font-weight:900!important;color:#3b2b20!important;border:2px solid #d2a900!important;border-radius:5px!important;background-color:#ffe16b!important;background-image:linear-gradient(#ffe16b,#ffe16b)!important;box-shadow:inset 0 0 0 9999px rgba(255,225,107,.96)!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color-adjust:exact!important}
+@media print{td.detail .payment-total-line{border:2px solid #b48b00!important;background:#ffe16b!important;background-image:linear-gradient(#ffe16b,#ffe16b)!important;box-shadow:inset 0 0 0 9999px #ffe16b!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}}

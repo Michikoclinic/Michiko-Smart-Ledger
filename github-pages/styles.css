@@ -20,4 +20,7 @@
 .month-heading-actions{display:flex;align-items:center;gap:9px}.month-heading-actions>span{color:var(--muted);font-size:12px}.month-heading-actions button{padding:7px 10px;border:1px solid #dfc4b9;border-radius:9px;background:#fff7df;color:var(--wine-dark);font-size:11px;font-weight:700;cursor:pointer}.month-heading-actions button:hover{background:#f5dda1}.month-helper{margin:-8px 0 14px;color:var(--muted);font-size:12px}.month-input-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.month-input-grid label{margin:0!important}.month-input-grid label span{display:block;margin-bottom:4px;color:#765f58;font-size:11px}.month-input-grid input{width:100%;padding:10px!important}
 @media(max-width:700px){.month-heading-actions{align-items:flex-start;flex-direction:column}.month-input-grid{grid-template-columns:1fr 1fr}}
 @media print{.month-heading-actions button{display:none!important}.month-heading-actions>span{font-size:6.5pt;color:#000}.month-modal{display:none!important}}
+.pdf-button{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:11px 15px;border:1px solid #d7b968;border-radius:11px;background:#fff0bd;color:#65452f;font-weight:700;cursor:pointer}.pdf-button:hover{background:#f3d982;transform:translateY(-1px)}.print-action{gap:8px}
+.heading-actions{flex-wrap:wrap}
+@media print{.pdf-button{display:none!important}}
 

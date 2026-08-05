@@ -23,7 +23,7 @@ function formatDetails(text){return String(text).split(/\r?\n/).flatMap(line=>{c
 function ledgerContext(){const branch=document.querySelector("#branch")?.value||"default";const date=document.querySelector("#ledgerDate")?.value||"";return {branch,date}}
 function ledgerStorageKey(){const {branch,date}=ledgerContext();return `${ledgerStoragePrefix}:${encodeURIComponent(branch)}:${date}`}
 function monthStorageKey(){const {branch,date}=ledgerContext();return `${monthStoragePrefix}:${encodeURIComponent(branch)}:${date.slice(0,7)}`}
-function loadSavedLedger(){try{const saved=JSON.parse(localStorage.getItem(ledgerStorageKey())||"[]");rows=Array.isArray(saved)?saved:[]}catch{rows=[]}try{const savedMonth=JSON.parse(localStorage.getItem(monthStorageKey())||"{}");monthBase=Object.fromEntries(keys.map(key=>[key,Number(savedMonth[key])||0]))}catch{monthBase=Object.fromEntries(keys.map(key=>[key,0]))}}
+function loadSavedLedger(){try{const saved=JSON.parse(localStorage.getItem(ledgerStorageKey())||"[]");rows=Array.isArray(saved)?saved.map(row=>({...row,detail:Array.isArray(row.detail)?row.detail.map(formatNumbersInText):formatDetails(formatNumbersInText(row.detail||""))})):[]}catch{rows=[]}try{const savedMonth=JSON.parse(localStorage.getItem(monthStorageKey())||"{}");monthBase=Object.fromEntries(keys.map(key=>[key,Number(savedMonth[key])||0]))}catch{monthBase=Object.fromEntries(keys.map(key=>[key,0]))}}
 function saveLedger(){try{localStorage.setItem(ledgerStorageKey(),JSON.stringify(rows))}catch{}}
 function saveMonthBase(){try{localStorage.setItem(monthStorageKey(),JSON.stringify(monthBase))}catch{}}
 function totals(){return rows.reduce((a,r)=>(keys.forEach(k=>a[k]+=(r[k]||0)),a),Object.fromEntries(keys.map(k=>[k,0])))}
@@ -63,6 +63,7 @@ document.querySelectorAll(".payment-amount,.month-input-grid input").forEach(inp
 document.querySelectorAll("[data-payment]").forEach(box=>box.addEventListener("change",()=>{const option=box.closest(".payment-option");const amount=option.querySelector(".payment-amount");option.classList.toggle("selected",box.checked);amount.disabled=!box.checked;if(box.checked)amount.focus();else amount.value=""}));
 const entryForm=document.querySelector("#entryForm");
 const detailInput=entryForm.elements.detail;
+detailInput.addEventListener("input",()=>{const cursor=detailInput.selectionStart??detailInput.value.length;const before=detailInput.value;const formatted=formatNumbersInText(before);if(formatted!==before){detailInput.value=formatted;const next=cursor+(formatted.length-before.length);detailInput.setSelectionRange(next,next)}});
 detailInput.addEventListener("blur",()=>{detailInput.value=formatNumbersInText(detailInput.value)});
 const phraseInput=document.querySelector("#phraseInput");
 const phraseChips=document.querySelector("#phraseChips");

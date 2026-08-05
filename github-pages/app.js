@@ -1,7 +1,7 @@
 const rows=[];
-const keys=["cash","scb","lp","card","member","deposit","outstanding"];
-const labels=["เงินสด","โอน · SCB","โอน · LP","บัตรเครดิต","ใช้ Member","ใช้มัดจำ","ค้างชำระ"];
-const monthBase={cash:0,scb:0,lp:0,card:0,member:0,deposit:0,outstanding:0};
+const keys=["cash","scb","lp","cardKbank","cardBbl","cardKtc","member","deposit","outstanding"];
+const labels=["เงินสด","โอน · SCB","โอน · LP","บัตร · กสิกร","บัตร · กรุงเทพ","บัตร · KTC","ใช้ Member","ใช้มัดจำ","ค้างชำระ"];
+const monthBase=Object.fromEntries(keys.map(key=>[key,0]));
 const money=n=>new Intl.NumberFormat("th-TH",{maximumFractionDigits:0}).format(n||0);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function totals(){return rows.reduce((a,r)=>(keys.forEach(k=>a[k]+=(r[k]||0)),a),Object.fromEntries(keys.map(k=>[k,0])))}
@@ -9,11 +9,11 @@ function render(){
  const q=document.querySelector("#search").value.trim().toLowerCase();
  const filtered=rows.filter(r=>[r.hn,r.patient,...r.detail].join(" ").toLowerCase().includes(q));
  document.querySelector("#rowCount").textContent=rows.length;
- document.querySelector("#ledgerRows").innerHTML=filtered.map(r=>`<tr><td><b>${esc(r.hn)}</b>${r.isNew?'<span class="new">NEW</span>':''}</td><td>${esc(r.patient)}</td><td class="detail">${r.detail.map(x=>`<span>${esc(x)}</span>`).join("")}</td>${keys.map(k=>`<td>${r[k]?money(r[k]):""}</td>`).join("")}<td>${esc(r.remark||"")}</td></tr>`).join("")||'<tr><td colspan="11">ไม่พบรายการที่ค้นหา</td></tr>';
- const t=totals(); const daily=t.cash+t.scb+t.lp+t.card;
+ document.querySelector("#ledgerRows").innerHTML=filtered.map(r=>`<tr><td><b>${esc(r.hn)}</b>${r.isNew?'<span class="new">NEW</span>':''}</td><td>${esc(r.patient)}</td><td class="detail">${r.detail.map(x=>`<span>${esc(x)}</span>`).join("")}</td>${keys.map(k=>`<td>${r[k]?money(r[k]):""}</td>`).join("")}<td>${esc(r.remark||"")}</td></tr>`).join("")||'<tr><td colspan="13">ยังไม่มีรายการสำหรับวันนี้</td></tr>';
+ const t=totals(); const daily=t.cash+t.scb+t.lp+t.cardKbank+t.cardBbl+t.cardKtc;
  document.querySelector("#ledgerTotal").innerHTML=`<tr><td colspan="3">รวมประจำวัน</td>${keys.map(k=>`<td>${t[k]?money(t[k]):""}</td>`).join("")}<td></td></tr>`;
  document.querySelector("#dailyCards").innerHTML=[["ยอดรับรวมวันนี้",daily],...keys.map((k,i)=>[labels[i],t[k]])].map(x=>`<article class="card"><span>${x[0]}</span><strong>${money(x[1])}</strong><small>บาท</small></article>`).join("");
- const m=Object.fromEntries(keys.map(k=>[k,monthBase[k]+t[k]])); const mg=m.cash+m.scb+m.lp+m.card;
+ const m=Object.fromEntries(keys.map(k=>[k,monthBase[k]+t[k]])); const mg=m.cash+m.scb+m.lp+m.cardKbank+m.cardBbl+m.cardKtc;
  document.querySelector("#monthTotals").innerHTML=`<tr><td>${money(mg)}</td>${keys.map(k=>`<td>${money(m[k])}</td>`).join("")}</tr>`;
 }
 document.querySelector("#search").addEventListener("input",render);
@@ -34,10 +34,11 @@ ledgerDate.addEventListener("change",()=>updateDate(ledgerDate.value));
 document.querySelector("#previousDate").onclick=()=>moveDate(-1);
 document.querySelector("#nextDate").onclick=()=>moveDate(1);
 const modal=document.querySelector("#modal");
-document.querySelector("#addButton").onclick=()=>{modal.hidden=false;modal.querySelector("input").focus()};
+document.querySelectorAll("[data-payment]").forEach(box=>box.addEventListener("change",()=>{const option=box.closest(".payment-option");const amount=option.querySelector(".payment-amount");option.classList.toggle("selected",box.checked);amount.disabled=!box.checked;if(box.checked)amount.focus();else amount.value=""}));
+document.querySelector("#addButton").onclick=()=>{modal.hidden=false;modal.querySelector('input[name="hn"]').focus()};
 document.querySelector("#closeButton").onclick=document.querySelector("#cancelButton").onclick=()=>modal.hidden=true;
 modal.addEventListener("click",e=>{if(e.target===modal)modal.hidden=true});
-document.querySelector("#entryForm").addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);rows.push({hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),detail:[String(f.get("detail"))],cash:Number(f.get("cash"))||0});e.target.reset();modal.hidden=true;render()});
+document.querySelector("#entryForm").addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,Number(f.get(key))||0]));rows.push({hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),detail:[String(f.get("detail"))],...payments});e.target.reset();e.target.querySelectorAll(".payment-option").forEach(option=>option.classList.remove("selected"));e.target.querySelectorAll(".payment-amount").forEach(input=>input.disabled=true);modal.hidden=true;render()});
 document.querySelector("#printButton").onclick=()=>window.print();
 updateDate(ledgerDate.value);
 render();

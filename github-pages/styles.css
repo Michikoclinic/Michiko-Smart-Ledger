@@ -54,3 +54,7 @@ td.detail .payment-total-line{display:table!important;width:auto!important;max-w
 /* Minimal payment-total text highlight */
 td.detail .payment-total-line{display:table!important;width:auto!important;max-width:100%!important;margin:2px auto 0!important;padding:0 3px!important;text-align:center!important;font-weight:800!important;line-height:1.15!important;border:0!important;border-radius:2px!important;background:#ffe680!important;background-image:linear-gradient(#ffe680,#ffe680)!important;box-shadow:none!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}
 @media print{td.detail .payment-total-line{display:table!important;width:auto!important;margin:2px auto 0!important;padding:0 3px!important;font-size:7.5pt!important;line-height:1.15!important;border:0!important;background:#ffe680!important;background-image:linear-gradient(#ffe680,#ffe680)!important}}
+
+/* Centered, readable ledger table headings */
+.ledger-card thead th{text-align:center!important;vertical-align:middle!important;white-space:normal!important;line-height:1.3!important;padding:10px 6px!important;word-break:keep-all}
+@media print{.ledger-card thead th{text-align:center!important;vertical-align:middle!important;white-space:normal!important;line-height:1.2!important;padding:4px 3px!important;font-size:7.2pt!important;word-break:keep-all}}

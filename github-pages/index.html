@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#fff7ef">
   <title>Michiko Smart Ledger</title>
-  <link rel="stylesheet" href="styles.css?v=20260805f">
+  <link rel="stylesheet" href="styles.css?v=20260805g">
 </head>
 <body>
   <header class="topbar" id="top">
@@ -17,7 +17,7 @@
   <main class="workspace">
     <section class="page-heading">
       <div><p class="eyebrow">DAILY LEDGER</p><h1>สมุดรายวัน</h1><p>กรอกข้อมูลประจำวัน แล้วปริ้นหรือบันทึก PDF ก่อนปิดหรือรีเฟรชหน้า</p></div>
-      <button class="primary" id="addButton">＋ เพิ่มรายการ</button>
+      <div class="heading-actions"><button class="quick-print" id="printTopButton" type="button"><span aria-hidden="true">🖨️</span> ปริ้น</button><button class="primary" id="addButton">＋ เพิ่มรายการ</button></div>
     </section>
 
     <section class="toolbar">
@@ -55,8 +55,8 @@
     <label class="payment-option"><span><input type="checkbox" data-payment="member"> ใช้ Member</span><input class="payment-amount" name="member" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
     <label class="payment-option"><span><input type="checkbox" data-payment="deposit"> ใช้มัดจำ</span><input class="payment-amount" name="deposit" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
     <label class="payment-option"><span><input type="checkbox" data-payment="outstanding"> ค้างชำระ</span><input class="payment-amount" name="outstanding" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
-  </div></fieldset><div class="form-actions"><button type="button" id="cancelButton">ยกเลิก</button><button class="primary" type="submit">เพิ่มรายการ</button></div></form></section></div>
-  <script src="app.js?v=20260805f"></script>
+  </div></fieldset><div class="form-actions"><button type="button" id="cancelButton">ยกเลิก</button><button class="primary" id="saveEntryButton" type="submit">บันทึกรายการ</button></div></form></section></div>
+  <script src="app.js?v=20260805g"></script>
 </body>
 </html>
 

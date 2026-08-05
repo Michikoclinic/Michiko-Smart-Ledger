@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#fff7ef">
   <title>Michiko Smart Ledger</title>
-  <link rel="stylesheet" href="styles.css?v=20260805b">
+  <link rel="stylesheet" href="styles.css?v=20260805c">
 </head>
 <body>
   <header class="topbar" id="top">
@@ -27,7 +27,7 @@
     </section>
 
     <div class="ledger-meta"><span><i></i> เปิดรับรายการ <b id="branchName">พหลโยธิน 21</b></span><span><b id="rowCount">0</b> รายการ</span></div>
-    <section class="print-heading"><img src="michiko-logo.png" alt="Michiko Aesthetics"><div><h2>สมุดรายวัน</h2><p>เอกสารสำหรับฝ่ายบัญชี</p></div></section>
+    <section class="print-heading"><img src="michiko-logo.png" alt="Michiko Aesthetics"><div><h2>สมุดรายวัน</h2><p>เอกสารสำหรับฝ่ายบัญชี</p></div><time class="print-date" datetime="2026-08-15">วันที่ 15 สิงหาคม 2569</time></section>
 
     <section class="ledger-card" id="ledger">
       <div class="table-scroll"><table>
@@ -41,7 +41,7 @@
 
     <section class="summary" id="monthly"><div class="section-head"><div><p class="eyebrow">MONTH TO DATE</p><h2>ยอดสะสมประจำเดือน</h2></div><span>1–15 สิงหาคม 2569 · สะสมต่อเนื่องถึงสิ้นเดือน</span></div><div class="month-scroll"><table><thead><tr><th>ยอดรับรวม</th><th>เงินสด</th><th>โอน SCB</th><th>โอน LP</th><th>บัตรเครดิต</th><th>Member</th><th>มัดจำ</th><th>ค้างชำระ</th></tr></thead><tbody id="monthTotals"></tbody></table></div></section>
 
-    <div class="print-action"><button id="printButton">▣ ปริ้น</button></div>
+    <div class="print-action"><button id="printButton" aria-label="ปริ้นสมุดรายวัน"><span class="print-icon" aria-hidden="true">🖨️</span> ปริ้น</button></div>
     <footer><span>Michiko Smart Ledger</span><span>ข้อมูลตัวอย่างสำหรับตรวจสอบหน้าจอ</span></footer>
   </main>
 

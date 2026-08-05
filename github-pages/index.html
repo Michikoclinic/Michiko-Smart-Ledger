@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#fff7ef">
   <title>Michiko Smart Ledger</title>
-  <link rel="stylesheet" href="styles.css?v=20260805k">
+  <link rel="stylesheet" href="styles.css?v=20260805l">
 </head>
 <body>
   <header class="topbar" id="top">
@@ -17,7 +17,7 @@
   <main class="workspace">
     <section class="page-heading">
       <div><p class="eyebrow">DAILY LEDGER</p><h1>สมุดรายวัน</h1><p>กรอกข้อมูลประจำวัน แล้วปริ้นหรือบันทึก PDF ก่อนปิดหรือรีเฟรชหน้า</p></div>
-      <div class="heading-actions"><button class="quick-print" id="printTopButton" type="button"><span aria-hidden="true">🖨️</span> ปริ้น</button><button class="primary" id="addButton">＋ เพิ่มรายการ</button></div>
+      <div class="heading-actions"><button class="quick-print" id="printTopButton" type="button"><span aria-hidden="true">🖨️</span> ปริ้น</button><button class="pdf-button" id="savePdfTopButton" type="button"><span aria-hidden="true">📄</span> บันทึก PDF</button><button class="primary" id="addButton">＋ เพิ่มรายการ</button></div>
     </section>
 
     <section class="toolbar">
@@ -41,7 +41,7 @@
 
     <section class="summary" id="monthly"><div class="section-head"><div><p class="eyebrow">MONTH TO DATE</p><h2>ยอดสะสมประจำเดือน</h2></div><div class="month-heading-actions"><span id="monthRange">รวมตั้งแต่วันที่ 1 ถึงวันนี้</span><button id="editMonthButton" type="button">✎ กรอกยอดสะสมถึงเมื่อวาน</button></div></div><div class="month-scroll"><table><thead><tr><th>ยอดรับรวม</th><th>เงินสด</th><th>โอน SCB</th><th>โอน LP</th><th>บัตร KBank</th><th>บัตร BBL</th><th>บัตร KTC</th><th>Member</th><th>มัดจำ</th><th>ค้างชำระ</th></tr></thead><tbody id="monthTotals"></tbody></table></div></section>
 
-    <div class="print-action"><button id="printButton" aria-label="ปริ้นสมุดรายวัน"><span class="print-icon" aria-hidden="true">🖨️</span> ปริ้น</button></div>
+    <div class="print-action"><button class="pdf-button" id="savePdfButton" type="button"><span aria-hidden="true">📄</span> บันทึก PDF</button><button id="printButton" aria-label="ปริ้นสมุดรายวัน"><span class="print-icon" aria-hidden="true">🖨️</span> ปริ้น</button></div>
     <footer><span>Michiko Smart Ledger</span><span>กรุณาปริ้นหรือบันทึก PDF ก่อนปิดหรือรีเฟรชหน้า</span></footer>
   </main>
 
@@ -61,7 +61,7 @@
     <label><span>บัตรกสิกร</span><input name="cardKbank" type="number" min="0"></label><label><span>บัตรกรุงเทพ</span><input name="cardBbl" type="number" min="0"></label><label><span>บัตร KTC</span><input name="cardKtc" type="number" min="0"></label>
     <label><span>Member</span><input name="member" type="number" min="0"></label><label><span>มัดจำ</span><input name="deposit" type="number" min="0"></label><label><span>ค้างชำระ</span><input name="outstanding" type="number" min="0"></label>
   </div><div class="form-actions"><button type="button" id="cancelMonthButton">ยกเลิก</button><button class="primary" type="submit">บันทึกยอดเดือน</button></div></form></section></div>
-  <script src="app.js?v=20260805k"></script>
+  <script src="app.js?v=20260805l"></script>
 </body>
 </html>
 

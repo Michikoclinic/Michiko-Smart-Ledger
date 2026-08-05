@@ -1,4 +1,6 @@
-const rows=[];
+let rows=[];
+const ledgerStoragePrefix="michiko-ledger-rows-v1";
+const monthStoragePrefix="michiko-month-base-v1";
 const keys=["cash","scb","lp","cardKbank","cardBbl","cardKtc","member","deposit","outstanding"];
 const labels=["เงินสด","โอน · SCB","โอน · LP","บัตร · กสิกร","บัตร · กรุงเทพ","บัตร · KTC","ใช้ Member","ใช้มัดจำ","ค้างชำระ"];
 let monthBase=Object.fromEntries(keys.map(key=>[key,0]));
@@ -18,6 +20,12 @@ const formatMoneyInput=value=>{const digits=String(value??"").replace(/\D/g,"").
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function formatNumbersInText(text){return String(text).replace(/(?<![\d,])\d{4,}(?![\d,])/g,value=>Number(value).toLocaleString("en-US"))}
 function formatDetails(text){return String(text).split(/\r?\n/).flatMap(line=>{const marker=line.indexOf("รวมยอดชำระ");return marker>0?[line.slice(0,marker).trimEnd(),line.slice(marker)]:[line]})}
+function ledgerContext(){const branch=document.querySelector("#branch")?.value||"default";const date=document.querySelector("#ledgerDate")?.value||"";return {branch,date}}
+function ledgerStorageKey(){const {branch,date}=ledgerContext();return `${ledgerStoragePrefix}:${encodeURIComponent(branch)}:${date}`}
+function monthStorageKey(){const {branch,date}=ledgerContext();return `${monthStoragePrefix}:${encodeURIComponent(branch)}:${date.slice(0,7)}`}
+function loadSavedLedger(){try{const saved=JSON.parse(localStorage.getItem(ledgerStorageKey())||"[]");rows=Array.isArray(saved)?saved:[]}catch{rows=[]}try{const savedMonth=JSON.parse(localStorage.getItem(monthStorageKey())||"{}");monthBase=Object.fromEntries(keys.map(key=>[key,Number(savedMonth[key])||0]))}catch{monthBase=Object.fromEntries(keys.map(key=>[key,0]))}}
+function saveLedger(){try{localStorage.setItem(ledgerStorageKey(),JSON.stringify(rows))}catch{}}
+function saveMonthBase(){try{localStorage.setItem(monthStorageKey(),JSON.stringify(monthBase))}catch{}}
 function totals(){return rows.reduce((a,r)=>(keys.forEach(k=>a[k]+=(r[k]||0)),a),Object.fromEntries(keys.map(k=>[k,0])))}
 function render(){
  const q=document.querySelector("#search").value.trim().toLowerCase();
@@ -32,7 +40,7 @@ function render(){
  document.querySelectorAll("[data-edit]").forEach(button=>button.addEventListener("click",()=>openEditor(Number(button.dataset.edit))));
 }
 document.querySelector("#search").addEventListener("input",render);
-document.querySelector("#branch").addEventListener("change",e=>document.querySelector("#branchName").textContent=e.target.value);
+document.querySelector("#branch").addEventListener("change",e=>{document.querySelector("#branchName").textContent=e.target.value;loadSavedLedger();render()});
 const ledgerDate=document.querySelector("#ledgerDate");
 const today=new Date();
 ledgerDate.value=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
@@ -45,8 +53,8 @@ function updateDate(value){
  document.querySelector("#monthRange").textContent=`รวมวันที่ 1–${date.getDate()} ${new Intl.DateTimeFormat("th-TH",{month:"long",year:"numeric"}).format(date)}`;
  const printDate=document.querySelector("#printDate"); printDate.textContent=`วันที่ ${full}`; printDate.dateTime=value;
 }
-function moveDate(days){const date=new Date(`${ledgerDate.value}T12:00:00`);date.setDate(date.getDate()+days);ledgerDate.value=`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;updateDate(ledgerDate.value)}
-ledgerDate.addEventListener("change",()=>updateDate(ledgerDate.value));
+function moveDate(days){const date=new Date(`${ledgerDate.value}T12:00:00`);date.setDate(date.getDate()+days);ledgerDate.value=`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;updateDate(ledgerDate.value);loadSavedLedger();render()}
+ledgerDate.addEventListener("change",()=>{updateDate(ledgerDate.value);loadSavedLedger();render()});
 document.querySelector("#previousDate").onclick=()=>moveDate(-1);
 document.querySelector("#nextDate").onclick=()=>moveDate(1);
 const modal=document.querySelector("#modal");
@@ -70,15 +78,16 @@ function openEditor(index){resetEditor();editingIndex=index;const row=rows[index
 document.querySelector("#addButton").onclick=()=>{resetEditor();modal.hidden=false;entryForm.elements.hn.focus()};
 document.querySelector("#closeButton").onclick=document.querySelector("#cancelButton").onclick=()=>modal.hidden=true;
 modal.addEventListener("click",e=>{if(e.target===modal)modal.hidden=true});
-entryForm.addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,parseMoney(f.get(key))]));const record={hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),detail:formatDetails(formatNumbersInText(f.get("detail"))),...payments};if(editingIndex===null)rows.push(record);else rows[editingIndex]=record;resetEditor();modal.hidden=true;render()});
+entryForm.addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,parseMoney(f.get(key))]));const record={hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),detail:formatDetails(formatNumbersInText(f.get("detail"))),...payments};if(editingIndex===null)rows.push(record);else rows[editingIndex]=record;saveLedger();resetEditor();modal.hidden=true;render()});
 document.querySelector("#printButton").onclick=document.querySelector("#printTopButton").onclick=()=>window.print();
 document.querySelector("#savePdfButton").onclick=document.querySelector("#savePdfTopButton").onclick=()=>window.print();
 const monthForm=document.querySelector("#monthForm");
 document.querySelector("#editMonthButton").onclick=()=>{keys.forEach(key=>monthForm.elements[key].value=monthBase[key]?money(monthBase[key]):"");monthModal.hidden=false;monthForm.elements.cash.focus()};
 document.querySelector("#closeMonthButton").onclick=document.querySelector("#cancelMonthButton").onclick=()=>monthModal.hidden=true;
 monthModal.addEventListener("click",event=>{if(event.target===monthModal)monthModal.hidden=true});
-monthForm.addEventListener("submit",event=>{event.preventDefault();const form=new FormData(monthForm);monthBase=Object.fromEntries(keys.map(key=>[key,parseMoney(form.get(key))]));monthModal.hidden=true;render()});
+monthForm.addEventListener("submit",event=>{event.preventDefault();const form=new FormData(monthForm);monthBase=Object.fromEntries(keys.map(key=>[key,parseMoney(form.get(key))]));saveMonthBase();monthModal.hidden=true;render()});
 updateDate(ledgerDate.value);
+loadSavedLedger();
 renderPhrases();
 render();
 

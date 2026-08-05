@@ -1,7 +1,7 @@
 const rows=[];
 const keys=["cash","scb","lp","cardKbank","cardBbl","cardKtc","member","deposit","outstanding"];
 const labels=["เงินสด","โอน · SCB","โอน · LP","บัตร · กสิกร","บัตร · กรุงเทพ","บัตร · KTC","ใช้ Member","ใช้มัดจำ","ค้างชำระ"];
-const monthBase=Object.fromEntries(keys.map(key=>[key,0]));
+let monthBase=Object.fromEntries(keys.map(key=>[key,0]));
 let editingIndex=null;
 const phraseStorageKey="michiko-frequent-phrases-v1";
 let frequentPhrases=[];
@@ -33,6 +33,7 @@ function updateDate(value){
  const weekday=new Intl.DateTimeFormat("th-TH",{weekday:"long"}).format(date);
  document.querySelector("#weekdayLabel").textContent=weekday;
  document.querySelector("#dailyDate").textContent=full;
+ document.querySelector("#monthRange").textContent=`รวมวันที่ 1–${date.getDate()} ${new Intl.DateTimeFormat("th-TH",{month:"long",year:"numeric"}).format(date)}`;
  const printDate=document.querySelector("#printDate"); printDate.textContent=`วันที่ ${full}`; printDate.dateTime=value;
 }
 function moveDate(days){const date=new Date(`${ledgerDate.value}T12:00:00`);date.setDate(date.getDate()+days);ledgerDate.value=`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;updateDate(ledgerDate.value)}
@@ -40,6 +41,7 @@ ledgerDate.addEventListener("change",()=>updateDate(ledgerDate.value));
 document.querySelector("#previousDate").onclick=()=>moveDate(-1);
 document.querySelector("#nextDate").onclick=()=>moveDate(1);
 const modal=document.querySelector("#modal");
+const monthModal=document.querySelector("#monthModal");
 document.querySelectorAll("[data-payment]").forEach(box=>box.addEventListener("change",()=>{const option=box.closest(".payment-option");const amount=option.querySelector(".payment-amount");option.classList.toggle("selected",box.checked);amount.disabled=!box.checked;if(box.checked)amount.focus();else amount.value=""}));
 const entryForm=document.querySelector("#entryForm");
 const detailInput=entryForm.elements.detail;
@@ -58,6 +60,11 @@ document.querySelector("#closeButton").onclick=document.querySelector("#cancelBu
 modal.addEventListener("click",e=>{if(e.target===modal)modal.hidden=true});
 entryForm.addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,Number(f.get(key))||0]));const record={hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),detail:formatDetails(f.get("detail")),...payments};if(editingIndex===null)rows.push(record);else rows[editingIndex]=record;resetEditor();modal.hidden=true;render()});
 document.querySelector("#printButton").onclick=document.querySelector("#printTopButton").onclick=()=>window.print();
+const monthForm=document.querySelector("#monthForm");
+document.querySelector("#editMonthButton").onclick=()=>{keys.forEach(key=>monthForm.elements[key].value=monthBase[key]||"");monthModal.hidden=false;monthForm.elements.cash.focus()};
+document.querySelector("#closeMonthButton").onclick=document.querySelector("#cancelMonthButton").onclick=()=>monthModal.hidden=true;
+monthModal.addEventListener("click",event=>{if(event.target===monthModal)monthModal.hidden=true});
+monthForm.addEventListener("submit",event=>{event.preventDefault();const form=new FormData(monthForm);monthBase=Object.fromEntries(keys.map(key=>[key,Number(form.get(key))||0]));monthModal.hidden=true;render()});
 updateDate(ledgerDate.value);
 renderPhrases();
 render();

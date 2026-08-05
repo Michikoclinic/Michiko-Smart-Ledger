@@ -60,6 +60,7 @@ document.querySelector("#closeButton").onclick=document.querySelector("#cancelBu
 modal.addEventListener("click",e=>{if(e.target===modal)modal.hidden=true});
 entryForm.addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,Number(f.get(key))||0]));const record={hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),detail:formatDetails(f.get("detail")),...payments};if(editingIndex===null)rows.push(record);else rows[editingIndex]=record;resetEditor();modal.hidden=true;render()});
 document.querySelector("#printButton").onclick=document.querySelector("#printTopButton").onclick=()=>window.print();
+document.querySelector("#savePdfButton").onclick=document.querySelector("#savePdfTopButton").onclick=()=>window.print();
 const monthForm=document.querySelector("#monthForm");
 document.querySelector("#editMonthButton").onclick=()=>{keys.forEach(key=>monthForm.elements[key].value=monthBase[key]||"");monthModal.hidden=false;monthForm.elements.cash.focus()};
 document.querySelector("#closeMonthButton").onclick=document.querySelector("#cancelMonthButton").onclick=()=>monthModal.hidden=true;

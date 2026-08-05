@@ -1,10 +1,4 @@
-const rows=[
- {hn:"DEMO001",patient:"คนไข้ตัวอย่าง A",detail:["รายการสาธิต: ซื้อคอร์ส","ใช้ครั้งที่ 1/5 · เหลือ 4 ครั้ง"],remark:"ข้อมูลสาธิต",isNew:true},
- {hn:"DEMO002",patient:"คนไข้ตัวอย่าง B",detail:["รายการสาธิต: ใช้ Member","ยอดคงเหลือเป็นข้อมูลตัวอย่าง"]},
- {hn:"DEMO003",patient:"คนไข้ตัวอย่าง C",detail:["รายการสาธิต: ใช้มัดจำ","ยอดมัดจำเป็นข้อมูลตัวอย่าง"]},
- {hn:"DEMO004",patient:"คนไข้ตัวอย่าง D",detail:["รายการสาธิต: ทรีตเมนต์","รายละเอียดเพื่อทดสอบหน้าจอ"],isNew:true},
- {hn:"DEMO005",patient:"คนไข้ตัวอย่าง E",detail:["รายการสาธิต: ใช้คอร์สครั้งที่ 2/5","เหลือ 3 ครั้ง"],remark:"ข้อมูลสาธิต"}
-];
+const rows=[];
 const keys=["cash","scb","lp","card","member","deposit","outstanding"];
 const labels=["เงินสด","โอน · SCB","โอน · LP","บัตรเครดิต","ใช้ Member","ใช้มัดจำ","ค้างชำระ"];
 const monthBase={cash:0,scb:0,lp:0,card:0,member:0,deposit:0,outstanding:0};
@@ -25,6 +19,8 @@ function render(){
 document.querySelector("#search").addEventListener("input",render);
 document.querySelector("#branch").addEventListener("change",e=>document.querySelector("#branchName").textContent=e.target.value);
 const ledgerDate=document.querySelector("#ledgerDate");
+const today=new Date();
+ledgerDate.value=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
 function updateDate(value){
  const date=new Date(`${value}T12:00:00`);
  const full=new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(date);

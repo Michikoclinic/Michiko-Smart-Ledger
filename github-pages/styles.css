@@ -25,4 +25,6 @@
 @media print{.pdf-button{display:none!important}}
 .phrase-toggle{padding:6px 10px;border:1px dashed #cfae9e;border-radius:999px;background:#fffaf1;color:var(--wine);font-size:11px;font-weight:700;cursor:pointer}.phrase-toggle:hover{background:#f7e6df}
 .phrase-chip.suggested{border-color:#d1aa43;background:#fff0a8;box-shadow:0 3px 9px rgba(135,90,23,.1)}
+.phrase-section{margin:9px 0;padding:9px}.phrase-heading{align-items:center}.phrase-heading strong{font-size:12px}.phrase-heading small{font-size:9px}.phrase-add input{min-width:180px;padding:6px 8px!important}.phrase-add button{padding:6px 8px;font-size:11px}.phrase-chips{gap:4px;margin-top:7px}.phrase-chip{gap:5px;padding:4px 6px 4px 8px;font-size:11px}.phrase-chip i{width:15px;height:15px}.dialog .detail-input{min-height:125px;line-height:1.5;padding:11px!important}
+@media(max-width:600px){.dialog .detail-input{min-height:110px}}
 

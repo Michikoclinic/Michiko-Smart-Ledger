@@ -1,13 +1,13 @@
 const rows=[
- {hn:"M1286",patient:"คุณสมหญิง",detail:["ซื้อคอร์ส Dual Yellow 5 ครั้ง ราคา 28,000 บาท","ใช้ครั้งที่ 1/5 · เหลือ 4 ครั้ง"],scb:28000,remark:"นัดครั้งถัดไป 12 ส.ค.",isNew:true},
- {hn:"M0942",patient:"คุณบี",detail:["ใช้ Member 8,000 บาท","ยอดก่อนใช้ 50,000 บาท · เหลือ 42,000 บาท"],member:8000},
- {hn:"M1108",patient:"คุณมุก",detail:["ใช้มัดจำ 3,000 บาท","มัดจำเดิม 5,000 บาท · เหลือ 2,000 บาท"],deposit:3000,cash:1500},
- {hn:"M1279",patient:"คุณฟ้า",detail:["ทรีตเมนต์ Aura Glow","ได้รับของขวัญ Birthday Mask"],card:6500,isNew:true},
- {hn:"M0831",patient:"คุณแอน",detail:["ใช้ Dual Yellow ครั้งที่ 2/5","เหลือ 3 ครั้ง"],scb:2500,outstanding:2000,remark:"ติดตามยอดค้างชำระ"}
+ {hn:"DEMO001",patient:"คนไข้ตัวอย่าง A",detail:["รายการสาธิต: ซื้อคอร์ส","ใช้ครั้งที่ 1/5 · เหลือ 4 ครั้ง"],remark:"ข้อมูลสาธิต",isNew:true},
+ {hn:"DEMO002",patient:"คนไข้ตัวอย่าง B",detail:["รายการสาธิต: ใช้ Member","ยอดคงเหลือเป็นข้อมูลตัวอย่าง"]},
+ {hn:"DEMO003",patient:"คนไข้ตัวอย่าง C",detail:["รายการสาธิต: ใช้มัดจำ","ยอดมัดจำเป็นข้อมูลตัวอย่าง"]},
+ {hn:"DEMO004",patient:"คนไข้ตัวอย่าง D",detail:["รายการสาธิต: ทรีตเมนต์","รายละเอียดเพื่อทดสอบหน้าจอ"],isNew:true},
+ {hn:"DEMO005",patient:"คนไข้ตัวอย่าง E",detail:["รายการสาธิต: ใช้คอร์สครั้งที่ 2/5","เหลือ 3 ครั้ง"],remark:"ข้อมูลสาธิต"}
 ];
 const keys=["cash","scb","lp","card","member","deposit","outstanding"];
 const labels=["เงินสด","โอน · SCB","โอน · LP","บัตรเครดิต","ใช้ Member","ใช้มัดจำ","ค้างชำระ"];
-const monthBase={cash:124500,scb:386000,lp:72800,card:214500,member:96000,deposit:41500,outstanding:18000};
+const monthBase={cash:0,scb:0,lp:0,card:0,member:0,deposit:0,outstanding:0};
 const money=n=>new Intl.NumberFormat("th-TH",{maximumFractionDigits:0}).format(n||0);
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function totals(){return rows.reduce((a,r)=>(keys.forEach(k=>a[k]+=(r[k]||0)),a),Object.fromEntries(keys.map(k=>[k,0])))}
@@ -31,3 +31,4 @@ modal.addEventListener("click",e=>{if(e.target===modal)modal.hidden=true});
 document.querySelector("#entryForm").addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);rows.push({hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),detail:[String(f.get("detail"))],cash:Number(f.get("cash"))||0});e.target.reset();modal.hidden=true;render()});
 document.querySelector("#printButton").onclick=()=>window.print();
 render();
+

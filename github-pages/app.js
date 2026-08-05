@@ -5,8 +5,11 @@ let monthBase=Object.fromEntries(keys.map(key=>[key,0]));
 let editingIndex=null;
 const phraseStorageKey="michiko-frequent-phrases-v1";
 let frequentPhrases=[];
+let showAllPhrases=false;
 try{frequentPhrases=JSON.parse(localStorage.getItem(phraseStorageKey)||"[]").filter(item=>typeof item==="string")}catch{frequentPhrases=[]}
 const money=n=>new Intl.NumberFormat("th-TH",{maximumFractionDigits:0}).format(n||0);
+const parseMoney=value=>Number(String(value??"").replace(/,/g,""))||0;
+const formatMoneyInput=value=>{const digits=String(value??"").replace(/\D/g,"").replace(/^0+(?=\d)/,"");return digits?Number(digits).toLocaleString("en-US"):""};
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function formatDetails(text){return String(text).split(/\r?\n/).flatMap(line=>{const marker=line.indexOf("รวมยอดชำระ");return marker>0?[line.slice(0,marker).trimEnd(),line.slice(marker)]:[line]})}
 function totals(){return rows.reduce((a,r)=>(keys.forEach(k=>a[k]+=(r[k]||0)),a),Object.fromEntries(keys.map(k=>[k,0])))}
@@ -42,6 +45,7 @@ document.querySelector("#previousDate").onclick=()=>moveDate(-1);
 document.querySelector("#nextDate").onclick=()=>moveDate(1);
 const modal=document.querySelector("#modal");
 const monthModal=document.querySelector("#monthModal");
+document.querySelectorAll(".payment-amount,.month-input-grid input").forEach(input=>{input.type="text";input.inputMode="numeric";input.addEventListener("input",()=>{input.value=formatMoneyInput(input.value)})});
 document.querySelectorAll("[data-payment]").forEach(box=>box.addEventListener("change",()=>{const option=box.closest(".payment-option");const amount=option.querySelector(".payment-amount");option.classList.toggle("selected",box.checked);amount.disabled=!box.checked;if(box.checked)amount.focus();else amount.value=""}));
 const entryForm=document.querySelector("#entryForm");
 const detailInput=entryForm.elements.detail;
@@ -49,23 +53,23 @@ const phraseInput=document.querySelector("#phraseInput");
 const phraseChips=document.querySelector("#phraseChips");
 function storePhrases(){localStorage.setItem(phraseStorageKey,JSON.stringify(frequentPhrases))}
 function insertPhrase(phrase){const start=detailInput.selectionStart??detailInput.value.length;const end=detailInput.selectionEnd??start;const before=detailInput.value.slice(0,start);const prefix=before&& !before.endsWith("\n")?"\n":"";detailInput.setRangeText(`${prefix}${phrase}\n`,start,end,"end");detailInput.focus()}
-function renderPhrases(){phraseChips.innerHTML=frequentPhrases.length?frequentPhrases.map((phrase,index)=>`<button class="phrase-chip" type="button" data-phrase="${index}"><span>${esc(phrase)}</span><i data-remove-phrase="${index}" aria-label="ลบข้อความ">×</i></button>`).join(""):'<span class="phrase-empty">ยังไม่มีข้อความที่บันทึก</span>';phraseChips.querySelectorAll("[data-phrase]").forEach(button=>button.addEventListener("click",event=>{if(event.target.closest("[data-remove-phrase]"))return;insertPhrase(frequentPhrases[Number(button.dataset.phrase)])}));phraseChips.querySelectorAll("[data-remove-phrase]").forEach(remove=>remove.addEventListener("click",()=>{frequentPhrases.splice(Number(remove.dataset.removePhrase),1);storePhrases();renderPhrases()}))}
+function renderPhrases(){const visible=showAllPhrases?frequentPhrases:frequentPhrases.slice(0,6);phraseChips.innerHTML=frequentPhrases.length?visible.map((phrase,index)=>`<button class="phrase-chip" type="button" data-phrase="${index}"><span>${esc(phrase)}</span><i data-remove-phrase="${index}" aria-label="ลบข้อความ">×</i></button>`).join("")+(frequentPhrases.length>6?`<button class="phrase-toggle" type="button">${showAllPhrases?"ซ่อนข้อความที่เหลือ":`ดูทั้งหมด (+${frequentPhrases.length-6})`}</button>`:""):'<span class="phrase-empty">ยังไม่มีข้อความที่บันทึก</span>';phraseChips.querySelectorAll("[data-phrase]").forEach(button=>button.addEventListener("click",event=>{if(event.target.closest("[data-remove-phrase]"))return;insertPhrase(frequentPhrases[Number(button.dataset.phrase)])}));phraseChips.querySelectorAll("[data-remove-phrase]").forEach(remove=>remove.addEventListener("click",()=>{frequentPhrases.splice(Number(remove.dataset.removePhrase),1);storePhrases();renderPhrases()}));phraseChips.querySelector(".phrase-toggle")?.addEventListener("click",()=>{showAllPhrases=!showAllPhrases;renderPhrases()})}
 function savePhrase(){const phrase=phraseInput.value.trim();if(!phrase||frequentPhrases.includes(phrase))return;frequentPhrases.push(phrase);phraseInput.value="";storePhrases();renderPhrases()}
 document.querySelector("#savePhraseButton").onclick=savePhrase;
 phraseInput.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();savePhrase()}});
 function resetEditor(){entryForm.reset();editingIndex=null;document.querySelector("#saveEntryButton").textContent="บันทึกรายการ";entryForm.querySelectorAll(".payment-option").forEach(option=>option.classList.remove("selected"));entryForm.querySelectorAll(".payment-amount").forEach(input=>input.disabled=true)}
-function openEditor(index){resetEditor();editingIndex=index;const row=rows[index];entryForm.elements.hn.value=row.hn;entryForm.elements.patient.value=row.patient;entryForm.elements.detail.value=row.detail.join("\n");keys.forEach(key=>{if(row[key]){const box=entryForm.querySelector(`[data-payment="${key}"]`);const amount=entryForm.elements[key];box.checked=true;amount.disabled=false;amount.value=row[key];box.closest(".payment-option").classList.add("selected")}});document.querySelector("#saveEntryButton").textContent="บันทึกการแก้ไข";modal.hidden=false;entryForm.elements.hn.focus()}
+function openEditor(index){resetEditor();editingIndex=index;const row=rows[index];entryForm.elements.hn.value=row.hn;entryForm.elements.patient.value=row.patient;entryForm.elements.detail.value=row.detail.join("\n");keys.forEach(key=>{if(row[key]){const box=entryForm.querySelector(`[data-payment="${key}"]`);const amount=entryForm.elements[key];box.checked=true;amount.disabled=false;amount.value=money(row[key]);box.closest(".payment-option").classList.add("selected")}});document.querySelector("#saveEntryButton").textContent="บันทึกการแก้ไข";modal.hidden=false;entryForm.elements.hn.focus()}
 document.querySelector("#addButton").onclick=()=>{resetEditor();modal.hidden=false;entryForm.elements.hn.focus()};
 document.querySelector("#closeButton").onclick=document.querySelector("#cancelButton").onclick=()=>modal.hidden=true;
 modal.addEventListener("click",e=>{if(e.target===modal)modal.hidden=true});
-entryForm.addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,Number(f.get(key))||0]));const record={hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),detail:formatDetails(f.get("detail")),...payments};if(editingIndex===null)rows.push(record);else rows[editingIndex]=record;resetEditor();modal.hidden=true;render()});
+entryForm.addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,parseMoney(f.get(key))]));const record={hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),detail:formatDetails(f.get("detail")),...payments};if(editingIndex===null)rows.push(record);else rows[editingIndex]=record;resetEditor();modal.hidden=true;render()});
 document.querySelector("#printButton").onclick=document.querySelector("#printTopButton").onclick=()=>window.print();
 document.querySelector("#savePdfButton").onclick=document.querySelector("#savePdfTopButton").onclick=()=>window.print();
 const monthForm=document.querySelector("#monthForm");
-document.querySelector("#editMonthButton").onclick=()=>{keys.forEach(key=>monthForm.elements[key].value=monthBase[key]||"");monthModal.hidden=false;monthForm.elements.cash.focus()};
+document.querySelector("#editMonthButton").onclick=()=>{keys.forEach(key=>monthForm.elements[key].value=monthBase[key]?money(monthBase[key]):"");monthModal.hidden=false;monthForm.elements.cash.focus()};
 document.querySelector("#closeMonthButton").onclick=document.querySelector("#cancelMonthButton").onclick=()=>monthModal.hidden=true;
 monthModal.addEventListener("click",event=>{if(event.target===monthModal)monthModal.hidden=true});
-monthForm.addEventListener("submit",event=>{event.preventDefault();const form=new FormData(monthForm);monthBase=Object.fromEntries(keys.map(key=>[key,Number(form.get(key))||0]));monthModal.hidden=true;render()});
+monthForm.addEventListener("submit",event=>{event.preventDefault();const form=new FormData(monthForm);monthBase=Object.fromEntries(keys.map(key=>[key,parseMoney(form.get(key))]));monthModal.hidden=true;render()});
 updateDate(ledgerDate.value);
 renderPhrases();
 render();

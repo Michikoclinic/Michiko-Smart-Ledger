@@ -8,6 +8,9 @@ let monthBase=Object.fromEntries(keys.map(key=>[key,0]));
 let editingIndex=null;
 const phraseStorageKey="michiko-frequent-phrases-v1";
 const phraseUsageKey="michiko-frequent-phrase-usage-v1";
+const staffStorageKey="michiko-ledger-staff-names-v1";
+let staffNames={doctors:[],assistants:[]};
+try{const savedStaff=JSON.parse(localStorage.getItem(staffStorageKey)||"{}");staffNames.doctors=Array.isArray(savedStaff.doctors)?savedStaff.doctors:[];staffNames.assistants=Array.isArray(savedStaff.assistants)?savedStaff.assistants:[]}catch{}
 let frequentPhrases=[];
 let phraseQuery="";
 let phraseQueryStart=0;
@@ -19,7 +22,7 @@ const money=n=>new Intl.NumberFormat("th-TH",{maximumFractionDigits:0}).format(n
 const parseMoney=value=>Number(String(value??"").replace(/,/g,""))||0;
 const formatMoneyInput=value=>{const digits=String(value??"").replace(/\D/g,"").replace(/^0+(?=\d)/,"");return digits?Number(digits).toLocaleString("en-US"):""};
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-function formatNumbersInText(text){return String(text).replace(/(?<![\d,])\d{4,}(?![\d,])/g,value=>Number(value).toLocaleString("en-US"))}
+function formatNumbersInText(text){return String(text).replace(/\d[\d,]*/g,token=>{const digits=token.replace(/,/g,"");return digits.length>=4?Number(digits).toLocaleString("en-US"):token})}
 function formatDetails(text){return String(text).split(/\r?\n/).flatMap(line=>{const marker=line.indexOf("รวมยอดชำระ");return marker>0?[line.slice(0,marker).trimEnd(),line.slice(marker)]:[line]})}
 function saveLastView(){try{localStorage.setItem(viewStorageKey,JSON.stringify({branch:document.querySelector("#branch")?.value||"",date:document.querySelector("#ledgerDate")?.value||""}))}catch{}}
 function ledgerContext(){const branch=document.querySelector("#branch")?.value||"default";const date=document.querySelector("#ledgerDate")?.value||"";return {branch,date}}
@@ -28,14 +31,16 @@ function monthStorageKey(){const {branch,date}=ledgerContext();return `${monthSt
 function loadSavedLedger(){try{const saved=JSON.parse(localStorage.getItem(ledgerStorageKey())||"[]");rows=Array.isArray(saved)?saved.map(row=>({...row,detail:Array.isArray(row.detail)?row.detail.map(formatNumbersInText):formatDetails(formatNumbersInText(row.detail||""))})):[]}catch{rows=[]}try{const savedMonth=JSON.parse(localStorage.getItem(monthStorageKey())||"{}");monthBase=Object.fromEntries(keys.map(key=>[key,Number(savedMonth[key])||0]))}catch{monthBase=Object.fromEntries(keys.map(key=>[key,0]))}}
 function saveLedger(){try{localStorage.setItem(ledgerStorageKey(),JSON.stringify(rows))}catch{}}
 function saveMonthBase(){try{localStorage.setItem(monthStorageKey(),JSON.stringify(monthBase))}catch{}}
+function renderStaffNames(){document.querySelector("#doctorNames").innerHTML=staffNames.doctors.map(name=>`<option value="${esc(name)}"></option>`).join("");document.querySelector("#assistantNames").innerHTML=staffNames.assistants.map(name=>`<option value="${esc(name)}"></option>`).join("")}
+function rememberStaff(doctor,assistant){if(doctor&&!staffNames.doctors.includes(doctor))staffNames.doctors.push(doctor);if(assistant&&!staffNames.assistants.includes(assistant))staffNames.assistants.push(assistant);try{localStorage.setItem(staffStorageKey,JSON.stringify(staffNames))}catch{}renderStaffNames()}
 function totals(){return rows.reduce((a,r)=>(keys.forEach(k=>a[k]+=(r[k]||0)),a),Object.fromEntries(keys.map(k=>[k,0])))}
 function render(){
  const q=document.querySelector("#search").value.trim().toLowerCase();
- const filtered=rows.filter(r=>[r.hn,r.patient,...r.detail].join(" ").toLowerCase().includes(q));
+ const filtered=rows.filter(r=>[r.hn,r.patient,r.doctor||"",r.assistant||"",...r.detail].join(" ").toLowerCase().includes(q));
  document.querySelector("#rowCount").textContent=rows.length;
- document.querySelector("#ledgerRows").innerHTML=filtered.map(r=>{const index=rows.indexOf(r);return `<tr><td class="order-cell">${index+1}</td><td><b>${esc(r.hn)}</b>${r.isNew?'<span class="new">NEW</span>':''}</td><td>${esc(r.patient)}</td><td class="detail">${r.detail.map(x=>`<span class="${x.includes("รวมยอดชำระ")?"payment-total-line":""}">${esc(formatNumbersInText(x))||"&nbsp;"}</span>`).join("")}</td>${keys.map(k=>`<td>${r[k]?money(r[k]):""}</td>`).join("")}<td class="remark">${esc(r.remark||"")}<button type="button" class="edit-entry" data-edit="${index}">✎ แก้ไข</button></td></tr>`}).join("")||'<tr><td colspan="14" class="empty-ledger">ยังไม่มีรายการสำหรับวันนี้</td></tr>';
+ document.querySelector("#ledgerRows").innerHTML=filtered.map(r=>{const index=rows.indexOf(r);return `<tr><td class="order-cell">${index+1}</td><td><b>${esc(r.hn)}</b>${r.isNew?'<span class="new">NEW</span>':''}</td><td>${esc(r.patient)}</td><td>${esc(r.doctor||"")}</td><td>${esc(r.assistant||"")}</td><td class="detail">${r.detail.map(x=>`<span class="${x.includes("รวมยอดชำระ")?"payment-total-line":""}">${esc(formatNumbersInText(x))||"&nbsp;"}</span>`).join("")}</td>${keys.map(k=>`<td>${r[k]?money(r[k]):""}</td>`).join("")}<td class="remark">${esc(r.remark||"")}<button type="button" class="edit-entry" data-edit="${index}">✎ แก้ไข</button></td></tr>`}).join("")||'<tr><td colspan="16" class="empty-ledger">ยังไม่มีรายการสำหรับวันนี้</td></tr>';
  const t=totals(); const daily=t.cash+t.scb+t.lp+t.cardKbank+t.cardBbl+t.cardKtc;
- document.querySelector("#ledgerTotal").innerHTML=`<tr><td colspan="4">รวมประจำวัน</td>${keys.map(k=>`<td>${t[k]?money(t[k]):""}</td>`).join("")}<td></td></tr>`;
+ document.querySelector("#ledgerTotal").innerHTML=`<tr><td colspan="6">รวมประจำวัน</td>${keys.map(k=>`<td>${t[k]?money(t[k]):""}</td>`).join("")}<td></td></tr>`;
  document.querySelector("#dailyCards").innerHTML=[["ยอดรับรวมวันนี้",daily],...keys.map((k,i)=>[labels[i],t[k]])].map(x=>`<article class="card"><span>${x[0]}</span><strong>${money(x[1])}</strong><small>บาท</small></article>`).join("");
  const m=Object.fromEntries(keys.map(k=>[k,monthBase[k]+t[k]])); const mg=m.cash+m.scb+m.lp+m.cardKbank+m.cardBbl+m.cardKtc;
  document.querySelector("#monthTotals").innerHTML=`<tr><td>${money(mg)}</td>${keys.map(k=>`<td>${money(m[k])}</td>`).join("")}</tr>`;
@@ -78,11 +83,11 @@ document.querySelector("#savePhraseButton").onclick=savePhrase;
 phraseInput.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();savePhrase()}});
 detailInput.addEventListener("input",()=>{const cursor=detailInput.selectionStart??detailInput.value.length;const line=detailInput.value.slice(detailInput.value.lastIndexOf("\n",cursor-1)+1,cursor);const tokens=line.trimEnd().split(/\s+/).filter(Boolean);phraseQuery="";phraseQueryStart=cursor;for(let size=Math.min(3,tokens.length);size>=1;size--){const candidate=tokens.slice(-size).join(" ");if(frequentPhrases.some(phrase=>phrase.toLocaleLowerCase("th").includes(candidate.toLocaleLowerCase("th")))){phraseQuery=candidate;phraseQueryStart=cursor-candidate.length;break}}if(!phraseQuery&&tokens.length){phraseQuery=tokens.at(-1);phraseQueryStart=cursor-phraseQuery.length}showAllPhrases=false;renderPhrases()});
 function resetEditor(){entryForm.reset();editingIndex=null;phraseQuery="";phraseQueryStart=0;showAllPhrases=false;document.querySelector("#saveEntryButton").textContent="บันทึกรายการ";entryForm.querySelectorAll(".payment-option").forEach(option=>option.classList.remove("selected"));entryForm.querySelectorAll(".payment-amount").forEach(input=>input.disabled=true);renderPhrases()}
-function openEditor(index){resetEditor();editingIndex=index;const row=rows[index];entryForm.elements.hn.value=row.hn;entryForm.elements.patient.value=row.patient;entryForm.elements.detail.value=row.detail.map(formatNumbersInText).join("\n");keys.forEach(key=>{if(row[key]){const box=entryForm.querySelector(`[data-payment="${key}"]`);const amount=entryForm.elements[key];box.checked=true;amount.disabled=false;amount.value=money(row[key]);box.closest(".payment-option").classList.add("selected")}});document.querySelector("#saveEntryButton").textContent="บันทึกการแก้ไข";modal.hidden=false;entryForm.elements.hn.focus()}
+function openEditor(index){resetEditor();editingIndex=index;const row=rows[index];entryForm.elements.hn.value=row.hn;entryForm.elements.patient.value=row.patient;entryForm.elements.doctor.value=row.doctor||"";entryForm.elements.assistant.value=row.assistant||"";entryForm.elements.detail.value=row.detail.map(formatNumbersInText).join("\n");keys.forEach(key=>{if(row[key]){const box=entryForm.querySelector(`[data-payment="${key}"]`);const amount=entryForm.elements[key];box.checked=true;amount.disabled=false;amount.value=money(row[key]);box.closest(".payment-option").classList.add("selected")}});document.querySelector("#saveEntryButton").textContent="บันทึกการแก้ไข";modal.hidden=false;entryForm.elements.hn.focus()}
 document.querySelector("#addButton").onclick=()=>{resetEditor();modal.hidden=false;entryForm.elements.hn.focus()};
 document.querySelector("#closeButton").onclick=document.querySelector("#cancelButton").onclick=()=>modal.hidden=true;
 modal.addEventListener("click",e=>{if(e.target===modal)modal.hidden=true});
-entryForm.addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,parseMoney(f.get(key))]));const record={hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),detail:formatDetails(formatNumbersInText(f.get("detail"))),...payments};if(editingIndex===null)rows.push(record);else rows[editingIndex]=record;saveLedger();resetEditor();modal.hidden=true;render()});
+entryForm.addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,parseMoney(f.get(key))]));const record={hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),doctor:String(f.get("doctor")||"").trim(),assistant:String(f.get("assistant")||"").trim(),detail:formatDetails(formatNumbersInText(f.get("detail"))),...payments};rememberStaff(record.doctor,record.assistant);if(editingIndex===null)rows.push(record);else rows[editingIndex]=record;saveLedger();resetEditor();modal.hidden=true;render()});
 document.querySelector("#printButton").onclick=document.querySelector("#printTopButton").onclick=()=>window.print();
 document.querySelector("#savePdfButton").onclick=document.querySelector("#savePdfTopButton").onclick=()=>window.print();
 const monthForm=document.querySelector("#monthForm");
@@ -93,6 +98,7 @@ monthForm.addEventListener("submit",event=>{event.preventDefault();const form=ne
 updateDate(ledgerDate.value);
 loadSavedLedger();
 renderPhrases();
+renderStaffNames();
 render();
 
 

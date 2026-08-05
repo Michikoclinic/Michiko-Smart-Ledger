@@ -24,11 +24,25 @@ function render(){
 }
 document.querySelector("#search").addEventListener("input",render);
 document.querySelector("#branch").addEventListener("change",e=>document.querySelector("#branchName").textContent=e.target.value);
+const ledgerDate=document.querySelector("#ledgerDate");
+function updateDate(value){
+ const date=new Date(`${value}T12:00:00`);
+ const full=new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(date);
+ const weekday=new Intl.DateTimeFormat("th-TH",{weekday:"long"}).format(date);
+ document.querySelector("#weekdayLabel").textContent=weekday;
+ document.querySelector("#dailyDate").textContent=full;
+ const printDate=document.querySelector("#printDate"); printDate.textContent=`วันที่ ${full}`; printDate.dateTime=value;
+}
+function moveDate(days){const date=new Date(`${ledgerDate.value}T12:00:00`);date.setDate(date.getDate()+days);ledgerDate.value=`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;updateDate(ledgerDate.value)}
+ledgerDate.addEventListener("change",()=>updateDate(ledgerDate.value));
+document.querySelector("#previousDate").onclick=()=>moveDate(-1);
+document.querySelector("#nextDate").onclick=()=>moveDate(1);
 const modal=document.querySelector("#modal");
 document.querySelector("#addButton").onclick=()=>{modal.hidden=false;modal.querySelector("input").focus()};
 document.querySelector("#closeButton").onclick=document.querySelector("#cancelButton").onclick=()=>modal.hidden=true;
 modal.addEventListener("click",e=>{if(e.target===modal)modal.hidden=true});
 document.querySelector("#entryForm").addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);rows.push({hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),detail:[String(f.get("detail"))],cash:Number(f.get("cash"))||0});e.target.reset();modal.hidden=true;render()});
 document.querySelector("#printButton").onclick=()=>window.print();
+updateDate(ledgerDate.value);
 render();
 

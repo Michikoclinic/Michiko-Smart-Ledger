@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <meta name="theme-color" content="#fff7ef">
   <title>Michiko Smart Ledger</title>
-  <link rel="stylesheet" href="styles.css?v=20260805p">
+  <link rel="stylesheet" href="styles.css?v=20260805q">
 </head>
 <body>
   <header class="topbar" id="top">
@@ -45,7 +45,7 @@
     <footer><span>Michiko Smart Ledger</span><span>กรุณาปริ้นหรือบันทึก PDF ก่อนปิดหรือรีเฟรชหน้า</span></footer>
   </main>
 
-  <div class="modal" id="modal" hidden><section class="dialog"><button class="close" id="closeButton" aria-label="ปิด">×</button><p class="eyebrow">NEW ENTRY</p><h2>เพิ่มรายการวันนี้</h2><form id="entryForm"><div class="form-grid"><label><span>HN *</span><input name="hn" required></label><label><span>ชื่อคนไข้ *</span><input name="patient" required></label></div><section class="phrase-section"><div class="phrase-heading"><div><strong>ข้อความที่ใช้บ่อย</strong><small>บันทึกเฉพาะข้อความงานที่ใช้ซ้ำ</small></div><div class="phrase-add"><input id="phraseInput" type="text" placeholder="พิมพ์ข้อความแม่แบบ"><button id="savePhraseButton" type="button">＋ จำข้อความ</button></div></div><div class="phrase-chips" id="phraseChips"><span class="phrase-empty">ยังไม่มีข้อความที่บันทึก</span></div></section><label><span>รายละเอียด *</span><textarea class="detail-input" name="detail" rows="7" placeholder="พิมพ์รายละเอียดและกด Enter เพื่อขึ้นบรรทัดใหม่" required></textarea></label><fieldset class="payment-section"><legend>เลือกวิธีการชำระเงิน</legend><p>เลือกได้มากกว่าหนึ่งช่องทาง แล้วใส่ยอดเฉพาะช่องที่เลือก</p><div class="payment-grid">
+  <div class="modal" id="modal" hidden><section class="dialog"><button class="close" id="closeButton" aria-label="ปิด">×</button><p class="eyebrow">NEW ENTRY</p><h2>เพิ่มรายการวันนี้</h2><form id="entryForm"><div class="form-grid"><label><span>HN *</span><input name="hn" required></label><label><span>ชื่อคนไข้ *</span><input name="patient" required></label></div><section class="phrase-section"><div class="phrase-heading"><div><strong>คำที่ใช้บ่อย</strong><small>บันทึกเป็นคำหรือวลีสั้น เช่น Dual Yellow</small></div><div class="phrase-add"><input id="phraseInput" type="text" placeholder="พิมพ์คำแม่แบบ"><button id="savePhraseButton" type="button">＋ จำคำ</button></div></div><div class="phrase-chips" id="phraseChips"><span class="phrase-empty">ยังไม่มีคำที่บันทึก</span></div></section><label><span>รายละเอียด *</span><textarea class="detail-input" name="detail" rows="7" placeholder="พิมพ์รายละเอียดและกด Enter เพื่อขึ้นบรรทัดใหม่" required></textarea></label><fieldset class="payment-section"><legend>เลือกวิธีการชำระเงิน</legend><p>เลือกได้มากกว่าหนึ่งช่องทาง แล้วใส่ยอดเฉพาะช่องที่เลือก</p><div class="payment-grid">
     <label class="payment-option"><span><input type="checkbox" data-payment="cash"> เงินสด</span><input class="payment-amount" name="cash" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
     <label class="payment-option"><span><input type="checkbox" data-payment="scb"> โอน SCB</span><input class="payment-amount" name="scb" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
     <label class="payment-option"><span><input type="checkbox" data-payment="lp"> โอน LP</span><input class="payment-amount" name="lp" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
@@ -61,7 +61,7 @@
     <label><span>บัตรกสิกร</span><input name="cardKbank" type="number" min="0"></label><label><span>บัตรกรุงเทพ</span><input name="cardBbl" type="number" min="0"></label><label><span>บัตร KTC</span><input name="cardKtc" type="number" min="0"></label>
     <label><span>Member</span><input name="member" type="number" min="0"></label><label><span>มัดจำ</span><input name="deposit" type="number" min="0"></label><label><span>ค้างชำระ</span><input name="outstanding" type="number" min="0"></label>
   </div><div class="form-actions"><button type="button" id="cancelMonthButton">ยกเลิก</button><button class="primary" type="submit">บันทึกยอดเดือน</button></div></form></section></div>
-  <script src="app.js?v=20260805p"></script>
+  <script src="app.js?v=20260805q"></script>
 </body>
 </html>
 

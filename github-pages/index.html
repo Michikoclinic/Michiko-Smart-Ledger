@@ -32,7 +32,7 @@
 
     <section class="ledger-card" id="ledger">
       <div class="table-scroll"><table>
-        <thead><tr><th class="order-head">ลำดับ</th><th>HN</th><th>ชื่อ นามสกุล</th><th>ชื่อแพทย์</th><th>ผู้ช่วย</th><th class="details">รายละเอียด</th><th>เงินสด</th><th>SCB</th><th>LP</th><th>บัตร KBank</th><th>บัตร BBL</th><th>บัตร KTC</th><th>Member</th><th>มัดจำ</th><th>ค้างชำระ</th><th>หมายเหตุ</th></tr></thead>
+        <thead><tr><th class="order-head">ลำดับ</th><th>HN</th><th>ชื่อ นามสกุล</th><th class="details">รายละเอียด</th><th>เงินสด</th><th>SCB</th><th>LP</th><th>บัตร KBank</th><th>บัตร BBL</th><th>บัตร KTC</th><th>Member</th><th>ชื่อแพทย์</th><th>ผู้ช่วย</th><th>หมายเหตุ</th></tr></thead>
         <tbody id="ledgerRows"></tbody>
         <tfoot id="ledgerTotal"></tfoot>
       </table></div>
@@ -40,7 +40,7 @@
 
     <section class="summary" id="daily"><div class="section-head"><div><p class="eyebrow">DAILY SUMMARY</p><h2>สรุปยอดประจำวัน</h2></div><span id="dailyDate">15 สิงหาคม 2569</span></div><div class="summary-grid" id="dailyCards"></div></section>
 
-    <section class="summary" id="monthly"><div class="section-head"><div><p class="eyebrow">MONTH TO DATE</p><h2>ยอดสะสมประจำเดือน</h2></div><div class="month-heading-actions"><span id="monthRange">รวมตั้งแต่วันที่ 1 ถึงวันนี้</span><button id="editMonthButton" type="button">✎ กรอกยอดสะสมถึงเมื่อวาน</button></div></div><div class="month-scroll"><table><thead><tr><th>ยอดรับรวม</th><th>เงินสด</th><th>โอน SCB</th><th>โอน LP</th><th>บัตร KBank</th><th>บัตร BBL</th><th>บัตร KTC</th><th>Member</th><th>มัดจำ</th><th>ค้างชำระ</th></tr></thead><tbody id="monthTotals"></tbody></table></div></section>
+    <section class="summary" id="monthly"><div class="section-head"><div><p class="eyebrow">MONTH TO DATE</p><h2>ยอดสะสมประจำเดือน</h2></div><div class="month-heading-actions"><span id="monthRange">รวมตั้งแต่วันที่ 1 ถึงวันนี้</span><button id="editMonthButton" type="button">✎ กรอกยอดสะสมถึงเมื่อวาน</button></div></div><div class="month-scroll"><table><thead><tr><th>ยอดรับรวม</th><th>เงินสด</th><th>โอน SCB</th><th>โอน LP</th><th>บัตร KBank</th><th>บัตร BBL</th><th>บัตร KTC</th><th>Member</th></tr></thead><tbody id="monthTotals"></tbody></table></div></section>
 
     <div class="print-action"><button class="pdf-button" id="savePdfButton" type="button"><span aria-hidden="true">📄</span> บันทึก PDF</button><button id="printButton" aria-label="ปริ้นสมุดรายวัน"><span class="print-icon" aria-hidden="true">🖨️</span> ปริ้น</button></div>
     <footer><span>Michiko Smart Ledger</span><span>ข้อมูลรายการบันทึกในเครื่องนี้อัตโนมัติ</span></footer>
@@ -54,13 +54,11 @@
     <label class="payment-option"><span><input type="checkbox" data-payment="cardBbl"> บัตรเครดิต · กรุงเทพ</span><input class="payment-amount" name="cardBbl" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
     <label class="payment-option"><span><input type="checkbox" data-payment="cardKtc"> บัตรเครดิต · KTC</span><input class="payment-amount" name="cardKtc" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
     <label class="payment-option"><span><input type="checkbox" data-payment="member"> ใช้ Member</span><input class="payment-amount" name="member" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
-    <label class="payment-option"><span><input type="checkbox" data-payment="deposit"> ใช้มัดจำ</span><input class="payment-amount" name="deposit" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
-    <label class="payment-option"><span><input type="checkbox" data-payment="outstanding"> ค้างชำระ</span><input class="payment-amount" name="outstanding" type="number" min="0" placeholder="ยอดเงิน" disabled></label>
   </div></fieldset><div class="form-actions"><button type="button" id="cancelButton">ยกเลิก</button><button class="primary" id="saveEntryButton" type="submit">บันทึกรายการ</button></div></form></section></div>
   <div class="modal" id="monthModal" hidden><section class="dialog month-dialog"><button class="close" id="closeMonthButton" aria-label="ปิด">×</button><p class="eyebrow">MONTHLY OPENING TOTAL</p><h2>กรอกยอดสะสมถึงเมื่อวาน</h2><p class="month-helper">กรอกยอดที่รวมตั้งแต่วันที่ 1 ถึงเมื่อวาน ระบบจะบวกยอดวันนี้ให้อัตโนมัติ</p><form id="monthForm"><div class="month-input-grid">
     <label><span>เงินสด</span><input name="cash" type="number" min="0"></label><label><span>โอน SCB</span><input name="scb" type="number" min="0"></label><label><span>โอน LP</span><input name="lp" type="number" min="0"></label>
     <label><span>บัตรกสิกร</span><input name="cardKbank" type="number" min="0"></label><label><span>บัตรกรุงเทพ</span><input name="cardBbl" type="number" min="0"></label><label><span>บัตร KTC</span><input name="cardKtc" type="number" min="0"></label>
-    <label><span>Member</span><input name="member" type="number" min="0"></label><label><span>มัดจำ</span><input name="deposit" type="number" min="0"></label><label><span>ค้างชำระ</span><input name="outstanding" type="number" min="0"></label>
+    <label><span>Member</span><input name="member" type="number" min="0"></label>
   </div><div class="form-actions"><button type="button" id="cancelMonthButton">ยกเลิก</button><button class="primary" type="submit">บันทึกยอดเดือน</button></div></form></section></div>
   <script src="app.js?v=20260805ad"></script>
 </body>

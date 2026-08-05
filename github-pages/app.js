@@ -16,6 +16,7 @@ const money=n=>new Intl.NumberFormat("th-TH",{maximumFractionDigits:0}).format(n
 const parseMoney=value=>Number(String(value??"").replace(/,/g,""))||0;
 const formatMoneyInput=value=>{const digits=String(value??"").replace(/\D/g,"").replace(/^0+(?=\d)/,"");return digits?Number(digits).toLocaleString("en-US"):""};
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+function formatNumbersInText(text){return String(text).replace(/(?<![\d,])\d{4,}(?![\d,])/g,value=>Number(value).toLocaleString("en-US"))}
 function formatDetails(text){return String(text).split(/\r?\n/).flatMap(line=>{const marker=line.indexOf("รวมยอดชำระ");return marker>0?[line.slice(0,marker).trimEnd(),line.slice(marker)]:[line]})}
 function totals(){return rows.reduce((a,r)=>(keys.forEach(k=>a[k]+=(r[k]||0)),a),Object.fromEntries(keys.map(k=>[k,0])))}
 function render(){
@@ -54,6 +55,7 @@ document.querySelectorAll(".payment-amount,.month-input-grid input").forEach(inp
 document.querySelectorAll("[data-payment]").forEach(box=>box.addEventListener("change",()=>{const option=box.closest(".payment-option");const amount=option.querySelector(".payment-amount");option.classList.toggle("selected",box.checked);amount.disabled=!box.checked;if(box.checked)amount.focus();else amount.value=""}));
 const entryForm=document.querySelector("#entryForm");
 const detailInput=entryForm.elements.detail;
+detailInput.addEventListener("blur",()=>{detailInput.value=formatNumbersInText(detailInput.value)});
 const phraseInput=document.querySelector("#phraseInput");
 const phraseChips=document.querySelector("#phraseChips");
 function storePhrases(){localStorage.setItem(phraseStorageKey,JSON.stringify(frequentPhrases));localStorage.setItem(phraseUsageKey,JSON.stringify(phraseUsage))}
@@ -68,7 +70,7 @@ function openEditor(index){resetEditor();editingIndex=index;const row=rows[index
 document.querySelector("#addButton").onclick=()=>{resetEditor();modal.hidden=false;entryForm.elements.hn.focus()};
 document.querySelector("#closeButton").onclick=document.querySelector("#cancelButton").onclick=()=>modal.hidden=true;
 modal.addEventListener("click",e=>{if(e.target===modal)modal.hidden=true});
-entryForm.addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,parseMoney(f.get(key))]));const record={hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),detail:formatDetails(f.get("detail")),...payments};if(editingIndex===null)rows.push(record);else rows[editingIndex]=record;resetEditor();modal.hidden=true;render()});
+entryForm.addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,parseMoney(f.get(key))]));const record={hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),detail:formatDetails(formatNumbersInText(f.get("detail"))),...payments};if(editingIndex===null)rows.push(record);else rows[editingIndex]=record;resetEditor();modal.hidden=true;render()});
 document.querySelector("#printButton").onclick=document.querySelector("#printTopButton").onclick=()=>window.print();
 document.querySelector("#savePdfButton").onclick=document.querySelector("#savePdfTopButton").onclick=()=>window.print();
 const monthForm=document.querySelector("#monthForm");

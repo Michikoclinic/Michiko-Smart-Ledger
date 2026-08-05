@@ -28,3 +28,17 @@
 .phrase-section{margin:9px 0;padding:9px}.phrase-heading{align-items:center}.phrase-heading strong{font-size:12px}.phrase-heading small{font-size:9px}.phrase-add input{min-width:180px;padding:6px 8px!important}.phrase-add button{padding:6px 8px;font-size:11px}.phrase-chips{gap:4px;margin-top:7px}.phrase-chip{gap:5px;padding:4px 6px 4px 8px;font-size:11px}.phrase-chip i{width:15px;height:15px}.dialog .detail-input{min-height:125px;line-height:1.5;padding:11px!important}
 @media(max-width:600px){.dialog .detail-input{min-height:110px}}
 
+
+/* Print ledger readability: authoritative final overrides */
+@media print{
+.ledger-card th:nth-child(1),.ledger-card td:nth-child(1){width:3%!important;text-align:center!important}
+.ledger-card th:nth-child(2),.ledger-card td:nth-child(2){width:5%!important}
+.ledger-card th:nth-child(3),.ledger-card td:nth-child(3){width:8%!important}
+.ledger-card th:nth-child(4),.ledger-card td:nth-child(4){width:38%!important}
+.ledger-card th:nth-child(n+5):nth-child(-n+13),.ledger-card td:nth-child(n+5):nth-child(-n+13){width:4.5%!important}
+.ledger-card th:nth-child(14),.ledger-card td:nth-child(14){width:5.5%!important}
+.ledger-card td.detail{padding:6px 7px!important;text-align:left!important;font-size:8.5pt;line-height:1.45}
+.ledger-card td.detail span{margin:0 0 3px;white-space:pre-wrap;overflow-wrap:break-word;word-break:normal}
+.ledger-card td.detail .payment-total-line{display:block;margin:5px 0 1px!important;padding:4px 6px!important;text-align:center!important;font-weight:800;border:1px solid #b6983f!important;background:#fff0a8!important;background-image:linear-gradient(#fff0a8,#fff0a8)!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;color:#3f302b!important}
+.ledger-card td:nth-child(2),.ledger-card td:nth-child(3),.ledger-card td:nth-child(14){overflow-wrap:anywhere}
+}

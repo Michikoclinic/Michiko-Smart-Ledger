@@ -95,3 +95,9 @@ loadSavedLedger();
 renderPhrases();
 render();
 
+
+const branchGate=document.querySelector("#branchGate");
+const branchSessionKey="michiko-branch-chosen-session-v1";
+function chooseEntryBranch(branchName){const branch=document.querySelector("#branch");branch.value=branchName;document.querySelector("#branchName").textContent=branchName;saveLastView();loadSavedLedger();render();try{sessionStorage.setItem(branchSessionKey,"1")}catch{}branchGate.hidden=true}
+branchGate.querySelectorAll("[data-branch-choice]").forEach(button=>button.addEventListener("click",()=>chooseEntryBranch(button.dataset.branchChoice)));
+try{branchGate.hidden=sessionStorage.getItem(branchSessionKey)==="1"}catch{branchGate.hidden=false}

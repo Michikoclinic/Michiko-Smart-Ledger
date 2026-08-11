@@ -23,6 +23,8 @@ const parseMoney=value=>Number(String(value??"").replace(/,/g,""))||0;
 const formatMoneyInput=value=>{const digits=String(value??"").replace(/\D/g,"").replace(/^0+(?=\d)/,"");return digits?Number(digits).toLocaleString("en-US"):""};
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function formatNumbersInText(text){return String(text).replace(/\d[\d,]*/g,token=>{const digits=token.replace(/,/g,"");return digits.length>=4?Number(digits).toLocaleString("en-US"):token})}
+function calculateAdditions(text){return String(text).split(/\r?\n/).map(line=>{if(/=\s*[\d,]+\s*$/.test(line))return line;const match=line.match(/((?:\d[\d,]*\s*\+\s*)+\d[\d,]*)\s*(?:=\s*)?$/);if(!match)return line;const sum=(match[1].match(/\d[\d,]*/g)||[]).reduce((total,value)=>total+parseMoney(value),0);return line.slice(0,match.index)+match[1]+" = "+Number(sum).toLocaleString("en-US")}).join("\n")}
+function renderDetailContent(line){return esc(formatNumbersInText(line)).replaceAll("หักจากมัดจำ",'<strong class="deposit-deduction-text">หักจากมัดจำ</strong>')}
 function formatDetails(text){return String(text).split(/\r?\n/).flatMap(line=>{const marker=line.indexOf("รวมยอดชำระ");return marker>0?[line.slice(0,marker).trimEnd(),line.slice(marker)]:[line]})}
 function saveLastView(){try{localStorage.setItem(viewStorageKey,JSON.stringify({branch:document.querySelector("#branch")?.value||"",date:document.querySelector("#ledgerDate")?.value||""}))}catch{}}
 function ledgerContext(){const branch=document.querySelector("#branch")?.value||"default";const date=document.querySelector("#ledgerDate")?.value||"";return {branch,date}}
@@ -38,7 +40,7 @@ function render(){
  const q=document.querySelector("#search").value.trim().toLowerCase();
  const filtered=rows.filter(r=>[r.hn,r.patient,r.doctor||"",r.assistant||"",...r.detail].join(" ").toLowerCase().includes(q));
  document.querySelector("#rowCount").textContent=rows.length;
- document.querySelector("#ledgerRows").innerHTML=filtered.map(r=>{const index=rows.indexOf(r);return `<tr><td class="order-cell">${index+1}</td><td><b>${esc(r.hn)}</b>${r.isNew?'<span class="new">NEW</span>':''}</td><td>${esc(r.patient)}</td><td class="detail">${r.detail.map(x=>`<span class="${x.includes("รวมยอดชำระ")?"payment-total-line":""}">${esc(formatNumbersInText(x))||"&nbsp;"}</span>`).join("")}</td>${keys.map(k=>`<td>${r[k]?money(r[k]):""}</td>`).join("")}<td>${esc(r.doctor||"")}</td><td>${esc(r.assistant||"")}</td><td class="remark">${esc(r.remark||"")}<button type="button" class="edit-entry" data-edit="${index}">✎ แก้ไข</button></td></tr>`}).join("")||'<tr><td colspan="14" class="empty-ledger">ยังไม่มีรายการสำหรับวันนี้</td></tr>';
+ document.querySelector("#ledgerRows").innerHTML=filtered.map(r=>{const index=rows.indexOf(r);return `<tr><td class="order-cell">${index+1}</td><td><b>${esc(r.hn)}</b>${r.isNew?'<span class="new">NEW</span>':''}</td><td>${esc(r.patient)}</td><td class="detail">${r.detail.map(x=>{const classes=[x.includes("รวมยอดชำระ")?"payment-total-line":"",x.includes("หักจากเครดิต")?"credit-deduction-line":""].filter(Boolean).join(" ");return `<span class="${classes}">${renderDetailContent(x)||"&nbsp;"}</span>`}).join("")}</td>${keys.map(k=>`<td>${r[k]?money(r[k]):""}</td>`).join("")}<td>${esc(r.doctor||"")}</td><td>${esc(r.assistant||"")}</td><td class="remark">${esc(r.remark||"")}<button type="button" class="edit-entry" data-edit="${index}">✎ แก้ไข</button></td></tr>`}).join("")||'<tr><td colspan="14" class="empty-ledger">ยังไม่มีรายการสำหรับวันนี้</td></tr>';
  const t=totals(); const daily=t.cash+t.scb+t.lp+t.cardKbank+t.cardBbl+t.cardKtc;
  document.querySelector("#ledgerTotal").innerHTML=`<tr><td colspan="4">รวมประจำวัน</td>${keys.map(k=>`<td>${t[k]?money(t[k]):""}</td>`).join("")}<td></td><td></td><td></td></tr>`;
  document.querySelector("#dailyCards").innerHTML=[["ยอดรับรวมวันนี้",daily],...keys.map((k,i)=>[labels[i],t[k]])].map(x=>`<article class="card"><span>${x[0]}</span><strong>${money(x[1])}</strong><small>บาท</small></article>`).join("");
@@ -72,7 +74,7 @@ document.querySelectorAll("[data-payment]").forEach(box=>box.addEventListener("c
 const entryForm=document.querySelector("#entryForm");
 const detailInput=entryForm.elements.detail;
 detailInput.addEventListener("input",()=>{const cursor=detailInput.selectionStart??detailInput.value.length;const before=detailInput.value;const formatted=formatNumbersInText(before);if(formatted!==before){detailInput.value=formatted;const next=cursor+(formatted.length-before.length);detailInput.setSelectionRange(next,next)}});
-detailInput.addEventListener("blur",()=>{detailInput.value=formatNumbersInText(detailInput.value)});
+detailInput.addEventListener("blur",()=>{detailInput.value=formatNumbersInText(calculateAdditions(detailInput.value))});
 const phraseInput=document.querySelector("#phraseInput");
 const phraseChips=document.querySelector("#phraseChips");
 function storePhrases(){localStorage.setItem(phraseStorageKey,JSON.stringify(frequentPhrases));localStorage.setItem(phraseUsageKey,JSON.stringify(phraseUsage))}
@@ -87,7 +89,7 @@ function openEditor(index){resetEditor();editingIndex=index;const row=rows[index
 document.querySelector("#addButton").onclick=()=>{resetEditor();modal.hidden=false;entryForm.elements.hn.focus()};
 document.querySelector("#closeButton").onclick=document.querySelector("#cancelButton").onclick=()=>modal.hidden=true;
 modal.addEventListener("click",e=>{if(e.target===modal)modal.hidden=true});
-entryForm.addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,parseMoney(f.get(key))]));const record={hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),doctor:String(f.get("doctor")||"").trim(),assistant:String(f.get("assistant")||"").trim(),detail:formatDetails(formatNumbersInText(f.get("detail"))),...payments};rememberStaff(record.doctor,record.assistant);if(editingIndex===null)rows.push(record);else rows[editingIndex]=record;saveLedger();resetEditor();modal.hidden=true;render()});
+entryForm.addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,parseMoney(f.get(key))]));const record={hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),doctor:String(f.get("doctor")||"").trim(),assistant:String(f.get("assistant")||"").trim(),detail:formatDetails(formatNumbersInText(calculateAdditions(f.get("detail")))),...payments};rememberStaff(record.doctor,record.assistant);if(editingIndex===null)rows.push(record);else rows[editingIndex]=record;saveLedger();resetEditor();modal.hidden=true;render()});
 document.querySelector("#printButton").onclick=document.querySelector("#printTopButton").onclick=()=>window.print();
 document.querySelector("#savePdfButton").onclick=document.querySelector("#savePdfTopButton").onclick=()=>window.print();
 const monthForm=document.querySelector("#monthForm");

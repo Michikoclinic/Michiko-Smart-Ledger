@@ -79,6 +79,9 @@ td.detail .payment-total-line{display:table!important;width:auto!important;max-w
 /* Support highlight */
 .ledger-card td.detail .support-line{display:block;margin:3px 0;padding:2px 5px;border:0;border-radius:3px;background:#ffb35c!important;background-image:linear-gradient(#ffb35c,#ffb35c)!important;color:#40240b!important;font-weight:800;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}@media print{.ledger-card td.detail .support-line{border:0!important;background:#ffad42!important;background-image:linear-gradient(#ffad42,#ffad42)!important;color:#000!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}}
 
+/* Compact keyword highlights */
+.credit-deduction-text,.support-text{display:inline;padding:0 3px;border-radius:2px;font-weight:850;-webkit-box-decoration-break:clone;box-decoration-break:clone;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}.credit-deduction-text{background:#9edcff!important;color:#123b55!important}.support-text{background:#ffb35c!important;color:#40240b!important}@media print{.credit-deduction-text{background:#9edcff!important;color:#000!important}.support-text{background:#ffad42!important;color:#000!important}}
+
 /* Outstanding payment emphasis */
 .outstanding-text{color:#c8182b!important;font-weight:950!important}@media print{.outstanding-text{color:#c00000!important;font-weight:950!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}}
 

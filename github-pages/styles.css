@@ -86,7 +86,10 @@ td.detail .payment-total-line{display:table!important;width:auto!important;max-w
 .ledger-card td.detail>span.support-center-line{display:block!important;text-align:center!important}@media print{.ledger-card td.detail>span.support-center-line{display:block!important;text-align:center!important}}
 
 /* Outstanding payment emphasis */
-.outstanding-text{color:#c8182b!important;font-weight:950!important}@media print{.outstanding-text{color:#c00000!important;font-weight:950!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}}
+.outstanding-text{display:inline;padding:0 3px;border-radius:2px;background:#ffd5da!important;color:#c8182b!important;font-weight:950!important;-webkit-box-decoration-break:clone;box-decoration-break:clone;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}@media print{.outstanding-text{background:#ffd5da!important;color:#c00000!important;font-weight:950!important;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}}
+
+/* Live addition preview */
+.calculation-preview{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:7px;padding:8px 10px;border:1px solid #dfc56e;border-radius:9px;background:#fff4c9;color:#533b2e;font-size:11px}.calculation-preview[hidden]{display:none}.calculation-preview strong{color:var(--wine-dark)}.calculation-preview span{padding:2px 7px;border-radius:999px;background:#fff;font-weight:800;font-variant-numeric:tabular-nums}@media print{.calculation-preview{display:none!important}}
 
 /* Row edit, move, and delete actions */
 .row-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:4px;margin-top:7px}.row-actions button{margin:0!important;padding:4px 6px;border:1px solid #dfc4b9;border-radius:7px;background:#fff8e9;color:var(--wine);font-size:9px;font-weight:750;white-space:nowrap;cursor:pointer}.row-actions .move-entry{border-color:#a8c9dc;background:#eef8ff;color:#285d78}.row-actions .delete-entry{border-color:#e0aeb4;background:#fff0f1;color:#8d1f2c}.row-actions button:hover{filter:brightness(.95)}@media print{.row-actions{display:none!important}}

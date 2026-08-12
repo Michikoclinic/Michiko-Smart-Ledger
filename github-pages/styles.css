@@ -81,3 +81,6 @@ td.detail .payment-total-line{display:table!important;width:auto!important;max-w
 
 /* Compact row action dropdown */
 .row-action-menu{position:relative;display:inline-block;margin-top:7px}.row-action-menu>summary{list-style:none;padding:5px 8px;border:1px solid #dfc4b9;border-radius:8px;background:#fff8e9;color:var(--wine);font-size:10px;font-weight:800;white-space:nowrap;cursor:pointer}.row-action-menu>summary::-webkit-details-marker{display:none}.row-action-menu[open]>summary{background:#f8e1e5}.row-action-menu .row-actions{position:absolute;right:0;z-index:8;display:grid;min-width:104px;margin-top:4px;padding:5px;border:1px solid #e3cec3;border-radius:9px;background:#fff;box-shadow:0 8px 22px rgba(70,45,38,.18)}.row-action-menu .row-actions button{width:100%;text-align:left}@media print{.row-action-menu{display:none!important}}
+
+/* Red heart for management menu */
+.manage-heart{display:inline-block;margin-right:3px;color:#d8263f!important;font-size:13px;line-height:1;text-shadow:0 1px 0 #fff}

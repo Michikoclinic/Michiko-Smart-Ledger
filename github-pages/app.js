@@ -23,7 +23,7 @@ const parseMoney=value=>Number(String(value??"").replace(/,/g,""))||0;
 const formatMoneyInput=value=>{const digits=String(value??"").replace(/\D/g,"").replace(/^0+(?=\d)/,"");return digits?Number(digits).toLocaleString("en-US"):""};
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function formatNumbersInText(text){return String(text).replace(/\d[\d,]*/g,token=>{const digits=token.replace(/,/g,"");return digits.length>=4?Number(digits).toLocaleString("en-US"):token})}
-function calculateAdditions(text){return String(text).split(/\r?\n/).map(line=>{if(/=\s*[\d,]+\s*$/.test(line))return line;const match=line.match(/((?:\d[\d,]*\s*\+\s*)+\d[\d,]*)\s*(?:=\s*)?$/);if(!match)return line;const sum=(match[1].match(/\d[\d,]*/g)||[]).reduce((total,value)=>total+parseMoney(value),0);return line.slice(0,match.index)+match[1]+" = "+Number(sum).toLocaleString("en-US")}).join("\n")}
+function calculateAdditions(text,requireEquals=false){return String(text).split(/\r?\n/).map(line=>line.replace(/((?:\d[\d,]*\s*\+\s*)+\d[\d,]*)(\s*=\s*([\d,]+)?)?/g,(whole,expression,equalPart,manualResult)=>{if(manualResult)return whole;if(requireEquals&&!equalPart)return whole;const values=expression.match(/\d[\d,]*/g)||[];if(values.length<2)return whole;const sum=values.reduce((total,value)=>total+parseMoney(value),0);return `${expression.replace(/\s*\+\s*/g," + ")} = ${Number(sum).toLocaleString("en-US")}` })).join("\n")}
 function renderDetailContent(line){return esc(formatNumbersInText(line)).replaceAll("หักจากมัดจำ",'<strong class="deposit-deduction-text">หักจากมัดจำ</strong>')}
 function formatDetails(text){return String(text).split(/\r?\n/).flatMap(line=>{const marker=line.indexOf("รวมยอดชำระ");return marker>0?[line.slice(0,marker).trimEnd(),line.slice(marker)]:[line]})}
 function saveLastView(){try{localStorage.setItem(viewStorageKey,JSON.stringify({branch:document.querySelector("#branch")?.value||"",date:document.querySelector("#ledgerDate")?.value||""}))}catch{}}
@@ -75,7 +75,7 @@ document.querySelectorAll(".payment-amount,.month-input-grid input").forEach(inp
 document.querySelectorAll("[data-payment]").forEach(box=>box.addEventListener("change",()=>{const option=box.closest(".payment-option");const amount=option.querySelector(".payment-amount");option.classList.toggle("selected",box.checked);amount.disabled=!box.checked;if(box.checked)amount.focus();else amount.value=""}));
 const entryForm=document.querySelector("#entryForm");
 const detailInput=entryForm.elements.detail;
-detailInput.addEventListener("input",()=>{const cursor=detailInput.selectionStart??detailInput.value.length;const before=detailInput.value;const formatted=formatNumbersInText(before);if(formatted!==before){detailInput.value=formatted;const next=cursor+(formatted.length-before.length);detailInput.setSelectionRange(next,next)}});
+detailInput.addEventListener("input",()=>{const cursor=detailInput.selectionStart??detailInput.value.length;const before=detailInput.value;const calculated=calculateAdditions(before,true);const formatted=formatNumbersInText(calculated);if(formatted!==before){detailInput.value=formatted;const next=cursor+(formatted.length-before.length);detailInput.setSelectionRange(next,next)}});
 detailInput.addEventListener("blur",()=>{detailInput.value=formatNumbersInText(calculateAdditions(detailInput.value))});
 const phraseInput=document.querySelector("#phraseInput");
 const phraseChips=document.querySelector("#phraseChips");

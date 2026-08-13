@@ -1,4 +1,8 @@
 let rows=[];
+let supabaseClient=null;
+let cloudSyncActive=false;
+let cloudSyncStarting=false;
+let cloudChannel=null;
 const ledgerStoragePrefix="michiko-ledger-rows-v1";
 const monthStoragePrefix="michiko-month-base-v1";
 const viewStorageKey="michiko-ledger-last-view-v1";
@@ -34,10 +38,10 @@ function ledgerContext(){const branch=document.querySelector("#branch")?.value||
 function ledgerStorageKey(){const {branch,date}=ledgerContext();return `${ledgerStoragePrefix}:${encodeURIComponent(branch)}:${date}`}
 function monthStorageKey(){const {branch,date}=ledgerContext();return `${monthStoragePrefix}:${encodeURIComponent(branch)}:${date.slice(0,7)}`}
 function loadSavedLedger(){try{const saved=JSON.parse(localStorage.getItem(ledgerStorageKey())||"[]");rows=Array.isArray(saved)?saved.map(row=>({...row,detail:Array.isArray(row.detail)?row.detail.map(formatNumbersInText):formatDetails(formatNumbersInText(row.detail||""))})):[]}catch{rows=[]}try{const savedMonth=JSON.parse(localStorage.getItem(monthStorageKey())||"{}");monthBase=Object.fromEntries(keys.map(key=>[key,Number(savedMonth[key])||0]))}catch{monthBase=Object.fromEntries(keys.map(key=>[key,0]))}}
-function saveLedger(){try{localStorage.setItem(ledgerStorageKey(),JSON.stringify(rows))}catch{}}
-function saveMonthBase(){try{localStorage.setItem(monthStorageKey(),JSON.stringify(monthBase))}catch{}}
+function saveLedger(){try{const key=ledgerStorageKey();localStorage.setItem(key,JSON.stringify(rows));queueCloudSave(key)}catch{}}
+function saveMonthBase(){try{const key=monthStorageKey();localStorage.setItem(key,JSON.stringify(monthBase));queueCloudSave(key)}catch{}}
 function renderStaffNames(){document.querySelector("#doctorNames").innerHTML=staffNames.doctors.map(name=>`<option value="${esc(name)}"></option>`).join("");document.querySelector("#assistantNames").innerHTML=staffNames.assistants.map(name=>`<option value="${esc(name)}"></option>`).join("")}
-function rememberStaff(doctor,assistant){if(doctor&&!staffNames.doctors.includes(doctor))staffNames.doctors.push(doctor);if(assistant&&!staffNames.assistants.includes(assistant))staffNames.assistants.push(assistant);try{localStorage.setItem(staffStorageKey,JSON.stringify(staffNames))}catch{}renderStaffNames()}
+function rememberStaff(doctor,assistant){if(doctor&&!staffNames.doctors.includes(doctor))staffNames.doctors.push(doctor);if(assistant&&!staffNames.assistants.includes(assistant))staffNames.assistants.push(assistant);try{localStorage.setItem(staffStorageKey,JSON.stringify(staffNames));queueCloudSave(staffStorageKey)}catch{}renderStaffNames()}
 function totals(){return rows.reduce((a,r)=>(keys.forEach(k=>a[k]+=(r[k]||0)),a),Object.fromEntries(keys.map(k=>[k,0])))}
 function render(){
  const q=document.querySelector("#search").value.trim().toLowerCase();
@@ -85,7 +89,7 @@ detailInput.addEventListener("input",updateCalculationPreview);
 detailInput.addEventListener("blur",()=>{detailInput.value=formatNumbersInText(calculateAdditions(detailInput.value));updateCalculationPreview()});
 const phraseInput=document.querySelector("#phraseInput");
 const phraseChips=document.querySelector("#phraseChips");
-function storePhrases(){localStorage.setItem(phraseStorageKey,JSON.stringify(frequentPhrases));localStorage.setItem(phraseUsageKey,JSON.stringify(phraseUsage))}
+function storePhrases(){localStorage.setItem(phraseStorageKey,JSON.stringify(frequentPhrases));localStorage.setItem(phraseUsageKey,JSON.stringify(phraseUsage));queueCloudSave(phraseStorageKey);queueCloudSave(phraseUsageKey)}
 function insertPhrase(phrase){const cursor=detailInput.selectionStart??detailInput.value.length;const replaceStart=phraseQuery?phraseQueryStart:cursor;const prefix=!phraseQuery&&cursor>0&&!/\s$/.test(detailInput.value.slice(0,cursor))?" ":"";detailInput.setRangeText(`${prefix}${phrase} `,replaceStart,cursor,"end");phraseUsage[phrase]=(Number(phraseUsage[phrase])||0)+1;storePhrases();phraseQuery="";phraseQueryStart=detailInput.selectionStart??detailInput.value.length;showAllPhrases=false;renderPhrases();detailInput.focus()}
 function renderPhrases(){const ranked=[...frequentPhrases].sort((a,b)=>(Number(phraseUsage[b])||0)-(Number(phraseUsage[a])||0)||frequentPhrases.indexOf(a)-frequentPhrases.indexOf(b));const matches=phraseQuery?ranked.filter(phrase=>phrase.toLocaleLowerCase("th").includes(phraseQuery.toLocaleLowerCase("th"))):ranked;const visible=showAllPhrases?matches:matches.slice(0,6);if(!frequentPhrases.length){phraseChips.innerHTML='<span class="phrase-empty">ยังไม่มีคำที่บันทึก</span>';return}if(phraseQuery&&!matches.length){phraseChips.innerHTML=`<span class="phrase-empty">ไม่พบคำที่ตรงกับ “${esc(phraseQuery)}”</span>`;return}phraseChips.innerHTML=visible.map(phrase=>{const index=frequentPhrases.indexOf(phrase);return `<button class="phrase-chip${phraseQuery?" suggested":""}" type="button" data-phrase="${index}"><span>${esc(phrase)}</span><i data-remove-phrase="${index}" aria-label="ลบคำ">×</i></button>`}).join("")+(matches.length>6?`<button class="phrase-toggle" type="button">${showAllPhrases?"ซ่อนคำที่เหลือ":`แสดงทั้งหมด (+${matches.length-6})`}</button>`:"");phraseChips.querySelectorAll("[data-phrase]").forEach(button=>button.addEventListener("click",event=>{if(event.target.closest("[data-remove-phrase]"))return;insertPhrase(frequentPhrases[Number(button.dataset.phrase)])}));phraseChips.querySelectorAll("[data-remove-phrase]").forEach(remove=>remove.addEventListener("click",()=>{const phrase=frequentPhrases[Number(remove.dataset.removePhrase)];frequentPhrases.splice(Number(remove.dataset.removePhrase),1);delete phraseUsage[phrase];storePhrases();renderPhrases()}));phraseChips.querySelector(".phrase-toggle")?.addEventListener("click",()=>{showAllPhrases=!showAllPhrases;renderPhrases()})}
 function savePhrase(){const phrase=phraseInput.value.trim();if(!phrase)return;if(!frequentPhrases.includes(phrase))frequentPhrases.push(phrase);phraseInput.value="";showAllPhrases=true;storePhrases();renderPhrases()}
@@ -93,7 +97,7 @@ document.querySelector("#savePhraseButton").onclick=savePhrase;
 phraseInput.addEventListener("keydown",event=>{if(event.key==="Enter"){event.preventDefault();savePhrase()}});
 detailInput.addEventListener("input",()=>{const cursor=detailInput.selectionStart??detailInput.value.length;const textBeforeCursor=detailInput.value.slice(0,cursor);const currentWord=textBeforeCursor.match(/[^\s,.;:!?()[\]{}]+$/u)?.[0]||"";phraseQuery=currentWord;phraseQueryStart=cursor-currentWord.length;showAllPhrases=false;renderPhrases()});
 function deleteEntry(index){const row=rows[index];if(!row)return;if(!confirm(`ยืนยันลบรายการ HN ${row.hn} ของ ${row.patient} ใช่ไหม?`))return;rows.splice(index,1);saveLedger();render()}
-function moveEntryToDate(index){const row=rows[index];if(!row)return;const targetDate=prompt("กรอกวันที่ปลายทาง รูปแบบ ปี-เดือน-วัน เช่น 2026-08-12",ledgerDate.value);if(targetDate===null)return;const cleanDate=targetDate.trim();if(!/^\d{4}-\d{2}-\d{2}$/.test(cleanDate)||Number.isNaN(new Date(`${cleanDate}T12:00:00`).getTime())){alert("วันที่ไม่ถูกต้อง กรุณากรอกแบบ ปี-เดือน-วัน");return}if(cleanDate===ledgerDate.value){alert("รายการอยู่ในวันนี้แล้ว");return}const branch=document.querySelector("#branch").value;const targetKey=`${ledgerStoragePrefix}:${encodeURIComponent(branch)}:${cleanDate}`;let targetRows=[];try{const saved=JSON.parse(localStorage.getItem(targetKey)||"[]");targetRows=Array.isArray(saved)?saved:[]}catch{}targetRows.push({...row});try{localStorage.setItem(targetKey,JSON.stringify(targetRows))}catch{alert("ไม่สามารถบันทึกรายการไปวันที่ใหม่ได้");return}rows.splice(index,1);saveLedger();render();alert(`ย้ายรายการไปวันที่ ${cleanDate} แล้ว`)}
+function moveEntryToDate(index){const row=rows[index];if(!row)return;const targetDate=prompt("กรอกวันที่ปลายทาง รูปแบบ ปี-เดือน-วัน เช่น 2026-08-12",ledgerDate.value);if(targetDate===null)return;const cleanDate=targetDate.trim();if(!/^\d{4}-\d{2}-\d{2}$/.test(cleanDate)||Number.isNaN(new Date(`${cleanDate}T12:00:00`).getTime())){alert("วันที่ไม่ถูกต้อง กรุณากรอกแบบ ปี-เดือน-วัน");return}if(cleanDate===ledgerDate.value){alert("รายการอยู่ในวันนี้แล้ว");return}const branch=document.querySelector("#branch").value;const targetKey=`${ledgerStoragePrefix}:${encodeURIComponent(branch)}:${cleanDate}`;let targetRows=[];try{const saved=JSON.parse(localStorage.getItem(targetKey)||"[]");targetRows=Array.isArray(saved)?saved:[]}catch{}targetRows.push({...row});try{localStorage.setItem(targetKey,JSON.stringify(targetRows));queueCloudSave(targetKey)}catch{alert("ไม่สามารถบันทึกรายการไปวันที่ใหม่ได้");return}rows.splice(index,1);saveLedger();render();alert(`ย้ายรายการไปวันที่ ${cleanDate} แล้ว`)}
 function resetEditor(){entryForm.reset();editingIndex=null;phraseQuery="";phraseQueryStart=0;showAllPhrases=false;document.querySelector("#saveEntryButton").textContent="บันทึกรายการ";entryForm.querySelectorAll(".payment-option").forEach(option=>option.classList.remove("selected"));entryForm.querySelectorAll(".payment-amount").forEach(input=>input.disabled=true);updateCalculationPreview();renderPhrases()}
 function openEditor(index){resetEditor();editingIndex=index;const row=rows[index];entryForm.elements.hn.value=row.hn;entryForm.elements.patient.value=row.patient;entryForm.elements.doctor.value=row.doctor||"";entryForm.elements.assistant.value=row.assistant||"";entryForm.elements.detail.value=row.detail.map(formatNumbersInText).join("\n");updateCalculationPreview();keys.forEach(key=>{if(row[key]){const box=entryForm.querySelector(`[data-payment="${key}"]`);const amount=entryForm.elements[key];box.checked=true;amount.disabled=false;amount.value=money(row[key]);box.closest(".payment-option").classList.add("selected")}});document.querySelector("#saveEntryButton").textContent="บันทึกการแก้ไข";modal.hidden=false;entryForm.elements.hn.focus()}
 document.querySelector("#addButton").onclick=()=>{resetEditor();modal.hidden=false;entryForm.elements.hn.focus()};
@@ -126,6 +130,48 @@ async function importLedgerData(file){let backup;try{backup=JSON.parse(await fil
 document.querySelector("#exportDataButton").addEventListener("click",exportLedgerData);
 const importDataFile=document.querySelector("#importDataFile");document.querySelector("#importDataButton").addEventListener("click",()=>{importDataFile.value="";importDataFile.click()});importDataFile.addEventListener("change",()=>{const file=importDataFile.files?.[0];if(file)importLedgerData(file)});
 
+const cloudStoragePrefixes=[ledgerStoragePrefix,monthStoragePrefix,phraseStorageKey,phraseUsageKey,staffStorageKey];
+const syncStatus=document.querySelector("#syncStatus");
+const isCloudKey=key=>cloudStoragePrefixes.some(prefix=>key===prefix||key.startsWith(`${prefix}:`));
+function setSyncStatus(message,state=""){if(!syncStatus)return;syncStatus.textContent=message;syncStatus.className=`sync-status ${state}`.trim()}
+function storedPayload(raw){try{return JSON.parse(raw)}catch{return raw}}
+async function persistCloudKey(key){
+  if(!cloudSyncActive||!supabaseClient||!isCloudKey(key))return;
+  const raw=localStorage.getItem(key);if(raw===null)return;
+  setSyncStatus("กำลังบันทึก…");
+  const {data:{user}}=await supabaseClient.auth.getUser();
+  if(!user){setSyncStatus("ยังไม่เชื่อม","error");return}
+  const {error}=await supabaseClient.from("smart_ledger_state").upsert({storage_key:key,payload:storedPayload(raw),updated_by:user.id,updated_at:new Date().toISOString()},{onConflict:"storage_key"});
+  setSyncStatus(error?"บันทึกออนไลน์ไม่ได้":"เชื่อมข้อมูลแล้ว",error?"error":"connected");
+}
+function queueCloudSave(key){if(cloudSyncActive)persistCloudKey(key).catch(()=>setSyncStatus("บันทึกออนไลน์ไม่ได้","error"))}
+function refreshSharedState(){
+  try{frequentPhrases=JSON.parse(localStorage.getItem(phraseStorageKey)||"[]").filter(item=>typeof item==="string")}catch{frequentPhrases=[]}
+  try{phraseUsage=JSON.parse(localStorage.getItem(phraseUsageKey)||"{}")}catch{phraseUsage={}}
+  try{const saved=JSON.parse(localStorage.getItem(staffStorageKey)||"{}");staffNames.doctors=Array.isArray(saved.doctors)?saved.doctors:[];staffNames.assistants=Array.isArray(saved.assistants)?saved.assistants:[]}catch{staffNames={doctors:[],assistants:[]}}
+  loadSavedLedger();renderPhrases();renderStaffNames();render();
+}
+async function startCloudSync(){
+  if(!supabaseClient||cloudSyncActive||cloudSyncStarting)return;
+  cloudSyncStarting=true;
+  setSyncStatus("กำลังเชื่อม…");
+  const {data,error}=await supabaseClient.from("smart_ledger_state").select("storage_key,payload");
+  if(error){cloudSyncStarting=false;setSyncStatus("รอตั้งค่าฐานข้อมูล","error");return}
+  const cloudRows=Array.isArray(data)?data:[];
+  const cloudKeys=new Set(cloudRows.map(item=>item.storage_key));
+  cloudRows.forEach(item=>{if(isCloudKey(item.storage_key))localStorage.setItem(item.storage_key,JSON.stringify(item.payload))});
+  const localKeys=[];for(let index=0;index<localStorage.length;index++){const key=localStorage.key(index);if(key&&isCloudKey(key)&&!cloudKeys.has(key))localKeys.push(key)}
+  cloudSyncActive=true;cloudSyncStarting=false;
+  for(const key of localKeys)await persistCloudKey(key);
+  refreshSharedState();setSyncStatus("เชื่อมข้อมูลแล้ว","connected");
+  cloudChannel=supabaseClient.channel("smart-ledger-shared-state").on("postgres_changes",{event:"*",schema:"public",table:"smart_ledger_state"},change=>{
+    const item=change.new?.storage_key?change.new:change.old;if(!item?.storage_key||!isCloudKey(item.storage_key))return;
+    if(change.eventType==="DELETE")localStorage.removeItem(item.storage_key);else localStorage.setItem(item.storage_key,JSON.stringify(item.payload));
+    refreshSharedState();setSyncStatus("เชื่อมข้อมูลแล้ว","connected");
+  }).subscribe();
+}
+async function stopCloudSync(){cloudSyncActive=false;cloudSyncStarting=false;if(cloudChannel&&supabaseClient){await supabaseClient.removeChannel(cloudChannel);cloudChannel=null}setSyncStatus("ข้อมูลในเครื่อง")}
+
 /* Supabase reception login: the internal email stays hidden from staff. */
 const authGate=document.querySelector("#authGate");
 const loginForm=document.querySelector("#loginForm");
@@ -134,7 +180,6 @@ const loginButton=document.querySelector("#loginButton");
 const authError=document.querySelector("#authError");
 const logoutButton=document.querySelector("#logoutButton");
 const receptionEmail="customerservice@michikoclinic.com";
-let supabaseClient=null;
 function showAuthError(message){authError.textContent=message;authError.hidden=!message}
 function setSignedIn(signedIn){authGate.hidden=signedIn;logoutButton.hidden=!signedIn;if(!signedIn){branchGate.hidden=true;setTimeout(()=>loginPassword.focus(),0)}}
 async function initializeAuth(){
@@ -144,8 +189,8 @@ async function initializeAuth(){
   const {data,error}=await supabaseClient.auth.getSession();
   if(error){showAuthError("ตรวจสอบการเข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่");setSignedIn(false);return}
   setSignedIn(Boolean(data.session));
-  if(data.session){try{branchGate.hidden=sessionStorage.getItem(branchSessionKey)==="1"}catch{branchGate.hidden=false}}
-  supabaseClient.auth.onAuthStateChange((_event,session)=>setSignedIn(Boolean(session)));
+  if(data.session){try{branchGate.hidden=sessionStorage.getItem(branchSessionKey)==="1"}catch{branchGate.hidden=false}await startCloudSync()}
+  supabaseClient.auth.onAuthStateChange((_event,session)=>{setSignedIn(Boolean(session));if(session)startCloudSync();else stopCloudSync()});
 }
 loginForm.addEventListener("submit",async event=>{
   event.preventDefault();showAuthError("");
@@ -154,13 +199,13 @@ loginForm.addEventListener("submit",async event=>{
   const {error}=await supabaseClient.auth.signInWithPassword({email:receptionEmail,password:loginPassword.value});
   loginButton.disabled=false;loginButton.textContent="เข้าสู่ระบบ";
   if(error){showAuthError("รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่");loginPassword.select();return}
-  loginPassword.value="";setSignedIn(true);
+  loginPassword.value="";setSignedIn(true);await startCloudSync();
   try{sessionStorage.removeItem(branchSessionKey)}catch{}
   branchGate.hidden=false;
 });
 logoutButton.addEventListener("click",async()=>{
   logoutButton.disabled=true;
-  if(supabaseClient)await supabaseClient.auth.signOut();
+  await stopCloudSync();if(supabaseClient)await supabaseClient.auth.signOut();
   try{sessionStorage.removeItem(branchSessionKey)}catch{}
   logoutButton.disabled=false;showAuthError("");setSignedIn(false);
 });

@@ -137,13 +137,21 @@ function buildRangePage(branch,date,dateRows){
   const logo=document.querySelector(".brand-logo").src;
   return `<article class="range-print-page"><header class="range-print-head"><img src="${logo}" alt="Michiko Aesthetics"><div><h2>สมุดรายวัน</h2><p>สาขา ${esc(branch)} · เอกสารสำหรับฝ่ายบัญชี</p></div><time>${rangeDateLabel(date)}</time></header><table><thead><tr><th>ลำดับ</th><th>HN</th><th>ชื่อ นามสกุล</th><th>รายละเอียด</th><th>เงินสด</th><th>SCB</th><th>LP</th><th>บัตร KBank</th><th>บัตร BBL</th><th>บัตร KTC</th><th>Member</th><th>ชื่อแพทย์</th><th>ผู้ช่วย</th><th>หมายเหตุ</th></tr></thead><tbody>${body}</tbody><tfoot><tr class="range-print-total"><td colspan="4">รวมประจำวัน</td>${keys.map(key=>`<td>${total[key]?money(total[key]):""}</td>`).join("")}<td></td><td></td><td></td></tr></tfoot></table><div class="range-print-summary"><span>ยอดรับรวม ${money(grand)} บาท</span><span>Member ${money(total.member)} บาท</span></div></article>`;
 }
+function monthOpeningFor(branch,month){try{const saved=JSON.parse(localStorage.getItem(`${monthStoragePrefix}:${encodeURIComponent(branch)}:${month}`)||"{}");return Object.fromEntries(keys.map(key=>[key,Number(saved[key])||0]))}catch{return Object.fromEntries(keys.map(key=>[key,0]))}}
+function buildMonthlyRangeSummary(branch,month,cutoff){
+  const total=monthOpeningFor(branch,month);const cursor=new Date(`${month}-01T12:00:00`);const last=new Date(`${cutoff}T12:00:00`);
+  while(cursor<=last){const date=`${cursor.getFullYear()}-${String(cursor.getMonth()+1).padStart(2,"0")}-${String(cursor.getDate()).padStart(2,"0")}`;rowsForDate(branch,date).forEach(row=>keys.forEach(key=>total[key]+=Number(row[key])||0));cursor.setDate(cursor.getDate()+1)}
+  const grand=total.cash+total.scb+total.lp+total.cardKbank+total.cardBbl+total.cardKtc;const logo=document.querySelector(".brand-logo").src;
+  return `<article class="range-print-page month-range-page"><header class="range-print-head"><img src="${logo}" alt="Michiko Aesthetics"><div><h2>ยอดสะสมรายเดือน</h2><p>สาขา ${esc(branch)} · สะสมตั้งแต่วันที่ 1</p></div><time>ถึง ${rangeDateLabel(cutoff)}</time></header><h3>สรุปยอดประจำเดือน ${new Intl.DateTimeFormat("th-TH",{month:"long",year:"numeric"}).format(new Date(`${month}-01T12:00:00`))}</h3><div class="month-range-grid"><article><span>ยอดรับรวม</span><strong>${money(grand)}</strong><small>บาท</small></article>${keys.map((key,index)=>`<article><span>${labels[index]}</span><strong>${money(total[key])}</strong><small>บาท</small></article>`).join("")}</div></article>`;
+}
 pdfRangeForm.addEventListener("submit",event=>{
   event.preventDefault();const start=pdfStartDate.value;const end=pdfEndDate.value;
   if(!start||!end||start>end){alert("กรุณาเลือกช่วงวันที่ให้ถูกต้อง");return}
   const dates=[];const cursor=new Date(`${start}T12:00:00`);const last=new Date(`${end}T12:00:00`);
   while(cursor<=last){dates.push(`${cursor.getFullYear()}-${String(cursor.getMonth()+1).padStart(2,"0")}-${String(cursor.getDate()).padStart(2,"0")}`);cursor.setDate(cursor.getDate()+1)}
   const branch=document.querySelector("#branch").value;
-  rangeReport.innerHTML=dates.map(date=>buildRangePage(branch,date,rowsForDate(branch,date))).join("");
+  const monthCutoffs={};dates.forEach(date=>{monthCutoffs[date.slice(0,7)]=date});
+  rangeReport.innerHTML=dates.map(date=>buildRangePage(branch,date,rowsForDate(branch,date))).join("")+Object.entries(monthCutoffs).map(([month,cutoff])=>buildMonthlyRangeSummary(branch,month,cutoff)).join("");
   closePdfRange();document.body.classList.add("range-print");rangeReport.setAttribute("aria-hidden","false");setTimeout(()=>window.print(),50);
 });
 window.addEventListener("afterprint",()=>{document.body.classList.remove("range-print");rangeReport.setAttribute("aria-hidden","true")});

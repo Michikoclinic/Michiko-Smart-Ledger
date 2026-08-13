@@ -48,6 +48,7 @@ function saveMonthBase(){try{const key=monthStorageKey();localStorage.setItem(ke
 function renderStaffNames(){document.querySelector("#doctorNames").innerHTML=staffNames.doctors.map(name=>`<option value="${esc(name)}"></option>`).join("");document.querySelector("#assistantNames").innerHTML=staffNames.assistants.map(name=>`<option value="${esc(name)}"></option>`).join("")}
 function rememberStaff(doctor,assistant){if(doctor&&!staffNames.doctors.includes(doctor))staffNames.doctors.push(doctor);if(assistant&&!staffNames.assistants.includes(assistant))staffNames.assistants.push(assistant);try{localStorage.setItem(staffStorageKey,JSON.stringify(staffNames));queueCloudSave(staffStorageKey)}catch{}renderStaffNames()}
 function totals(){return rows.reduce((a,r)=>(keys.forEach(k=>a[k]+=(r[k]||0)),a),Object.fromEntries(keys.map(k=>[k,0])))}
+function automaticMonthTotals(branch,dateValue){const result=Object.fromEntries(keys.map(key=>[key,0]));const month=dateValue.slice(0,7);const cursor=new Date(`${month}-01T12:00:00`);const last=new Date(`${dateValue}T12:00:00`);while(cursor<=last){const date=`${cursor.getFullYear()}-${String(cursor.getMonth()+1).padStart(2,"0")}-${String(cursor.getDate()).padStart(2,"0")}`;rowsForDate(branch,date).forEach(row=>keys.forEach(key=>result[key]+=Number(row[key])||0));cursor.setDate(cursor.getDate()+1)}return result}
 function render(){
  const q=document.querySelector("#search").value.trim().toLowerCase();
  const filtered=rows.filter(r=>[r.hn,r.patient,r.doctor||"",r.assistant||"",...r.detail].join(" ").toLowerCase().includes(q));
@@ -56,7 +57,7 @@ function render(){
  const t=totals(); const daily=t.cash+t.scb+t.lp+t.cardKbank+t.cardBbl+t.cardKtc;
  document.querySelector("#ledgerTotal").innerHTML=`<tr><td colspan="4">รวมประจำวัน</td>${keys.map(k=>`<td>${t[k]?money(t[k]):""}</td>`).join("")}<td></td><td></td><td></td></tr>`;
  document.querySelector("#dailyCards").innerHTML=[["ยอดรับรวมวันนี้",daily],...keys.map((k,i)=>[paymentLabels()[i],t[k]])].map(x=>`<article class="card"><span>${x[0]}</span><strong>${money(x[1])}</strong><small>บาท</small></article>`).join("");
- const m=Object.fromEntries(keys.map(k=>[k,monthBase[k]+t[k]])); const mg=m.cash+m.scb+m.lp+m.cardKbank+m.cardBbl+m.cardKtc;
+ const m=automaticMonthTotals(document.querySelector("#branch").value,ledgerDate.value); const mg=m.cash+m.scb+m.lp+m.cardKbank+m.cardBbl+m.cardKtc;
  document.querySelector("#monthTotals").innerHTML=`<tr><td>${money(mg)}</td>${keys.map(k=>`<td>${money(m[k])}</td>`).join("")}</tr>`;
  document.querySelectorAll("[data-edit]").forEach(button=>button.addEventListener("click",()=>openEditor(Number(button.dataset.edit))));
  document.querySelectorAll("[data-delete]").forEach(button=>button.addEventListener("click",()=>deleteEntry(Number(button.dataset.delete))));
@@ -139,10 +140,8 @@ function buildRangePage(branch,date,dateRows){
   const logo=document.querySelector(".brand-logo").src;
   const branchLabels=paymentLabels(branch);return `<article class="range-print-page"><header class="range-print-head"><img src="${logo}" alt="Michiko Aesthetics"><div><h2>สมุดรายวัน</h2><p>สาขา ${esc(branch)} · เอกสารสำหรับฝ่ายบัญชี</p></div><time>${rangeDateLabel(date)}</time></header><table><thead><tr><th>ลำดับ</th><th>HN</th><th>ชื่อ นามสกุล</th><th>รายละเอียด</th>${branchLabels.map(label=>`<th>${esc(label.replace("โอน · ",""))}</th>`).join("")}<th>ชื่อแพทย์</th><th>ผู้ช่วย</th><th>หมายเหตุ</th></tr></thead><tbody>${body}</tbody><tfoot><tr class="range-print-total"><td colspan="4">รวมประจำวัน</td>${keys.map(key=>`<td>${total[key]?money(total[key]):""}</td>`).join("")}<td></td><td></td><td></td></tr></tfoot></table><div class="range-print-summary"><span>ยอดรับรวม ${money(grand)} บาท</span><span>Member ${money(total.member)} บาท</span></div></article>`;
 }
-function monthOpeningFor(branch,month){try{const saved=JSON.parse(localStorage.getItem(`${monthStoragePrefix}:${encodeURIComponent(branch)}:${month}`)||"{}");return Object.fromEntries(keys.map(key=>[key,Number(saved[key])||0]))}catch{return Object.fromEntries(keys.map(key=>[key,0]))}}
 function buildMonthlyRangeSummary(branch,month,cutoff){
-  const total=monthOpeningFor(branch,month);const cursor=new Date(`${month}-01T12:00:00`);const last=new Date(`${cutoff}T12:00:00`);
-  while(cursor<=last){const date=`${cursor.getFullYear()}-${String(cursor.getMonth()+1).padStart(2,"0")}-${String(cursor.getDate()).padStart(2,"0")}`;rowsForDate(branch,date).forEach(row=>keys.forEach(key=>total[key]+=Number(row[key])||0));cursor.setDate(cursor.getDate()+1)}
+  const total=automaticMonthTotals(branch,cutoff);
   const grand=total.cash+total.scb+total.lp+total.cardKbank+total.cardBbl+total.cardKtc;const logo=document.querySelector(".brand-logo").src;
   const branchLabels=paymentLabels(branch);return `<article class="range-print-page month-range-page"><header class="range-print-head"><img src="${logo}" alt="Michiko Aesthetics"><div><h2>ยอดสะสมรายเดือน</h2><p>สาขา ${esc(branch)} · สะสมตั้งแต่วันที่ 1</p></div><time>ถึง ${rangeDateLabel(cutoff)}</time></header><h3>สรุปยอดประจำเดือน ${new Intl.DateTimeFormat("th-TH",{month:"long",year:"numeric"}).format(new Date(`${month}-01T12:00:00`))}</h3><div class="month-range-grid"><article><span>ยอดรับรวม</span><strong>${money(grand)}</strong><small>บาท</small></article>${keys.map((key,index)=>`<article><span>${branchLabels[index]}</span><strong>${money(total[key])}</strong><small>บาท</small></article>`).join("")}</div></article>`;
 }
@@ -157,11 +156,6 @@ pdfRangeForm.addEventListener("submit",event=>{
   closePdfRange();document.body.classList.add("range-print");rangeReport.setAttribute("aria-hidden","false");setTimeout(()=>window.print(),50);
 });
 window.addEventListener("afterprint",()=>{document.body.classList.remove("range-print");rangeReport.setAttribute("aria-hidden","true")});
-const monthForm=document.querySelector("#monthForm");
-document.querySelector("#editMonthButton").onclick=()=>{keys.forEach(key=>monthForm.elements[key].value=monthBase[key]?money(monthBase[key]):"");monthModal.hidden=false;monthForm.elements.cash.focus()};
-document.querySelector("#closeMonthButton").onclick=document.querySelector("#cancelMonthButton").onclick=()=>monthModal.hidden=true;
-monthModal.addEventListener("click",event=>{if(event.target===monthModal)monthModal.hidden=true});
-monthForm.addEventListener("submit",event=>{event.preventDefault();const form=new FormData(monthForm);monthBase=Object.fromEntries(keys.map(key=>[key,parseMoney(form.get(key))]));saveMonthBase();monthModal.hidden=true;render()});
 updateDate(ledgerDate.value);
 loadSavedLedger();
 renderPhrases();

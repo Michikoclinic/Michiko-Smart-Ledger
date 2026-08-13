@@ -125,3 +125,43 @@ function exportLedgerData(){const data={format:"michiko-smart-ledger-backup",ver
 async function importLedgerData(file){let backup;try{backup=JSON.parse(await file.text())}catch{alert("ไฟล์สำรองไม่ถูกต้อง");return}if(backup?.format!=="michiko-smart-ledger-backup"||!backup.items||typeof backup.items!=="object"){alert("ไฟล์นี้ไม่ใช่ข้อมูลสำรองของ Michiko Smart Ledger");return}const keys=Object.keys(backup.items).filter(key=>key.startsWith(backupPrefix)&&typeof backup.items[key]==="string");if(!keys.length){alert("ไม่พบข้อมูลสำหรับนำเข้า");return}if(!confirm(`นำเข้าข้อมูล ${keys.length} ชุด ข้อมูลชื่อเดียวกันในเครื่องนี้จะถูกแทนที่ ยืนยันหรือไม่?`))return;try{keys.forEach(key=>localStorage.setItem(key,backup.items[key]));alert("นำเข้าข้อมูลเรียบร้อย ระบบจะโหลดหน้าใหม่");location.reload()}catch{alert("พื้นที่จัดเก็บไม่เพียงพอ ไม่สามารถนำเข้าข้อมูลได้")}}
 document.querySelector("#exportDataButton").addEventListener("click",exportLedgerData);
 const importDataFile=document.querySelector("#importDataFile");document.querySelector("#importDataButton").addEventListener("click",()=>{importDataFile.value="";importDataFile.click()});importDataFile.addEventListener("change",()=>{const file=importDataFile.files?.[0];if(file)importLedgerData(file)});
+
+/* Supabase reception login: the internal email stays hidden from staff. */
+const authGate=document.querySelector("#authGate");
+const loginForm=document.querySelector("#loginForm");
+const loginPassword=document.querySelector("#loginPassword");
+const loginButton=document.querySelector("#loginButton");
+const authError=document.querySelector("#authError");
+const logoutButton=document.querySelector("#logoutButton");
+const receptionEmail="ledger@michiko.local";
+let supabaseClient=null;
+function showAuthError(message){authError.textContent=message;authError.hidden=!message}
+function setSignedIn(signedIn){authGate.hidden=signedIn;logoutButton.hidden=!signedIn;if(!signedIn){branchGate.hidden=true;setTimeout(()=>loginPassword.focus(),0)}}
+async function initializeAuth(){
+  const config=window.MICHIKO_SUPABASE;
+  if(!config?.url||!config?.publishableKey||!window.supabase?.createClient){showAuthError("เชื่อมต่อระบบเข้าสู่ระบบไม่ได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วรีเฟรชหน้า");setSignedIn(false);return}
+  supabaseClient=window.supabase.createClient(config.url,config.publishableKey,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true}});
+  const {data,error}=await supabaseClient.auth.getSession();
+  if(error){showAuthError("ตรวจสอบการเข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่");setSignedIn(false);return}
+  setSignedIn(Boolean(data.session));
+  if(data.session){try{branchGate.hidden=sessionStorage.getItem(branchSessionKey)==="1"}catch{branchGate.hidden=false}}
+  supabaseClient.auth.onAuthStateChange((_event,session)=>setSignedIn(Boolean(session)));
+}
+loginForm.addEventListener("submit",async event=>{
+  event.preventDefault();showAuthError("");
+  if(!supabaseClient){showAuthError("ระบบยังเชื่อมต่อไม่สำเร็จ กรุณารีเฟรชหน้าแล้วลองใหม่");return}
+  loginButton.disabled=true;loginButton.textContent="กำลังเข้าสู่ระบบ…";
+  const {error}=await supabaseClient.auth.signInWithPassword({email:receptionEmail,password:loginPassword.value});
+  loginButton.disabled=false;loginButton.textContent="เข้าสู่ระบบ";
+  if(error){showAuthError("รหัสผ่านไม่ถูกต้อง กรุณาลองใหม่");loginPassword.select();return}
+  loginPassword.value="";setSignedIn(true);
+  try{sessionStorage.removeItem(branchSessionKey)}catch{}
+  branchGate.hidden=false;
+});
+logoutButton.addEventListener("click",async()=>{
+  logoutButton.disabled=true;
+  if(supabaseClient)await supabaseClient.auth.signOut();
+  try{sessionStorage.removeItem(branchSessionKey)}catch{}
+  logoutButton.disabled=false;showAuthError("");setSignedIn(false);
+});
+initializeAuth();

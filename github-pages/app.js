@@ -8,6 +8,8 @@ const monthStoragePrefix="michiko-month-base-v1";
 const viewStorageKey="michiko-ledger-last-view-v1";
 const keys=["cash","scb","lp","cardKbank","cardBbl","cardKtc","member"];
 const labels=["เงินสด","โอน · SCB","โอน · LP","บัตร · กสิกร","บัตร · กรุงเทพ","บัตร · KTC","ใช้ Member"];
+function paymentLabels(branch=document.querySelector("#branch")?.value){return branch==="EmSphere"?["เงินสด","SCB บริษัทมิชิโกะ 456","SCB มณี Shop","บัตร · กสิกร","บัตร · กรุงเทพ","บัตร · KTC","ใช้ Member"]:labels}
+function updateBranchPaymentLabels(){const branch=document.querySelector("#branch")?.value;const branchLabels=paymentLabels(branch);document.querySelector('[data-payment-heading="scb"]').textContent=branch==="EmSphere"?"SCB มิชิโกะ 456":"SCB";document.querySelector('[data-payment-heading="lp"]').textContent=branch==="EmSphere"?"SCB มณี Shop":"LP";document.querySelector('[data-payment-label="scb"]').textContent=branchLabels[1];document.querySelector('[data-payment-label="lp"]').textContent=branchLabels[2];document.querySelector('[data-month-label="scb"]').textContent=branchLabels[1];document.querySelector('[data-month-label="lp"]').textContent=branchLabels[2];document.querySelector('[data-month-heading="scb"]').textContent=branchLabels[1];document.querySelector('[data-month-heading="lp"]').textContent=branchLabels[2]}
 let monthBase=Object.fromEntries(keys.map(key=>[key,0]));
 let editingIndex=null;
 const phraseStorageKey="michiko-frequent-phrases-v1";
@@ -53,7 +55,7 @@ function render(){
  document.querySelector("#ledgerRows").innerHTML=filtered.map(r=>{const index=rows.indexOf(r);return `<tr><td class="order-cell">${index+1}</td><td><b>${esc(r.hn)}</b>${r.isNew?'<span class="new">NEW</span>':''}</td><td>${esc(r.patient)}</td><td class="detail">${r.detail.map(x=>{const classes=[x.includes("รวมยอดชำระ")?"payment-total-line":"",/support/i.test(x)?"support-center-line":""].filter(Boolean).join(" ");return `<span class="${classes}">${renderDetailContent(x)||"&nbsp;"}</span>`}).join("")}</td>${keys.map(k=>`<td>${r[k]?money(r[k]):""}</td>`).join("")}<td>${esc(r.doctor||"")}</td><td>${esc(r.assistant||"")}</td><td class="remark">${esc(r.remark||"")}<details class="row-action-menu"><summary><span class="manage-heart" aria-hidden="true">♥</span> จัดการ</summary><div class="row-actions"><button type="button" class="edit-entry" data-edit="${index}">✎ แก้ไข</button><button type="button" class="move-entry" data-move="${index}">↪ ย้ายวัน</button><button type="button" class="delete-entry" data-delete="${index}">🗑 ลบ</button></div></details></td></tr>`}).join("")||'<tr><td colspan="14" class="empty-ledger">ยังไม่มีรายการสำหรับวันนี้</td></tr>';
  const t=totals(); const daily=t.cash+t.scb+t.lp+t.cardKbank+t.cardBbl+t.cardKtc;
  document.querySelector("#ledgerTotal").innerHTML=`<tr><td colspan="4">รวมประจำวัน</td>${keys.map(k=>`<td>${t[k]?money(t[k]):""}</td>`).join("")}<td></td><td></td><td></td></tr>`;
- document.querySelector("#dailyCards").innerHTML=[["ยอดรับรวมวันนี้",daily],...keys.map((k,i)=>[labels[i],t[k]])].map(x=>`<article class="card"><span>${x[0]}</span><strong>${money(x[1])}</strong><small>บาท</small></article>`).join("");
+ document.querySelector("#dailyCards").innerHTML=[["ยอดรับรวมวันนี้",daily],...keys.map((k,i)=>[paymentLabels()[i],t[k]])].map(x=>`<article class="card"><span>${x[0]}</span><strong>${money(x[1])}</strong><small>บาท</small></article>`).join("");
  const m=Object.fromEntries(keys.map(k=>[k,monthBase[k]+t[k]])); const mg=m.cash+m.scb+m.lp+m.cardKbank+m.cardBbl+m.cardKtc;
  document.querySelector("#monthTotals").innerHTML=`<tr><td>${money(mg)}</td>${keys.map(k=>`<td>${money(m[k])}</td>`).join("")}</tr>`;
  document.querySelectorAll("[data-edit]").forEach(button=>button.addEventListener("click",()=>openEditor(Number(button.dataset.edit))));
@@ -61,7 +63,7 @@ function render(){
  document.querySelectorAll("[data-move]").forEach(button=>button.addEventListener("click",()=>moveEntryToDate(Number(button.dataset.move))));
 }
 document.querySelector("#search").addEventListener("input",render);
-document.querySelector("#branch").addEventListener("change",e=>{document.querySelector("#branchName").textContent=e.target.value;saveLastView();loadSavedLedger();render()});
+document.querySelector("#branch").addEventListener("change",e=>{document.querySelector("#branchName").textContent=e.target.value;updateBranchPaymentLabels();saveLastView();loadSavedLedger();render()});
 const ledgerDate=document.querySelector("#ledgerDate");
 const today=new Date();
 ledgerDate.value=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
@@ -135,14 +137,14 @@ function buildRangePage(branch,date,dateRows){
   const grand=total.cash+total.scb+total.lp+total.cardKbank+total.cardBbl+total.cardKtc;
   const body=dateRows.map((row,index)=>`<tr><td>${index+1}</td><td><b>${esc(row.hn||"")}</b></td><td>${esc(row.patient||"")}</td><td class="range-print-detail">${(Array.isArray(row.detail)?row.detail:formatDetails(row.detail||"")).map(line=>`<span class="${line.includes("รวมยอดชำระ")?"payment-total-line":""}">${renderDetailContent(line)||"&nbsp;"}</span>`).join("")}</td>${keys.map(key=>`<td>${row[key]?money(row[key]):""}</td>`).join("")}<td>${esc(row.doctor||"")}</td><td>${esc(row.assistant||"")}</td><td>${esc(row.remark||"")}</td></tr>`).join("")||'<tr><td class="range-print-empty" colspan="14">ไม่มีรายการในวันนี้</td></tr>';
   const logo=document.querySelector(".brand-logo").src;
-  return `<article class="range-print-page"><header class="range-print-head"><img src="${logo}" alt="Michiko Aesthetics"><div><h2>สมุดรายวัน</h2><p>สาขา ${esc(branch)} · เอกสารสำหรับฝ่ายบัญชี</p></div><time>${rangeDateLabel(date)}</time></header><table><thead><tr><th>ลำดับ</th><th>HN</th><th>ชื่อ นามสกุล</th><th>รายละเอียด</th><th>เงินสด</th><th>SCB</th><th>LP</th><th>บัตร KBank</th><th>บัตร BBL</th><th>บัตร KTC</th><th>Member</th><th>ชื่อแพทย์</th><th>ผู้ช่วย</th><th>หมายเหตุ</th></tr></thead><tbody>${body}</tbody><tfoot><tr class="range-print-total"><td colspan="4">รวมประจำวัน</td>${keys.map(key=>`<td>${total[key]?money(total[key]):""}</td>`).join("")}<td></td><td></td><td></td></tr></tfoot></table><div class="range-print-summary"><span>ยอดรับรวม ${money(grand)} บาท</span><span>Member ${money(total.member)} บาท</span></div></article>`;
+  const branchLabels=paymentLabels(branch);return `<article class="range-print-page"><header class="range-print-head"><img src="${logo}" alt="Michiko Aesthetics"><div><h2>สมุดรายวัน</h2><p>สาขา ${esc(branch)} · เอกสารสำหรับฝ่ายบัญชี</p></div><time>${rangeDateLabel(date)}</time></header><table><thead><tr><th>ลำดับ</th><th>HN</th><th>ชื่อ นามสกุล</th><th>รายละเอียด</th>${branchLabels.map(label=>`<th>${esc(label.replace("โอน · ",""))}</th>`).join("")}<th>ชื่อแพทย์</th><th>ผู้ช่วย</th><th>หมายเหตุ</th></tr></thead><tbody>${body}</tbody><tfoot><tr class="range-print-total"><td colspan="4">รวมประจำวัน</td>${keys.map(key=>`<td>${total[key]?money(total[key]):""}</td>`).join("")}<td></td><td></td><td></td></tr></tfoot></table><div class="range-print-summary"><span>ยอดรับรวม ${money(grand)} บาท</span><span>Member ${money(total.member)} บาท</span></div></article>`;
 }
 function monthOpeningFor(branch,month){try{const saved=JSON.parse(localStorage.getItem(`${monthStoragePrefix}:${encodeURIComponent(branch)}:${month}`)||"{}");return Object.fromEntries(keys.map(key=>[key,Number(saved[key])||0]))}catch{return Object.fromEntries(keys.map(key=>[key,0]))}}
 function buildMonthlyRangeSummary(branch,month,cutoff){
   const total=monthOpeningFor(branch,month);const cursor=new Date(`${month}-01T12:00:00`);const last=new Date(`${cutoff}T12:00:00`);
   while(cursor<=last){const date=`${cursor.getFullYear()}-${String(cursor.getMonth()+1).padStart(2,"0")}-${String(cursor.getDate()).padStart(2,"0")}`;rowsForDate(branch,date).forEach(row=>keys.forEach(key=>total[key]+=Number(row[key])||0));cursor.setDate(cursor.getDate()+1)}
   const grand=total.cash+total.scb+total.lp+total.cardKbank+total.cardBbl+total.cardKtc;const logo=document.querySelector(".brand-logo").src;
-  return `<article class="range-print-page month-range-page"><header class="range-print-head"><img src="${logo}" alt="Michiko Aesthetics"><div><h2>ยอดสะสมรายเดือน</h2><p>สาขา ${esc(branch)} · สะสมตั้งแต่วันที่ 1</p></div><time>ถึง ${rangeDateLabel(cutoff)}</time></header><h3>สรุปยอดประจำเดือน ${new Intl.DateTimeFormat("th-TH",{month:"long",year:"numeric"}).format(new Date(`${month}-01T12:00:00`))}</h3><div class="month-range-grid"><article><span>ยอดรับรวม</span><strong>${money(grand)}</strong><small>บาท</small></article>${keys.map((key,index)=>`<article><span>${labels[index]}</span><strong>${money(total[key])}</strong><small>บาท</small></article>`).join("")}</div></article>`;
+  const branchLabels=paymentLabels(branch);return `<article class="range-print-page month-range-page"><header class="range-print-head"><img src="${logo}" alt="Michiko Aesthetics"><div><h2>ยอดสะสมรายเดือน</h2><p>สาขา ${esc(branch)} · สะสมตั้งแต่วันที่ 1</p></div><time>ถึง ${rangeDateLabel(cutoff)}</time></header><h3>สรุปยอดประจำเดือน ${new Intl.DateTimeFormat("th-TH",{month:"long",year:"numeric"}).format(new Date(`${month}-01T12:00:00`))}</h3><div class="month-range-grid"><article><span>ยอดรับรวม</span><strong>${money(grand)}</strong><small>บาท</small></article>${keys.map((key,index)=>`<article><span>${branchLabels[index]}</span><strong>${money(total[key])}</strong><small>บาท</small></article>`).join("")}</div></article>`;
 }
 pdfRangeForm.addEventListener("submit",event=>{
   event.preventDefault();const start=pdfStartDate.value;const end=pdfEndDate.value;
@@ -169,7 +171,7 @@ render();
 
 const branchGate=document.querySelector("#branchGate");
 const branchSessionKey="michiko-branch-chosen-session-v1";
-function chooseEntryBranch(branchName){const branch=document.querySelector("#branch");branch.value=branchName;document.querySelector("#branchName").textContent=branchName;saveLastView();loadSavedLedger();render();try{sessionStorage.setItem(branchSessionKey,"1")}catch{}branchGate.hidden=true}
+function chooseEntryBranch(branchName){const branch=document.querySelector("#branch");branch.value=branchName;document.querySelector("#branchName").textContent=branchName;updateBranchPaymentLabels();saveLastView();loadSavedLedger();render();try{sessionStorage.setItem(branchSessionKey,"1")}catch{}branchGate.hidden=true}
 branchGate.querySelectorAll("[data-branch-choice]").forEach(button=>button.addEventListener("click",()=>chooseEntryBranch(button.dataset.branchChoice)));
 try{branchGate.hidden=sessionStorage.getItem(branchSessionKey)==="1"}catch{branchGate.hidden=false}
 
@@ -260,3 +262,4 @@ logoutButton.addEventListener("click",async()=>{
   logoutButton.disabled=false;showAuthError("");setSignedIn(false);
 });
 initializeAuth();
+updateBranchPaymentLabels();

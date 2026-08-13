@@ -26,7 +26,7 @@
 
     <section class="toolbar">
       <label><span>สาขา</span><select id="branch"><option>พหลโยธิน 21</option><option>EmSphere</option></select></label>
-      <div class="date-box"><button id="previousDate" type="button" aria-label="วันก่อนหน้า">‹</button><label class="date-control"><small id="weekdayLabel">วันนี้</small><input id="ledgerDate" type="date" aria-label="เลือกวันที่สมุดรายวัน"></label><button id="nextDate" type="button" aria-label="วันถัดไป">›</button></div>
+      <div class="date-box"><button id="previousDate" type="button" aria-label="วันก่อนหน้า">‹</button><label class="date-control"><small id="weekdayLabel">วันนี้</small><strong id="dateDisplay">วัน/เดือน/ปี</strong><input id="ledgerDate" type="date" aria-label="เลือกวันที่สมุดรายวัน"></label><button id="nextDate" type="button" aria-label="วันถัดไป">›</button></div>
       <label class="search"><span>⌕</span><input id="search" placeholder="ค้นหา HN, ชื่อ หรือรายละเอียด"></label>
     </section>
 
@@ -65,7 +65,7 @@
   </div><div class="form-actions"><button type="button" id="cancelMonthButton">ยกเลิก</button><button class="primary" type="submit">บันทึกยอดเดือน</button></div></form></section></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js?v=20260813a"></script>
-  <script src="app.js?v=20260813e"></script>
+  <script src="app.js?v=20260813f"></script>
 </body>
 </html>
 

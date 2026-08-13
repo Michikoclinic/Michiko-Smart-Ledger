@@ -65,6 +65,8 @@ ledgerDate.value=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2
 try{const lastView=JSON.parse(localStorage.getItem(viewStorageKey)||"{}");const branch=document.querySelector("#branch");if([...branch.options].some(option=>option.value===lastView.branch))branch.value=lastView.branch;if(/^\d{4}-\d{2}-\d{2}$/.test(lastView.date||""))ledgerDate.value=lastView.date;document.querySelector("#branchName").textContent=branch.value}catch{}
 function updateDate(value){
  const date=new Date(`${value}T12:00:00`);
+ const [year,month,day]=value.split("-");
+ document.querySelector("#dateDisplay").textContent=`${day}/${month}/${year}`;
  const full=new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(date);
  const weekday=new Intl.DateTimeFormat("th-TH",{weekday:"long"}).format(date);
  document.querySelector("#weekdayLabel").textContent=weekday;

@@ -107,9 +107,9 @@ detailInput.addEventListener("keydown",event=>{if(event.ctrlKey&&event.code==="S
 detailInput.addEventListener("compositionstart",()=>{detailIsComposing=true});
 detailInput.addEventListener("compositionend",()=>{detailIsComposing=false;updateCalculationPreview()});
 detailInput.addEventListener("paste",event=>{event.preventDefault();const pasted=(event.clipboardData?.getData("text/plain")||"").replace(/\r\n?/g,"\n");const start=detailInput.selectionStart??detailInput.value.length;const end=detailInput.selectionEnd??start;detailInput.setRangeText(pasted,start,end,"end");detailInput.dispatchEvent(new InputEvent("input",{bubbles:true,inputType:"insertFromPaste",data:pasted}))});
-detailInput.addEventListener("input",event=>{if(detailIsComposing)return;const start=detailInput.selectionStart??detailInput.value.length;const end=detailInput.selectionEnd??start;const before=detailInput.value;const calculated=event.data==="="?calculateAdditions(before,true):before;const formatted=formatNumbersInText(calculated);if(formatted===before)return;const formattedStart=formatNumbersInText(event.data==="="?calculateAdditions(before.slice(0,start),true):before.slice(0,start)).length;const formattedEnd=formatNumbersInText(event.data==="="?calculateAdditions(before.slice(0,end),true):before.slice(0,end)).length;detailInput.value=formatted;detailInput.setSelectionRange(Math.min(formatted.length,formattedStart),Math.min(formatted.length,formattedEnd))});
+detailInput.addEventListener("input",event=>{if(detailIsComposing)return;const start=detailInput.selectionStart??detailInput.value.length;const end=detailInput.selectionEnd??start;const before=detailInput.value;const calculated=event.data==="="?calculateDetailPaymentTotal(calculateAdditions(before,true)):before;const formatted=formatNumbersInText(calculated);if(formatted===before)return;const transform=value=>formatNumbersInText(event.data==="="?calculateDetailPaymentTotal(calculateAdditions(value,true)):value).length;detailInput.value=formatted;detailInput.setSelectionRange(Math.min(formatted.length,transform(before.slice(0,start))),Math.min(formatted.length,transform(before.slice(0,end))))});
 detailInput.addEventListener("input",updateCalculationPreview);
-detailInput.addEventListener("blur",()=>{detailInput.value=formatNumbersInText(calculateAdditions(detailInput.value));updateCalculationPreview()});
+detailInput.addEventListener("blur",()=>{detailInput.value=formatNumbersInText(calculateDetailPaymentTotal(calculateAdditions(detailInput.value)));updateCalculationPreview()});
 const phraseInput=document.querySelector("#phraseInput");
 const phraseChips=document.querySelector("#phraseChips");
 function storePhrases(){localStorage.setItem(phraseStorageKey,JSON.stringify(frequentPhrases));localStorage.setItem(phraseUsageKey,JSON.stringify(phraseUsage));queueCloudSave(phraseStorageKey);queueCloudSave(phraseUsageKey)}
@@ -126,7 +126,7 @@ function openEditor(index){resetEditor();editingIndex=index;const row=rows[index
 document.querySelector("#addButton").onclick=()=>{resetEditor();modal.hidden=false;entryForm.elements.hn.focus()};
 document.querySelector("#closeButton").onclick=document.querySelector("#cancelButton").onclick=()=>modal.hidden=true;
 modal.addEventListener("click",e=>{if(e.target===modal)modal.hidden=true});
-entryForm.addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,parseMoney(f.get(key))]));const record={hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),doctor:String(f.get("doctor")||"").trim(),assistant:String(f.get("assistant")||"").trim(),detail:formatDetails(formatNumbersInText(calculateAdditions(f.get("detail")))),...payments};rememberPatient(record.hn,record.patient);rememberStaff(record.doctor,record.assistant);if(editingIndex===null)rows.push(record);else rows[editingIndex]=record;saveLedger();resetEditor();modal.hidden=true;render()});
+entryForm.addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,parseMoney(f.get(key))]));const record={hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),doctor:String(f.get("doctor")||"").trim(),assistant:String(f.get("assistant")||"").trim(),detail:formatDetails(formatNumbersInText(calculateDetailPaymentTotal(calculateAdditions(f.get("detail"))))),...payments};rememberPatient(record.hn,record.patient);rememberStaff(record.doctor,record.assistant);if(editingIndex===null)rows.push(record);else rows[editingIndex]=record;saveLedger();resetEditor();modal.hidden=true;render()});
 document.querySelector("#printButton").onclick=document.querySelector("#printTopButton").onclick=()=>window.print();
 const pdfRangeModal=document.querySelector("#pdfRangeModal");
 const pdfRangeForm=document.querySelector("#pdfRangeForm");
@@ -224,6 +224,8 @@ async function startCloudSync(){
   }).subscribe();
 }
 async function stopCloudSync(){cloudSyncActive=false;cloudSyncStarting=false;if(cloudChannel&&supabaseClient){await supabaseClient.removeChannel(cloudChannel);cloudChannel=null}setSyncStatus("ข้อมูลในเครื่อง")}
+
+function calculateDetailPaymentTotal(text){const lines=String(text).split(/\r?\n/);const totalIndex=lines.findIndex(line=>/รวมยอดรับชำระ\s*=\s*$/u.test(line));if(totalIndex<0)return text;let total=0;for(const line of lines.slice(0,totalIndex)){if(/รวมยอด|ยอดชำระ|หักจาก|ค้างชำระ|เครดิต|มัดจำ/u.test(line))continue;const amounts=[...line.matchAll(/(\d[\d,]*(?:\.\d+)?)\s*บาท/gu)];if(amounts.length){total+=calculationNumber(amounts.at(-1)[1]);continue}const result=line.match(/=\s*(\d[\d,]*(?:\.\d+)?)\s*$/u);if(result)total+=calculationNumber(result[1])}lines[totalIndex]=lines[totalIndex].replace(/=\s*$/,`= ${calculationMoney(total)} บาท`);return lines.join("\n")}
 
 /* Supabase reception login: the internal email stays hidden from staff. */
 const authGate=document.querySelector("#authGate");

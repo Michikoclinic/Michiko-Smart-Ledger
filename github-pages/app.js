@@ -103,6 +103,7 @@ patientInput.addEventListener("input",()=>{patientNameAutofilled=false});
 const calculationPreview=document.createElement("div");calculationPreview.className="calculation-preview";calculationPreview.hidden=true;detailInput.closest("label").after(calculationPreview);
 function updateCalculationPreview(){const results=additionPreviews(detailInput.value);calculationPreview.hidden=!results.length;calculationPreview.innerHTML=results.length?`<strong>ผลคำนวณอัตโนมัติ</strong>${results.map(result=>`<span>${esc(result)}</span>`).join("")}`:""}
 let detailIsComposing=false;
+detailInput.addEventListener("keydown",event=>{if(event.ctrlKey&&event.code==="Space"){event.preventDefault();const start=detailInput.selectionStart??detailInput.value.length;const end=detailInput.selectionEnd??start;detailInput.setRangeText(" ",start,end,"end");detailInput.dispatchEvent(new InputEvent("input",{bubbles:true,inputType:"insertText",data:" "}))}});
 detailInput.addEventListener("compositionstart",()=>{detailIsComposing=true});
 detailInput.addEventListener("compositionend",()=>{detailIsComposing=false;updateCalculationPreview()});
 detailInput.addEventListener("paste",event=>{event.preventDefault();const pasted=(event.clipboardData?.getData("text/plain")||"").replace(/\r\n?/g,"\n");const start=detailInput.selectionStart??detailInput.value.length;const end=detailInput.selectionEnd??start;detailInput.setRangeText(pasted,start,end,"end");detailInput.dispatchEvent(new InputEvent("input",{bubbles:true,inputType:"insertFromPaste",data:pasted}))});

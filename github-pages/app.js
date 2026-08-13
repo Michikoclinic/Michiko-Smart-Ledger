@@ -69,7 +69,7 @@ try{const lastView=JSON.parse(localStorage.getItem(viewStorageKey)||"{}");const 
 function updateDate(value){
  const date=new Date(`${value}T12:00:00`);
  const [year,month,day]=value.split("-");
- document.querySelector("#dateDisplay").textContent=`${day}/${month}/${year}`;
+ document.querySelector("#dateDisplay strong").textContent=`${day}/${month}/${year}`;
  const full=new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(date);
  const weekday=new Intl.DateTimeFormat("th-TH",{weekday:"long"}).format(date);
  document.querySelector("#weekdayLabel").textContent=weekday;
@@ -79,6 +79,7 @@ function updateDate(value){
 }
 function moveDate(days){const date=new Date(`${ledgerDate.value}T12:00:00`);date.setDate(date.getDate()+days);ledgerDate.value=`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;updateDate(ledgerDate.value);saveLastView();loadSavedLedger();render()}
 ledgerDate.addEventListener("change",()=>{updateDate(ledgerDate.value);saveLastView();loadSavedLedger();render()});
+document.querySelector("#dateDisplay").addEventListener("click",()=>{if(typeof ledgerDate.showPicker==="function")ledgerDate.showPicker();else{ledgerDate.focus();ledgerDate.click()}});
 document.querySelector("#previousDate").onclick=()=>moveDate(-1);
 document.querySelector("#nextDate").onclick=()=>moveDate(1);
 const modal=document.querySelector("#modal");

@@ -7,7 +7,7 @@
   <title>Michiko Smart Ledger</title>
   <link rel="icon" type="image/png" href="accounting-icon.png?v=20260813d">
   <link rel="apple-touch-icon" href="accounting-icon.png?v=20260813d">
-  <link rel="stylesheet" href="styles.css?v=20260813a">
+  <link rel="stylesheet" href="styles.css?v=20260813h">
 </head>
 <body>
   <div class="auth-gate" id="authGate"><section class="auth-card" role="dialog" aria-modal="true" aria-labelledby="authTitle"><img src="michiko-logo.png" alt="Michiko Aesthetics"><p class="eyebrow">MICHIKO SMART LEDGER</p><h1 id="authTitle">เข้าสู่ระบบ Reception</h1><p>กรอกรหัสผ่านเพื่อเปิดสมุดรายวัน</p><form id="loginForm"><label><span>รหัสผ่าน</span><input id="loginPassword" type="password" autocomplete="current-password" required></label><p class="auth-error" id="authError" role="alert" hidden></p><button class="primary" id="loginButton" type="submit">เข้าสู่ระบบ</button></form></section></div>
@@ -26,7 +26,7 @@
 
     <section class="toolbar">
       <label><span>สาขา</span><select id="branch"><option>พหลโยธิน 21</option><option>EmSphere</option></select></label>
-      <div class="date-box"><button id="previousDate" type="button" aria-label="วันก่อนหน้า">‹</button><label class="date-control"><small id="weekdayLabel">วันนี้</small><strong id="dateDisplay">วัน/เดือน/ปี</strong><input id="ledgerDate" type="date" aria-label="เลือกวันที่สมุดรายวัน"></label><button id="nextDate" type="button" aria-label="วันถัดไป">›</button></div>
+      <div class="date-box"><button id="previousDate" type="button" aria-label="วันก่อนหน้า">‹</button><div class="date-control"><small id="weekdayLabel">วันนี้</small><button id="dateDisplay" type="button" aria-label="เปิดปฏิทิน"><strong>วัน/เดือน/ปี</strong><span class="calendar-mark" aria-hidden="true"></span></button><input id="ledgerDate" type="date" aria-label="เลือกวันที่สมุดรายวัน"></div><button id="nextDate" type="button" aria-label="วันถัดไป">›</button></div>
       <label class="search"><span>⌕</span><input id="search" placeholder="ค้นหา HN, ชื่อ หรือรายละเอียด"></label>
     </section>
 
@@ -65,7 +65,7 @@
   </div><div class="form-actions"><button type="button" id="cancelMonthButton">ยกเลิก</button><button class="primary" type="submit">บันทึกยอดเดือน</button></div></form></section></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js?v=20260813a"></script>
-  <script src="app.js?v=20260813g"></script>
+  <script src="app.js?v=20260813h"></script>
 </body>
 </html>
 

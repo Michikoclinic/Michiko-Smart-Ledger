@@ -133,7 +133,7 @@ const loginPassword=document.querySelector("#loginPassword");
 const loginButton=document.querySelector("#loginButton");
 const authError=document.querySelector("#authError");
 const logoutButton=document.querySelector("#logoutButton");
-const receptionEmail="ledger@michiko.local";
+const receptionEmail="customerservice@michikoclinic.com";
 let supabaseClient=null;
 function showAuthError(message){authError.textContent=message;authError.hidden=!message}
 function setSignedIn(signedIn){authGate.hidden=signedIn;logoutButton.hidden=!signedIn;if(!signedIn){branchGate.hidden=true;setTimeout(()=>loginPassword.focus(),0)}}

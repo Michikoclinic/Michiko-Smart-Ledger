@@ -13,8 +13,11 @@ let editingIndex=null;
 const phraseStorageKey="michiko-frequent-phrases-v1";
 const phraseUsageKey="michiko-frequent-phrase-usage-v1";
 const staffStorageKey="michiko-ledger-staff-names-v1";
+const patientStorageKey="michiko-patient-directory-v1";
 let staffNames={doctors:[],assistants:[]};
+let patientDirectory={};
 try{const savedStaff=JSON.parse(localStorage.getItem(staffStorageKey)||"{}");staffNames.doctors=Array.isArray(savedStaff.doctors)?savedStaff.doctors:[];staffNames.assistants=Array.isArray(savedStaff.assistants)?savedStaff.assistants:[]}catch{}
+try{const savedPatients=JSON.parse(localStorage.getItem(patientStorageKey)||"{}");patientDirectory=savedPatients&&typeof savedPatients==="object"&&!Array.isArray(savedPatients)?savedPatients:{}}catch{patientDirectory={}}
 let frequentPhrases=[];
 let phraseQuery="";
 let phraseQueryStart=0;
@@ -84,6 +87,13 @@ document.querySelectorAll(".payment-amount,.month-input-grid input").forEach(inp
 document.querySelectorAll("[data-payment]").forEach(box=>box.addEventListener("change",()=>{const option=box.closest(".payment-option");const amount=option.querySelector(".payment-amount");option.classList.toggle("selected",box.checked);amount.disabled=!box.checked;if(box.checked)amount.focus();else amount.value=""}));
 const entryForm=document.querySelector("#entryForm");
 const detailInput=entryForm.elements.detail;
+const hnInput=entryForm.elements.hn;
+const patientInput=entryForm.elements.patient;
+let patientNameAutofilled=false;
+function normalizedHn(value){return String(value||"").trim().toUpperCase()}
+function rememberPatient(hn,name){const key=normalizedHn(hn);const cleanName=String(name||"").trim();if(!key||!cleanName)return;patientDirectory[key]=cleanName;try{localStorage.setItem(patientStorageKey,JSON.stringify(patientDirectory));queueCloudSave(patientStorageKey)}catch{}}
+hnInput.addEventListener("input",()=>{const remembered=patientDirectory[normalizedHn(hnInput.value)];if(remembered&&(patientNameAutofilled||!patientInput.value.trim())){patientInput.value=remembered;patientNameAutofilled=true}else if(patientNameAutofilled&&!remembered){patientInput.value="";patientNameAutofilled=false}});
+patientInput.addEventListener("input",()=>{patientNameAutofilled=false});
 const calculationPreview=document.createElement("div");calculationPreview.className="calculation-preview";calculationPreview.hidden=true;detailInput.closest("label").after(calculationPreview);
 function updateCalculationPreview(){const results=additionPreviews(detailInput.value);calculationPreview.hidden=!results.length;calculationPreview.innerHTML=results.length?`<strong>ผลคำนวณอัตโนมัติ</strong>${results.map(result=>`<span>${esc(result)}</span>`).join("")}`:""}
 detailInput.addEventListener("input",()=>{const cursor=detailInput.selectionStart??detailInput.value.length;const before=detailInput.value;const calculated=calculateAdditions(before,true);const formatted=formatNumbersInText(calculated);if(formatted!==before){detailInput.value=formatted;const next=cursor+(formatted.length-before.length);detailInput.setSelectionRange(next,next)}});
@@ -100,12 +110,12 @@ phraseInput.addEventListener("keydown",event=>{if(event.key==="Enter"){event.pre
 detailInput.addEventListener("input",()=>{const cursor=detailInput.selectionStart??detailInput.value.length;const textBeforeCursor=detailInput.value.slice(0,cursor);const currentWord=textBeforeCursor.match(/[^\s,.;:!?()[\]{}]+$/u)?.[0]||"";phraseQuery=currentWord;phraseQueryStart=cursor-currentWord.length;showAllPhrases=false;renderPhrases()});
 function deleteEntry(index){const row=rows[index];if(!row)return;if(!confirm(`ยืนยันลบรายการ HN ${row.hn} ของ ${row.patient} ใช่ไหม?`))return;rows.splice(index,1);saveLedger();render()}
 function moveEntryToDate(index){const row=rows[index];if(!row)return;const targetDate=prompt("กรอกวันที่ปลายทาง รูปแบบ ปี-เดือน-วัน เช่น 2026-08-12",ledgerDate.value);if(targetDate===null)return;const cleanDate=targetDate.trim();if(!/^\d{4}-\d{2}-\d{2}$/.test(cleanDate)||Number.isNaN(new Date(`${cleanDate}T12:00:00`).getTime())){alert("วันที่ไม่ถูกต้อง กรุณากรอกแบบ ปี-เดือน-วัน");return}if(cleanDate===ledgerDate.value){alert("รายการอยู่ในวันนี้แล้ว");return}const branch=document.querySelector("#branch").value;const targetKey=`${ledgerStoragePrefix}:${encodeURIComponent(branch)}:${cleanDate}`;let targetRows=[];try{const saved=JSON.parse(localStorage.getItem(targetKey)||"[]");targetRows=Array.isArray(saved)?saved:[]}catch{}targetRows.push({...row});try{localStorage.setItem(targetKey,JSON.stringify(targetRows));queueCloudSave(targetKey)}catch{alert("ไม่สามารถบันทึกรายการไปวันที่ใหม่ได้");return}rows.splice(index,1);saveLedger();render();alert(`ย้ายรายการไปวันที่ ${cleanDate} แล้ว`)}
-function resetEditor(){entryForm.reset();editingIndex=null;phraseQuery="";phraseQueryStart=0;showAllPhrases=false;document.querySelector("#saveEntryButton").textContent="บันทึกรายการ";entryForm.querySelectorAll(".payment-option").forEach(option=>option.classList.remove("selected"));entryForm.querySelectorAll(".payment-amount").forEach(input=>input.disabled=true);updateCalculationPreview();renderPhrases()}
+function resetEditor(){entryForm.reset();editingIndex=null;patientNameAutofilled=false;phraseQuery="";phraseQueryStart=0;showAllPhrases=false;document.querySelector("#saveEntryButton").textContent="บันทึกรายการ";entryForm.querySelectorAll(".payment-option").forEach(option=>option.classList.remove("selected"));entryForm.querySelectorAll(".payment-amount").forEach(input=>input.disabled=true);updateCalculationPreview();renderPhrases()}
 function openEditor(index){resetEditor();editingIndex=index;const row=rows[index];entryForm.elements.hn.value=row.hn;entryForm.elements.patient.value=row.patient;entryForm.elements.doctor.value=row.doctor||"";entryForm.elements.assistant.value=row.assistant||"";entryForm.elements.detail.value=row.detail.map(formatNumbersInText).join("\n");updateCalculationPreview();keys.forEach(key=>{if(row[key]){const box=entryForm.querySelector(`[data-payment="${key}"]`);const amount=entryForm.elements[key];box.checked=true;amount.disabled=false;amount.value=money(row[key]);box.closest(".payment-option").classList.add("selected")}});document.querySelector("#saveEntryButton").textContent="บันทึกการแก้ไข";modal.hidden=false;entryForm.elements.hn.focus()}
 document.querySelector("#addButton").onclick=()=>{resetEditor();modal.hidden=false;entryForm.elements.hn.focus()};
 document.querySelector("#closeButton").onclick=document.querySelector("#cancelButton").onclick=()=>modal.hidden=true;
 modal.addEventListener("click",e=>{if(e.target===modal)modal.hidden=true});
-entryForm.addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,parseMoney(f.get(key))]));const record={hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),doctor:String(f.get("doctor")||"").trim(),assistant:String(f.get("assistant")||"").trim(),detail:formatDetails(formatNumbersInText(calculateAdditions(f.get("detail")))),...payments};rememberStaff(record.doctor,record.assistant);if(editingIndex===null)rows.push(record);else rows[editingIndex]=record;saveLedger();resetEditor();modal.hidden=true;render()});
+entryForm.addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,parseMoney(f.get(key))]));const record={hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),doctor:String(f.get("doctor")||"").trim(),assistant:String(f.get("assistant")||"").trim(),detail:formatDetails(formatNumbersInText(calculateAdditions(f.get("detail")))),...payments};rememberPatient(record.hn,record.patient);rememberStaff(record.doctor,record.assistant);if(editingIndex===null)rows.push(record);else rows[editingIndex]=record;saveLedger();resetEditor();modal.hidden=true;render()});
 document.querySelector("#printButton").onclick=document.querySelector("#printTopButton").onclick=()=>window.print();
 document.querySelector("#savePdfButton").onclick=document.querySelector("#savePdfTopButton").onclick=()=>window.print();
 const monthForm=document.querySelector("#monthForm");
@@ -132,7 +142,7 @@ async function importLedgerData(file){let backup;try{backup=JSON.parse(await fil
 document.querySelector("#exportDataButton").addEventListener("click",exportLedgerData);
 const importDataFile=document.querySelector("#importDataFile");document.querySelector("#importDataButton").addEventListener("click",()=>{importDataFile.value="";importDataFile.click()});importDataFile.addEventListener("change",()=>{const file=importDataFile.files?.[0];if(file)importLedgerData(file)});
 
-const cloudStoragePrefixes=[ledgerStoragePrefix,monthStoragePrefix,phraseStorageKey,phraseUsageKey,staffStorageKey];
+const cloudStoragePrefixes=[ledgerStoragePrefix,monthStoragePrefix,phraseStorageKey,phraseUsageKey,staffStorageKey,patientStorageKey];
 const syncStatus=document.querySelector("#syncStatus");
 const isCloudKey=key=>cloudStoragePrefixes.some(prefix=>key===prefix||key.startsWith(`${prefix}:`));
 function setSyncStatus(message,state=""){if(!syncStatus)return;syncStatus.textContent=message;syncStatus.className=`sync-status ${state}`.trim()}
@@ -151,6 +161,7 @@ function refreshSharedState(){
   try{frequentPhrases=JSON.parse(localStorage.getItem(phraseStorageKey)||"[]").filter(item=>typeof item==="string")}catch{frequentPhrases=[]}
   try{phraseUsage=JSON.parse(localStorage.getItem(phraseUsageKey)||"{}")}catch{phraseUsage={}}
   try{const saved=JSON.parse(localStorage.getItem(staffStorageKey)||"{}");staffNames.doctors=Array.isArray(saved.doctors)?saved.doctors:[];staffNames.assistants=Array.isArray(saved.assistants)?saved.assistants:[]}catch{staffNames={doctors:[],assistants:[]}}
+  try{const saved=JSON.parse(localStorage.getItem(patientStorageKey)||"{}");patientDirectory=saved&&typeof saved==="object"&&!Array.isArray(saved)?saved:{}}catch{patientDirectory={}}
   loadSavedLedger();renderPhrases();renderStaffNames();render();
 }
 async function startCloudSync(){

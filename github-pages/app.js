@@ -118,7 +118,35 @@ document.querySelector("#closeButton").onclick=document.querySelector("#cancelBu
 modal.addEventListener("click",e=>{if(e.target===modal)modal.hidden=true});
 entryForm.addEventListener("submit",e=>{e.preventDefault();const f=new FormData(e.target);const payments=Object.fromEntries(keys.map(key=>[key,parseMoney(f.get(key))]));const record={hn:String(f.get("hn")).toUpperCase(),patient:String(f.get("patient")),doctor:String(f.get("doctor")||"").trim(),assistant:String(f.get("assistant")||"").trim(),detail:formatDetails(formatNumbersInText(calculateAdditions(f.get("detail")))),...payments};rememberPatient(record.hn,record.patient);rememberStaff(record.doctor,record.assistant);if(editingIndex===null)rows.push(record);else rows[editingIndex]=record;saveLedger();resetEditor();modal.hidden=true;render()});
 document.querySelector("#printButton").onclick=document.querySelector("#printTopButton").onclick=()=>window.print();
-document.querySelector("#savePdfButton").onclick=document.querySelector("#savePdfTopButton").onclick=()=>window.print();
+const pdfRangeModal=document.querySelector("#pdfRangeModal");
+const pdfRangeForm=document.querySelector("#pdfRangeForm");
+const pdfStartDate=document.querySelector("#pdfStartDate");
+const pdfEndDate=document.querySelector("#pdfEndDate");
+const rangeReport=document.querySelector("#rangeReport");
+function openPdfRange(){pdfStartDate.value=ledgerDate.value;pdfEndDate.value=ledgerDate.value;pdfRangeModal.hidden=false}
+function closePdfRange(){pdfRangeModal.hidden=true}
+document.querySelector("#savePdfButton").onclick=document.querySelector("#savePdfTopButton").onclick=openPdfRange;
+document.querySelector("#closePdfRangeButton").onclick=document.querySelector("#cancelPdfRangeButton").onclick=closePdfRange;
+pdfRangeModal.addEventListener("click",event=>{if(event.target===pdfRangeModal)closePdfRange()});
+function rowsForDate(branch,date){try{const value=JSON.parse(localStorage.getItem(`${ledgerStoragePrefix}:${encodeURIComponent(branch)}:${date}`)||"[]");return Array.isArray(value)?value:[]}catch{return[]}}
+function rangeDateLabel(value){const date=new Date(`${value}T12:00:00`);return new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(date)}
+function buildRangePage(branch,date,dateRows){
+  const total=dateRows.reduce((result,row)=>(keys.forEach(key=>result[key]+=Number(row[key])||0),result),Object.fromEntries(keys.map(key=>[key,0])));
+  const grand=total.cash+total.scb+total.lp+total.cardKbank+total.cardBbl+total.cardKtc;
+  const body=dateRows.map((row,index)=>`<tr><td>${index+1}</td><td><b>${esc(row.hn||"")}</b></td><td>${esc(row.patient||"")}</td><td class="range-print-detail">${(Array.isArray(row.detail)?row.detail:formatDetails(row.detail||"")).map(line=>`<span class="${line.includes("รวมยอดชำระ")?"payment-total-line":""}">${renderDetailContent(line)||"&nbsp;"}</span>`).join("")}</td>${keys.map(key=>`<td>${row[key]?money(row[key]):""}</td>`).join("")}<td>${esc(row.doctor||"")}</td><td>${esc(row.assistant||"")}</td><td>${esc(row.remark||"")}</td></tr>`).join("")||'<tr><td class="range-print-empty" colspan="14">ไม่มีรายการในวันนี้</td></tr>';
+  const logo=document.querySelector(".brand-logo").src;
+  return `<article class="range-print-page"><header class="range-print-head"><img src="${logo}" alt="Michiko Aesthetics"><div><h2>สมุดรายวัน</h2><p>สาขา ${esc(branch)} · เอกสารสำหรับฝ่ายบัญชี</p></div><time>${rangeDateLabel(date)}</time></header><table><thead><tr><th>ลำดับ</th><th>HN</th><th>ชื่อ นามสกุล</th><th>รายละเอียด</th><th>เงินสด</th><th>SCB</th><th>LP</th><th>บัตร KBank</th><th>บัตร BBL</th><th>บัตร KTC</th><th>Member</th><th>ชื่อแพทย์</th><th>ผู้ช่วย</th><th>หมายเหตุ</th></tr></thead><tbody>${body}</tbody><tfoot><tr class="range-print-total"><td colspan="4">รวมประจำวัน</td>${keys.map(key=>`<td>${total[key]?money(total[key]):""}</td>`).join("")}<td></td><td></td><td></td></tr></tfoot></table><div class="range-print-summary"><span>ยอดรับรวม ${money(grand)} บาท</span><span>Member ${money(total.member)} บาท</span></div></article>`;
+}
+pdfRangeForm.addEventListener("submit",event=>{
+  event.preventDefault();const start=pdfStartDate.value;const end=pdfEndDate.value;
+  if(!start||!end||start>end){alert("กรุณาเลือกช่วงวันที่ให้ถูกต้อง");return}
+  const dates=[];const cursor=new Date(`${start}T12:00:00`);const last=new Date(`${end}T12:00:00`);
+  while(cursor<=last){dates.push(`${cursor.getFullYear()}-${String(cursor.getMonth()+1).padStart(2,"0")}-${String(cursor.getDate()).padStart(2,"0")}`);cursor.setDate(cursor.getDate()+1)}
+  const branch=document.querySelector("#branch").value;
+  rangeReport.innerHTML=dates.map(date=>buildRangePage(branch,date,rowsForDate(branch,date))).join("");
+  closePdfRange();document.body.classList.add("range-print");rangeReport.setAttribute("aria-hidden","false");setTimeout(()=>window.print(),50);
+});
+window.addEventListener("afterprint",()=>{document.body.classList.remove("range-print");rangeReport.setAttribute("aria-hidden","true")});
 const monthForm=document.querySelector("#monthForm");
 document.querySelector("#editMonthButton").onclick=()=>{keys.forEach(key=>monthForm.elements[key].value=monthBase[key]?money(monthBase[key]):"");monthModal.hidden=false;monthForm.elements.cash.focus()};
 document.querySelector("#closeMonthButton").onclick=document.querySelector("#cancelMonthButton").onclick=()=>monthModal.hidden=true;

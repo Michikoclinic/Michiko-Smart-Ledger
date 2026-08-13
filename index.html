@@ -7,7 +7,7 @@
   <title>Michiko Smart Ledger</title>
   <link rel="icon" type="image/png" href="github-pages/accounting-icon.png?v=20260813d">
   <link rel="apple-touch-icon" href="github-pages/accounting-icon.png?v=20260813d">
-  <link rel="stylesheet" href="github-pages/styles.css?v=20260813h">
+  <link rel="stylesheet" href="github-pages/styles.css?v=20260813i">
 </head>
 <body>
   <div class="auth-gate" id="authGate"><section class="auth-card" role="dialog" aria-modal="true" aria-labelledby="authTitle"><img src="github-pages/michiko-logo.png" alt="Michiko Aesthetics"><p class="eyebrow">MICHIKO SMART LEDGER</p><h1 id="authTitle">เข้าสู่ระบบ Reception</h1><p>กรอกรหัสผ่านเพื่อเปิดสมุดรายวัน</p><form id="loginForm"><label><span>รหัสผ่าน</span><input id="loginPassword" type="password" autocomplete="current-password" required></label><p class="auth-error" id="authError" role="alert" hidden></p><button class="primary" id="loginButton" type="submit">เข้าสู่ระบบ</button></form></section></div>
@@ -63,9 +63,11 @@
     <label><span>บัตรกสิกร</span><input name="cardKbank" type="number" min="0"></label><label><span>บัตรกรุงเทพ</span><input name="cardBbl" type="number" min="0"></label><label><span>บัตร KTC</span><input name="cardKtc" type="number" min="0"></label>
     <label><span>Member</span><input name="member" type="number" min="0"></label>
   </div><div class="form-actions"><button type="button" id="cancelMonthButton">ยกเลิก</button><button class="primary" type="submit">บันทึกยอดเดือน</button></div></form></section></div>
+  <div class="modal" id="pdfRangeModal" hidden><section class="dialog pdf-range-dialog"><button class="close" id="closePdfRangeButton" aria-label="ปิด">×</button><p class="eyebrow">PDF DATE RANGE</p><h2>เลือกช่วงวันที่สำหรับ PDF</h2><p class="month-helper">ระบบจะแยกข้อมูลแต่ละวันเป็นคนละหน้า สำหรับสาขาที่เลือกอยู่</p><form id="pdfRangeForm"><div class="form-grid"><label><span>ตั้งแต่วันที่</span><input id="pdfStartDate" name="startDate" type="date" required></label><label><span>ถึงวันที่</span><input id="pdfEndDate" name="endDate" type="date" required></label></div><div class="form-actions"><button type="button" id="cancelPdfRangeButton">ยกเลิก</button><button class="primary" type="submit">สร้าง PDF</button></div></form></section></div>
+  <section class="range-report" id="rangeReport" aria-hidden="true"></section>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="github-pages/supabase-config.js?v=20260813a"></script>
-  <script src="github-pages/app.js?v=20260813h"></script>
+  <script src="github-pages/app.js?v=20260813i"></script>
 </body>
 </html>
 

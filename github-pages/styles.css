@@ -81,6 +81,7 @@ td.detail .payment-total-line{display:table!important;width:auto!important;max-w
 
 /* Compact keyword highlights */
 .credit-deduction-text,.support-text{display:inline;padding:0 3px;border-radius:2px;font-weight:850;-webkit-box-decoration-break:clone;box-decoration-break:clone;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}.credit-deduction-text{background:#9edcff!important;color:#123b55!important}.support-text{background:#ffb35c!important;color:#40240b!important}@media print{.credit-deduction-text{background:#9edcff!important;color:#000!important}.support-text{background:#ffad42!important;color:#000!important}}
+.deposit-deduction-line{display:inline;padding:0 3px;border-radius:2px;background:#f7a8c4!important;color:#5b1630!important;font-weight:850;-webkit-box-decoration-break:clone;box-decoration-break:clone;-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important}@media print{.deposit-deduction-line{background:#f7a8c4!important;color:#000!important}}
 
 /* Center support rows like payment totals */
 .ledger-card td.detail>span.support-center-line{display:block!important;text-align:center!important}@media print{.ledger-card td.detail>span.support-center-line{display:block!important;text-align:center!important}}

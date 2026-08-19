@@ -1,0 +1,1 @@
+import type {Metadata} from "next";import "./globals.css";export const metadata:Metadata={title:"Michiko Smart Ledger — Digital Consent",description:"ระบบเอกสารยินยอมดิจิทัลสำหรับ Michiko Clinic"};export default function Layout({children}:{children:React.ReactNode}){return <html lang="th"><body>{children}</body></html>}

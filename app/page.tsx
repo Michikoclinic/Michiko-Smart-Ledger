@@ -309,7 +309,7 @@ export default function Home() {
           <img src="https://michikoclinic.github.io/Michiko-Smart-Ledger/github-pages/michiko-logo.png" alt="Michiko Aesthetics" />
         </div>
         <nav>
-          <a className="main-home" href="https://michikoclinic.github.io/Michiko-Smart-Ledger/">⌂ กลับหน้าหลัก</a>
+          <button className="main-home" onClick={() => { setPatient(null); setView("patients"); }}>⌂ เริ่ม Consent ใหม่</button>
           <button
             className={view !== "history" ? "active" : ""}
             onClick={() => setView("patients")}
@@ -335,7 +335,7 @@ export default function Home() {
         <header>
           <button className="mobileM">M</button>
           <div>
-            <em>MICHIKO SMART LEDGER</em>
+            <em>MICHIKO DIGITAL CONSENT</em>
             <h1>
               {view === "patients"
                 ? "Digital Consent"

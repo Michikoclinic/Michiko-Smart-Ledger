@@ -116,12 +116,10 @@ td.detail .payment-total-line{display:table!important;width:auto!important;max-w
 /* Repeated print header with fixed, balanced column proportions */
 .print-repeat-heading{display:none}.ledger-card tbody td:nth-child(2),.range-print-page tbody td:nth-child(2){white-space:nowrap!important;word-break:keep-all!important;overflow-wrap:normal!important}
 @media print{
-@page{size:A4 landscape;margin:7mm 7mm 10mm}
-.print-heading{display:none!important}.print-repeat-heading{display:table-row!important}
+@page{size:A4 landscape;margin:22mm 7mm 10mm}
+.print-repeat-heading{display:none!important}body:not(.range-print) .print-heading{display:flex!important;position:fixed;z-index:5;top:4mm;left:7mm;right:7mm;height:14mm;margin:0;padding:0 0 3mm;background:#fff;border-bottom:2px solid var(--wine)}
 .ledger-card th,.ledger-card td{width:auto!important}
 .print-column-widths .col-order{width:3%!important}.print-column-widths .col-hn{width:5%!important}.print-column-widths .col-name{width:8%!important}.print-column-widths .col-detail{width:33%!important}.print-column-widths .col-payment{width:5%!important}.print-column-widths .col-doctor{width:5%!important}.print-column-widths .col-assistant{width:5%!important}.print-column-widths .col-remark{width:6%!important}
-.print-repeat-heading th{padding:0 0 4px!important;border:0!important;border-bottom:2px solid var(--wine)!important;background:#fff!important}
-.print-repeat-heading th>div{display:flex;align-items:center;gap:10px;text-align:left!important}.print-repeat-heading img{width:105px;height:42px;object-fit:contain}.print-repeat-heading span{display:grid}.print-repeat-heading b{font-size:13pt}.print-repeat-heading small{font-size:8pt;font-weight:500}.print-repeat-heading time{margin-left:auto;font-size:8.5pt;font-weight:800;white-space:nowrap}
 .ledger-card tbody tr,.range-print-page tbody tr{break-inside:avoid!important;page-break-inside:avoid!important}.range-print-page th:nth-child(4),.range-print-page td:nth-child(4){width:32%!important}
 body:not(.range-print)::after,body.range-print .range-print-page::after{content:"มีต่อหน้าถัดไป";position:fixed;right:7mm;bottom:1mm;padding:1px 5px;background:#fff;color:#000;font-size:7pt;font-weight:800}
 }

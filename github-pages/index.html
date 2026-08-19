@@ -7,7 +7,7 @@
   <title>Michiko Smart Ledger</title>
   <link rel="icon" type="image/png" href="accounting-icon.png?v=20260813d">
   <link rel="apple-touch-icon" href="accounting-icon.png?v=20260813d">
-  <link rel="stylesheet" href="styles.css?v=20260819print5">
+  <link rel="stylesheet" href="styles.css?v=20260819print6">
 </head>
 <body>
   <div class="auth-gate" id="authGate"><section class="auth-card" role="dialog" aria-modal="true" aria-labelledby="authTitle"><img src="michiko-logo.png" alt="Michiko Aesthetics"><p class="eyebrow">MICHIKO SMART LEDGER</p><h1 id="authTitle">เข้าสู่ระบบ Reception</h1><p>กรอกรหัสผ่านเพื่อเปิดสมุดรายวัน</p><form id="loginForm"><label><span>รหัสผ่าน</span><input id="loginPassword" type="password" autocomplete="current-password" required></label><p class="auth-error" id="authError" role="alert" hidden></p><button class="primary" id="loginButton" type="submit">เข้าสู่ระบบ</button></form></section></div>
@@ -37,7 +37,7 @@
     <section class="ledger-card" id="ledger">
       <div class="table-scroll"><table>
         <colgroup class="print-column-widths"><col class="col-order"><col class="col-hn"><col class="col-name"><col class="col-detail"><col span="7" class="col-payment"><col class="col-doctor"><col class="col-assistant"><col class="col-remark"></colgroup>
-        <thead><tr class="print-repeat-heading"><th colspan="14"><div><img src="michiko-logo.png" alt="Michiko Aesthetics"><span><b>สมุดรายวัน</b><small>เอกสารสำหรับฝ่ายบัญชี</small></span><time class="print-date-copy">วันที่</time></div></th></tr><tr><th class="order-head">ลำดับ</th><th>HN</th><th>ชื่อ นามสกุล</th><th class="details">รายละเอียด</th><th>เงินสด</th><th data-payment-heading="scb">SCB</th><th data-payment-heading="lp">LP</th><th>บัตร KBank</th><th>บัตร BBL</th><th>บัตร KTC</th><th>Member</th><th>ชื่อแพทย์</th><th>ผู้ช่วย</th><th>หมายเหตุ</th></tr></thead>
+        <thead><tr><th class="order-head">ลำดับ</th><th>HN</th><th>ชื่อ นามสกุล</th><th class="details">รายละเอียด</th><th>เงินสด</th><th data-payment-heading="scb">SCB</th><th data-payment-heading="lp">LP</th><th>บัตร KBank</th><th>บัตร BBL</th><th>บัตร KTC</th><th>Member</th><th>ชื่อแพทย์</th><th>ผู้ช่วย</th><th>หมายเหตุ</th></tr></thead>
         <tbody id="ledgerRows"></tbody>
         <tfoot id="ledgerTotal"></tfoot>
       </table></div>
@@ -69,7 +69,7 @@
   <section class="range-report" id="rangeReport" aria-hidden="true"></section>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js?v=20260813a"></script>
-  <script src="app.js?v=20260819print5"></script>
+  <script src="app.js?v=20260819print6"></script>
 </body>
 </html>
 

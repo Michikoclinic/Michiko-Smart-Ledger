@@ -56,6 +56,7 @@ body{background:linear-gradient(135deg,#fff8f4 0%,#fff4f7 36%,#f4f5ff 70%,#f2fbf
 /* No-purple pastel palette: cream, peach, blush and mint */
 .brand img{display:block;width:185px;height:58px;padding:5px 10px;border-radius:10px;background:#fff8f3;object-fit:contain;object-position:center;filter:none}
 nav .main-home{display:block;padding:14px;border-radius:10px;color:inherit;text-decoration:none;font-size:14px}nav .main-home:hover{background:#ffffff22;color:white}
+nav .staff-login{display:block;margin-top:18px;padding:12px 14px;border-top:1px solid #ffffff24;color:#fff8f3;text-decoration:none;font-size:12px;opacity:.82}nav .staff-login:hover{opacity:1;background:#ffffff18;border-radius:10px}
 
 /* Playful, easy-to-scan Michiko pastel refresh */
 :root{--ink:#453531;--muted:#846f68;--cream:#fffaf4;--paper:#fffefd;--line:#ebded8;--green:#5f9b83;--orange:#ed896d;--shadow:0 16px 40px rgba(101,69,55,.12)}

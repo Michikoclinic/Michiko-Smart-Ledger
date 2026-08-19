@@ -322,6 +322,7 @@ export default function Home() {
           >
             ◷ ประวัติ Consent
           </button>
+          <a className="staff-login" href="https://michikoclinic.github.io/Michiko-Smart-Ledger/">🔒 สำหรับพนักงาน</a>
         </nav>
         <div className="clinic">
           <i>MC</i>

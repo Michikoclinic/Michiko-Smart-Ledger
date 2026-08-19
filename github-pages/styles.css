@@ -117,7 +117,7 @@ td.detail .payment-total-line{display:table!important;width:auto!important;max-w
 .print-repeat-heading{display:none}.ledger-card tbody td:nth-child(2),.range-print-page tbody td:nth-child(2){white-space:nowrap!important;word-break:keep-all!important;overflow-wrap:normal!important}
 @media print{
 @page{size:A4 landscape;margin:22mm 7mm 10mm}
-.print-repeat-heading{display:none!important}body:not(.range-print) .print-heading{display:flex!important;position:fixed;z-index:5;top:4mm;left:7mm;right:7mm;height:14mm;margin:0;padding:0 0 3mm;background:#fff;border-bottom:2px solid var(--wine)}
+.print-repeat-heading{display:none!important}body:not(.range-print) .print-heading{display:flex!important;position:fixed;z-index:5;top:4mm;left:7mm;right:7mm;height:14mm;margin:0;padding:0 0 3mm;background:#fff;border:0!important;outline:0!important;box-shadow:none!important}
 .ledger-card th,.ledger-card td{width:auto!important}
 .print-column-widths .col-order{width:3%!important}.print-column-widths .col-hn{width:5%!important}.print-column-widths .col-name{width:8%!important}.print-column-widths .col-detail{width:33%!important}.print-column-widths .col-payment{width:5%!important}.print-column-widths .col-doctor{width:5%!important}.print-column-widths .col-assistant{width:5%!important}.print-column-widths .col-remark{width:6%!important}
 .ledger-card tbody tr,.range-print-page tbody tr{break-inside:avoid!important;page-break-inside:avoid!important}.range-print-page th:nth-child(4),.range-print-page td:nth-child(4){width:32%!important}

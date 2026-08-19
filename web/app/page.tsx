@@ -180,6 +180,7 @@ export default function Home() {
           <a className="active" href="#ledger">สมุดรายวัน</a>
           <a href="#patients">คนไข้</a>
           <a href="#history">ประวัติ</a>
+          <a href="https://michiko-digital-consent.michiko-9481.chatgpt.site/">Digital Consent</a>
         </nav>
         <div className="profile">
           <span className="profile-copy"><strong>มินตรา</strong><small>Reception</small></span>

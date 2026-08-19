@@ -119,6 +119,7 @@ td.detail .payment-total-line{display:table!important;width:auto!important;max-w
 @page{size:A4 landscape;margin:20mm 7mm 10mm}
 body:not(.range-print) .print-heading{display:flex!important;position:fixed;z-index:5;top:-15mm;left:0;right:0;height:13mm;margin:0;padding:0 0 3mm;background:#fff;border-bottom:2px solid var(--wine)}
 .ledger-card tbody tr,.range-print-page tbody tr{break-inside:avoid!important;page-break-inside:avoid!important}
-.ledger-card th:nth-child(2),.ledger-card td:nth-child(2){width:5%!important}.ledger-card th:nth-child(4),.ledger-card td:nth-child(4){width:38%!important}
+.ledger-card th:nth-child(2),.ledger-card td:nth-child(2){width:5%!important}.ledger-card th:nth-child(4),.ledger-card td:nth-child(4){width:33%!important}
+.range-print-page th:nth-child(4),.range-print-page td:nth-child(4){width:32%!important}
 body:not(.range-print)::after,body.range-print .range-print-page::after{content:"มีต่อหน้าถัดไป";position:fixed;right:7mm;bottom:1mm;padding:1px 5px;background:#fff;color:#000;font-size:7pt;font-weight:800}
 }

@@ -1,0 +1,2021 @@
+[
+  {
+    "file": "01_ฉีดฟิลเลอร์_Filler_3.docx",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "การยินยอม"
+      },
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "Consent"
+      },
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "ข้าพเจ้ายินยอมให้แพทย์ของ Michiko Clinic ฉีดฟิลเลอร์ (HA) โดยรับทราบรายละเอียด ข้อดี ข้อเสีย และข้อควรระวังแล้ว รวมถึงได้มีโอกาสซักถามและรับคำตอบเป็นที่พอใจแล้ว"
+      },
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "I consent to HA filler injection by Michiko Clinic physician, having been fully informed and had the opportunity to ask questions."
+      },
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "ความเสี่ยงและผลข้างเคียงที่อาจเกิดขึ้น"
+      },
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "Possible Risks & Side Effects"
+      },
+      {
+        "type": "paragraph",
+        "style": "List Paragraph",
+        "text": "ปวด บวม แดง ช้ำ คัน ตึงบริเวณที่ฉีด — มักหายเองใน 1–2 สัปดาห์ / Pain, swelling, redness, bruising, itching, tightness — usually resolves in 1–2 weeks"
+      },
+      {
+        "type": "paragraph",
+        "style": "List Paragraph",
+        "text": "อาการอักเสบล่าช้า: อาจเกิดขึ้นภายหลังได้ หากร่างกายอ่อนแอ หรือรับประทานของดิบ ของหมักดอง ของเค็ม หรือเข้ารับการผ่าตัดอื่นภายใน 7–14 วัน / Delayed inflammation: possible if body is weakened, or consuming raw/fermented/salty food, or undergoing surgery within 7–14 days"
+      },
+      {
+        "type": "paragraph",
+        "style": "List Paragraph",
+        "text": "ก้อนฟิลเลอร์ใต้ผิว (Nodule/Granuloma) อาจเกิดในบางราย อาจอยู่ได้หลายเดือน / Nodule or granuloma formation in some cases; may persist for months"
+      },
+      {
+        "type": "paragraph",
+        "style": "List Paragraph",
+        "text": "ความเสี่ยงสูงสุด (พบน้อยมาก): ฉีดเข้าเส้นเลือด → หลอดเลือดอุดตัน → เนื้อตาย / ตาบอดชั่วคราวหรือถาวร / สมองขาดเลือด / Rare severe: intravascular injection → vascular occlusion → necrosis, vision loss, stroke"
+      },
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "ข้อปฏิบัติหลังฉีด (2 สัปดาห์)"
+      },
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "Post-Treatment Care (2 weeks)"
+      },
+      {
+        "type": "paragraph",
+        "style": "List Paragraph",
+        "text": "งดศัลยกรรม ทันตกรรม (ถอนฟัน/รากฟัน) ภายใน 2 สัปดาห์ / Avoid surgery and dental procedures for 2 weeks"
+      },
+      {
+        "type": "paragraph",
+        "style": "List Paragraph",
+        "text": "หลีกเลี่ยงความร้อนทุกชนิด: เลเซอร์ ซาวน่า อบไอน้ำ ออนเซ็น อย่างน้อย 2–4 สัปดาห์ / Avoid all heat: laser, sauna, steam, onsen for at least 2–4 weeks"
+      },
+      {
+        "type": "paragraph",
+        "style": "List Paragraph",
+        "text": "งดแอลกอฮอล์ ของดิบ ของหมักดอง อย่างน้อย 2 สัปดาห์ (ขั้นต่ำ 72 ชม.) / Avoid alcohol, raw/fermented food for 2 weeks (minimum 72 hrs)"
+      },
+      {
+        "type": "paragraph",
+        "style": "List Paragraph",
+        "text": "งดนวด ขัดผิว ทรีทเม้นท์ และการกดบริเวณที่ฉีด 2 สัปดาห์ / No massage, scrub, treatment, or pressure on injected area for 2 weeks"
+      },
+      {
+        "type": "paragraph",
+        "style": "List Paragraph",
+        "text": "ประคบเย็นได้เพื่อลดบวมช้ำใน 48 ชั่วโมงแรก / Cold compress may be applied to reduce swelling/bruising in the first 48 hrs"
+      },
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "คำถามก่อนรับบริการ"
+      },
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "Pre-Treatment Questions"
+      },
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "มีโรคผิวหนัง สิว เริม หรือแผลบนใบหน้า? / Do you have any active skin condition; acne, herpes, or facial wound? ◯ ใช่ Yes ◯ ไม่ No"
+      },
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "กำลังตั้งครรภ์หรือให้นมบุตร? / Are you pregnant or breastfeeding? ◯ ใช่ Yes ◯ ไม่ No"
+      },
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "ยินยอมรับการทายาชาก่อน/ระหว่างทำหัตถการ? / Do you consent to use topical anesthesia before/during procedure? ◯ ใช่ Yes ◯ ไม่ No"
+      },
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "ข้าพเจ้าได้รับทราบแล้วว่า การรักษาทางการแพทย์ไม่อาจรับประกันผลการรักษาให้ได้ตามที่ข้าพเจ้าคาดหวังไว้เสมอไป ผลการรักษาด้วยฟิลเลอร์ขึ้นอยู่กับแต่ละบุคคล ข้าพเจ้ายอมรับว่าคำชี้แจงในหนังสือยินยอมนี้ถือเป็นสำคัญ มีความถูกต้องเหนือข้อมูลที่ได้รับแจ้งทางอื่นๆ ไม่ว่าจะเป็นด้วยวาจาหรือลายลักษณ์อักษรก่อนหน้านี้"
+      },
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "I acknowledge that medical treatments cannot guarantee results as expected. Results of ฟิลเลอร์ vary by individual. I accept that this consent supersedes all prior verbal or written information."
+      },
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "ข้าพเจ้าได้อ่านและเข้าใจข้อมูลทั้งหมดนี้แล้ว และยินยอมเข้ารับการรักษา โดยข้าพเจ้าหรือผู้แทนจะไม่เรียกร้องค่าเสียหายใดๆ จากแพทย์หรือ Michiko Clinic อันเนื่องมาจากความเสี่ยงที่ได้รับแจ้งข้างต้น"
+      },
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "I have read and understood this document and consent to treatment. I will not hold the physician or Michiko Clinic liable for the disclosed risks."
+      },
+      {
+        "type": "paragraph",
+        "style": "Normal",
+        "text": "มิชิโกะ คลินิกเวชกรรม | MICHIKO Aesthetics"
+      },
+      {
+        "type": "table",
+        "index": 0,
+        "rows": [
+          [
+            "หนังสือแสดงความยินยอมเข้ารับการฉีดฟิลเลอร์ (Hyaluronic Acid) Informed Consent for Hyaluronic Acid Filler Injection"
+          ]
+        ]
+      },
+      {
+        "type": "table",
+        "index": 1,
+        "rows": [
+          [
+            "HN:___________",
+            "ชื่อ-สกุล:_________________________________",
+            "DOB:_____________",
+            "Date:_______________"
+          ]
+        ]
+      },
+      {
+        "type": "table",
+        "index": 2,
+        "rows": [
+          [
+            "ลายมือชื่อผู้รับบริการ / Patient Signature ................................................................",
+            "ลายมือชื่อแพทย์ / Physician ................................................................"
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "file": "(Eng) Xerf-แบบฟอร์มแสดงความยินยอมเข้ารับบริการ.docx",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I hereby give my consent for the doctor of Michiko Aesthetics & Wellness to perform examination and treatment on me using the XERF device. I acknowledge that I have been informed of and fully understand the details, advantages, disadvantages, and precautions related to the XERF program, as stated below."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "The treating doctor has explained that the XERF program is an innovative facial skin care treatment utilizing Monopolar Radiofrequency technology, which delivers thermal energy deep into the skin layers. This process helps tighten the skin, stimulate collagen production, and effectively reduce facial skin laxity, resulting in firmer, tighter, and more youthful-looking skin."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Treatment with the XERF device is suitable for individuals with concerns about skin looseness, as well as those who wish to restore smoother and more youthful-looking skin without undergoing surgery. I have been given the opportunity to ask questions and have received satisfactory explanations from the doctor."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I have been informed about the inappropriate timing for undergoing treatment with the XERF device, as well as the contraindications, warnings, and precautions that should be understood prior to the procedure, in order to ensure that the treatment is appropriate and safe for my skin condition. I have also been informed of possible post-treatment reactions, such as swelling, redness, warmth, or sensitivity to touch in the treated area, which are commonly observed and usually resolve on their own within a few days after the completion of the treatment, provided that the doctor’s instructions are strictly followed."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "The treating doctor has explained that contraindications for the treatment must always be evaluated by the doctor in advance, as certain contraindications may affect the patient’s safety."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "The XERF program cannot be performed on the following individuals:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "- Individuals with a pacemaker or implanted electronic medical devices, as the energy used during treatment may interfere with the function of these devices."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "- Pregnant individuals."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "- Individuals with cancer."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "- Individuals with skin infections, dry facial skin, or easily irritated/sensitive skin."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I acknowledge that medical treatments cannot guarantee results that always meet my expectations. The treating doctor has informed me that the results of XERF treatment will gradually become apparent over a period of approximately three months, and that some individuals may achieve better results with more than one treatment session. I understand and accept that treatment outcomes vary from person to person."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I hereby certify that I have read and fully understood all the information contained in this document, and that I have been given the opportunity to ask questions regarding the precautions, potential risks, and possible complications related to the treatment. I acknowledge and consent to receiving the XERF treatment on this occasion, and I agree that neither I nor my representative shall make any claims for damages against the doctor or Michiko Aesthetics & Wellness."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Do you have a pacemaker or any other implanted electronic devices in your body? ೦ Yes ೦ No ……………………………………………………………………………………………………………………………………………………"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Have you ever been diagnosed with cancer, or do you have a history of receiving treatment related to cancer? ೦ Yes ೦ No"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Have you taken any medications containing vitamin A derivatives within the past six months? ೦ Yes ೦ No ……………………………………………………………………………………………………………………………………………………"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Are you currently pregnant? ೦ Yes ೦ No"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Patient's Name: _______________________________________________________________________________________ Date: _________________________________________________"
+      },
+      {
+        "type": "table",
+        "index": 0,
+        "rows": [
+          [
+            "Consent Form for Treatment with XERF Program",
+            "Patient Information : HN___________________________ Full Name : _______________________________________________________________________________________________________ Date of Birth : ____________________________________________________________________________________________________ Contact Number :________________________________________________________________________________________________"
+          ]
+        ]
+      },
+      {
+        "type": "footer",
+        "section": 0,
+        "text": "Michiko Aesthetics & Wellness | 7FL Em Tower, Emsphere"
+      }
+    ]
+  },
+  {
+    "file": "(TH) แบบฟอร์มการเข้ารับการรักษาด้วย Ultraformer III.docx",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Name............................................................................ Identity card number....................................................... Age................years Phone number.................................................................."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Information Document for Patients"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Ultraformer III"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Treatment with Ultraformer III should only be performed under medical supervision after fully understanding the risks involved. Informed consent must be obtained."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Dear Patient,"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "The information below is intended to help you better understand Ultraformer III treatment and provide an opportunity to ask questions before proceeding."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• How it works:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Ultherapy uses focused ultrasound energy that penetrates deep into the skin, stimulating collagen production, which may cause a warm sensation or slight discomfort when the ultrasound energy is delivered. This sensation indicates that the ultrasound energy is reaching the correct depth and target area. The goal is to stimulate collagen production and tighten the skin. Patients may feel discomfort during the procedure, and doctors may provide different options for pain management."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "The Ultraformer III system is designed to deliver ultrasound energy at specific depths between 1.5 mm and 4.5 mm under the skin. This allows the treatment to reach deep layers of skin where collagen production takes place. This process helps improve skin elasticity and appearance over time."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "The treatment head used in Ultraformer III has been approved for use at specific depths (3.0 mm and 4.5 mm). In some cases, there may be slight discomfort or redness during treatment, which will gradually subside. The effect of collagen production continues over several months following treatment."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• After effects:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Some patients may experience redness or slight swelling for a few hours to a few days post-treatment. A small percentage might feel temporary numbness, tingling, or soreness, but these symptoms are usually mild and short-lived."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• Temporary effects:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "You may experience temporary redness or swelling in the treated area after Ultraformer III treatment. In rare cases, bruising or welts may occur, depending on skin sensitivity, but typically resolve on their own within a few days to weeks."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• Risks:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "While Ultraformer III is generally safe, minor side effects like swelling or numbness may appear. These are not permanent and will gradually disappear as inflammation subsides. There may be risks associated with treatment, similar to other medical procedures."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• Effectiveness:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Results appear gradually over 2–3 months after treatment, as collagen builds up. However, results may vary depending on individual skin conditions, and Ultraformer III is not a replacement for surgical facelifts."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Possible side effects include:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• Nerve inflammation or damage (which will be treated medically) or pain due to irritation of facial nerves that may radiate to nearby areas. This could occur due to focused ultrasound energy or muscle inflammation. This may happen temporarily after treatment due to inflammation or temporary nerve response."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• Patients who have received injectable fillers or substances that differ from the body’s natural tissue may experience side effects due to interaction with ultrasound energy. This may result in filler deformation or migration, especially if treatment is done soon after injection (within 3–6 months). Treatment providers must carefully assess this."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• Limited results: The Ultraformer III system might not yield noticeable results in some cases, or results may vary. Individuals with extremely saggy or fatty areas may not see the same improvement as those with firm tissue."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• The Ultraformer III has not been tested for use with certain implanted medical devices: For example, pacemakers, defibrillators, or metal implants. Therefore, the system should not be used on patients with such devices in the treatment area (e.g., face, neck) or on areas with metal implants or embedded materials."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• Avoid contact with the treatment area during the procedure: Avoid touching the treated area with hands or applying skin care products directly on it until advised otherwise."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Ultraformer III has not been tested on certain groups, including:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Pregnant or breastfeeding women, children, or people with:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Pacemakers or implanted medical devices"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Bleeding disorders"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Skin infections or active skin diseases (e.g., herpes, eczema, psoriasis, autoimmune diseases)"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Diabetes / Epilepsy / Severe heart disease"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Consent Form for Photographing and Video Recording During Treatment"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• I consent to allow the physician to be the one performing the procedure."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• I consent to allow the clinic to photograph or video record my facial expressions and movements both before and after the procedure, as well as during the procedure itself."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• I understand and agree that photographs or videos may be used appropriately for educational and academic purposes to benefit treatment development, and may be shared with other doctors and staff of Michiko clinic."
+      },
+      {
+        "type": "table",
+        "index": 0,
+        "rows": [
+          [
+            "I give consent to the use of images for educational purposes or treatment records. ☐ Yes ☐ No The information provided by the physician/clinic has been explained and I understand it. ☐ Yes ☐ No I have not been coerced into giving any information regarding the treatment or procedure. ☐ Yes ☐ No I understand that the physician may use the images for reference regarding treatment results ☐ Yes ☐ No or facial changes. Patient Name: ............................................................ Age: ........... years Patient Signature: ....................................................... Date: ................................... Doctor/Nurse Name: .................................................. Signature: ................................................................. Date: ................................... Thank you for the information provided. All details relating to the treatment and your contact information will be kept confidential."
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "file": "(ENG) แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีด Sculptra.docx",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I consent to have MICHIKO Clinic's physician perform an examination and treatment on me, including the administration of Sculptra. I understand the details, benefits, risks, and precautions associated with Sculptra injections, as follows:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Sculptra is prepared by your physician and injected into the skin to fill deep grooves, particularly to address skin issues such as wrinkles, fine lines, folds, acne scars, and for rejuvenation in areas with volume loss (Lipoatrophy)."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "My treating physician has explained when and how Sculptra should be used, and I have had the opportunity to ask questions and received satisfactory answers. I am aware of the timing when Sculptra should not be administered and the contraindications, warnings, and precautions associated with this product, including potential reactions related to injections like bleeding, localized redness, bruising, swelling, palpable nodules, or lumps, especially periorbitally, or excessive product correction. Sometimes, nodules related to early treatment (within 3-6 weeks post-treatment) may be resolved with dilution and appropriate injection techniques. Reports exist of nodules developing later (1-14 months post-injection), which may take up to 2 years to resolve. In some cases, nodules or granulomas may require surgical intervention if they are larger, are in challenging anatomical areas (e.g., under the eyes), or persist after other treatments. Vascular events may occur if the product is accidentally injected into a blood vessel or if there is compression of blood vessels related to other injected products, which may result in conditions like pallor, skin color changes, necrosis, or ulceration. Rarely, conditions related to vascular occlusion, such as transient or permanent vision loss, cerebral vascular events, or strokes, may occur. For patients with a history of significant clinically important undesirable events, consideration should be given to not retreat."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "My treating physician has informed me of the use of specific anesthesia, such as Lidocaine, for pain relief. I have received information about the specific anesthesia used, when it is used, and the contraindications, warnings, and precautions associated with it, as well as potential side effects."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I understand that medical treatments cannot guarantee specific results. My treating physician has informed me that results from Sculptra injections may gradually appear within approximately 2-3 weeks, depending on the treated area and technique. For the initial treatment, corrections are usually made only at points, and patients should have a follow-up evaluation approximately 4 weeks post-treatment to determine if additional correction is needed."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I have been candid about my history of allergies, particularly to Sculptra components, other medications, and my medical history, and have received post-treatment care instructions. I understand the importance of following the instructions provided in the post-treatment care documents. ೦"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I certify that I have read and understood all the consent information above and agree to undergo treatment involving Sculptra injections. I, or my representative, will not hold the physician or MICHIKO Clinic liable for any damages."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I consent to the use of pre-treatment and/or during-treatment numbing cream, which may result in temporary discomfort. ೦ yes ೦ No"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I consent to the use of numbing injection before or during treatment. ೦ Yes ೦ No."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Do you regularly take vitamin E, fish oil, omega-3 supplements, multivitamins, or Gingko Biloba? ೦ No ೦ Yes (last taken on _____________________________________________)."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Do you regularly take Aspirin, Plavix, or blood thinning medication? ೦ No ೦ Yes (last taken on _____________________________________________)."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Are you currently planning a pregnancy? ೦ Yes ೦ No."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Do you currently have any skin conditions on my face, such as acne, eczema, or others, and am I currently undergoing any treatments? ೦ No ೦ Yes (currently taking ________________________________________________________________________)."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Patient's Name: _______________________________________________________________________________________ Date: _________________________________________________"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Please read additional details in the medical device labeling documents."
+      },
+      {
+        "type": "table",
+        "index": 0,
+        "rows": [
+          [
+            "Consent Form for Treatment with PLLA (S C U L P T R A)",
+            "Patient Information : HN___________________________ Full Name : _______________________________________________________________________________________________________ Date of Birth : ____________________________________________________________________________________________________ Contact Number :________________________________________________________________________________________________"
+          ]
+        ]
+      },
+      {
+        "type": "footer",
+        "section": 0,
+        "text": "Michiko Clinic by Life Partner co., Ltd. | 9/2 Floor 1 Building 1 Supalai Park Phaholyothin 21 Chatuchak Bangkok 10900 Tel. 0954424615"
+      }
+    ]
+  },
+  {
+    "file": "(Eng) แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดสลายฟิลเลอร์.docx",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I consent to the doctors at Michiko Clinic conducting examinations and treatments for me, including injecting dermal fillers. I acknowledge the details, benefits, drawbacks, and precautions of dermal filler injections as follows:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I understand that dermal filler injections involve the use of hyaluronidase, an enzyme that can dissolve hyaluronic acid or fillers in the skin."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I acknowledge that during dermal filler injections, doctors may inject multiple layers under the skin in areas where previous fillers were injected. This process may cause bruising and discoloration due to the disruption of blood vessels. Additionally, complete dissolution of previous fillers may require 1-3 sessions, and monitoring of results is necessary."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I understand that hyaluronidase may not be able to localize or accurately determine the volume of fillers to be dissolved. The outcome of filler dissolution may not be immediate and may take up to 7 days to fully react. Therefore, if additional filler injections are needed in the areas where dissolution is performed, it's advisable to wait for 7 days before proceeding."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I acknowledge that hyaluronidase cannot dissolve fake fillers, liquid silicone, whale blubber, or other substances that are not hyaluronic acid-based fillers. If I have previously injected such substances or received injections from non-medical personnel, these substances may not be dissolved."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I am aware that using hyaluronidase may cause swelling, redness, pain, or itching in the injected area shortly after the injection. If there are any abnormal skin reactions or severe symptoms such as severe swelling, eye swelling, chest tightness, rash on the face and body, or difficulty breathing, I will report them to the doctor immediately."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I understand that after dermal filler injections, I should not touch or press the injected area, as it may cause the filler to migrate to other areas and lead to unexpected results. I will not undertake any activities that may be dangerous to the treatment or results obtained from dermal filler injections without the doctor's permission."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I understand and acknowledge that medical treatment cannot guarantee the desired results. The outcome of filler dissolution depends on the individual. I agree that the instructions in this consent form are essential, accurate, and supersede any other information received previously, whether verbal or written."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I would like to proceed with the following treatment:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I want the doctor to dissolve all fillers in the problematic areas."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I want the doctor to dissolve fillers in some specific areas of concern. I understand that this may not fully address all my concerns and that hyaluronidase may not be able to precisely limit the area or volume of fillers to be dissolved."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I hereby affirm that I have read and understood all the content in this informed consent document. Neither I nor my representatives will make any claims for damages against the physician or Michiko Clinic."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I consent to the treatment with hyaluronidase to dissolve Filler in this session: ᪀ Yes ᪀ No"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I agree to undergo a patch test for hyaluronidase before the injection: ᪀ Yes ᪀ No"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I agree to receive numbing cream to minimize discomfort before or during the treatment ᪀ Yes ᪀ No"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I have no history of allergies to lidocaine injection and consent for the doctor to inject it ᪀ Yes ᪀ No"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "before or during the treatment"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I have no history of fake fillers, liquid silicone, whale blubber, or other substances: ᪀ Yes ᪀ No"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Patient's signature: _____________________________________________________________________________________ Date: __________________________________________"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Please read additional details in the medical device labeling"
+      },
+      {
+        "type": "table",
+        "index": 0,
+        "rows": [
+          [
+            "Consent Form for Treatment with Hyaluronidase to dissolve Hyaluronic Acid (Filler)",
+            "Patient Information : HN___________________________ Full Name : _______________________________________________________________________________________________________ Date of Birth : ____________________________________________________________________________________________________ Contact Number :________________________________________________________________________________________________"
+          ]
+        ]
+      },
+      {
+        "type": "footer",
+        "section": 0,
+        "text": "Michiko Clinic by Life Partner co., Ltd. | 9/2 Floor 1 Building 1 Supalai Park Phaholyothin 21 Chatuchak Bangkok 10900 Tel. 0954424615"
+      }
+    ]
+  },
+  {
+    "file": "(ENG) แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดฟิลเลอร์.docx",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I consent to allow the doctors at MICHIKO Clinic to examine and treat me, including administering filler injections. I have been informed about the details, benefits, risks, and precautions associated with filler injections."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I acknowledge that I have been informed about the use and indications of the filler products used for my treatment. The doctor has explained the usage method and the appropriate timing for using the product. I have had the opportunity to ask additional questions and received satisfactory answers. I have also been informed about contraindications, warnings, precautions, and adverse events related to the product. I am aware of the amount of product needed and the treatment costs."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I have been informed about the potential risks that may occur during treatment. Filler injections carry a risk of accidental entry into blood vessels at the injection site, potentially causing vascular occlusion, ischemia, tissue necrosis, or necrosis due to lack of blood supply. Other rare but severe adverse events may include temporary or permanent vision impairment, blindness, brain hemorrhage, or ischemia, skin necrosis, inflammation, or structural damage at the injection site."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Immediate reactions following injection may include bruising, redness, itching, swelling, pain, and tightness at the injection site. Generally, these symptoms may resolve within 1-2 weeks post-injection. In some cases with mild to moderate inflammation, symptoms may resolve within 2 weeks, and there may be cases where abnormalities persist for several months or more than a year, such as lumps at the treatment site, tissue collapse due to inflammation, or other rare abnormalities mentioned above."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I acknowledge that inflammation at the injection site may occur immediately or be delayed for several weeks. Swelling may occur post-injection if the patient has a weakened immune system, insufficient rest, excessive inflammation, consumes raw, fermented, or salty foods, or undergoes surgery elsewhere on the body within 7-14 days post-filler injection. These conditions may increase the likelihood of inflammation at the injection site, leading to pus formation and tissue collapse, reducing the effectiveness of the filler."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "In cases where the treating doctor uses filler products containing local anesthetic (Lidocaine 0.3%), I understand that Lidocaine is included to reduce pain during injection and treatment, with effects lasting approximately 2-4 hours."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "The treating doctor has informed me about the treatment area, treatment method, and expected results based on the amount of filler used, typically lasting 6-18 months. The duration depends on several factors, including the brand of filler, age, skin characteristics, and individual daily activities. Additional treatment may be necessary to achieve or maintain the desired results."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I confirm that I will follow the post-treatment care instructions, which include:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Avoiding surgical procedures, eye or nose surgeries, tooth extractions, or root canal treatments for 2 weeks post-filler injection."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Avoiding contact with tap water and contaminants on facial and intimate area injection sites for 24 hours, and for 7-10 days on hip injection sites."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Avoiding all forms of heat, such as facial laser treatments, steam rooms, saunas, and hot springs for at least 2-4 weeks."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Avoiding facial and body massages, exfoliation, and treatments for at least 2 weeks."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Avoiding alcoholic beverages, raw, fermented foods, and salty foods for 2 weeks (or at least 72 hours if not possible), as they may cause filler swelling. Cold compresses can be applied to reduce swelling and bruising within the first 48 hours post-procedure."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I have informed the treating doctor of all previous procedures I have undergone, including injections, surgeries, and chemical peels. I understand that if I have previously received filler or non-degradable substances from other locations or doctors, there is a possibility that bacteria or hidden contaminants in the previous filler or substance may resurface, leading to infection, which is not the fault of the doctor at Michiko Clinic."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I understand that medical treatment cannot guarantee specific results as expected. The outcome of treatment with filler depends on individual factors. I agree that the information in this consent form is important, accurate, and supersedes any other information received verbally or in writing before this."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I certify that I have read and fully understood the contents of this consent form and agree to receive the filler treatment. Neither I nor my representative will claim any damages from the doctor or Michiko Clinic. ೦ yes ೦ No"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I consent to the application of anesthetic cream before or during treatment. ೦ yes ೦ No"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I consent to the use of anesthetic injections before or during treatment, acknowledging the risk of temporary or permanent nerve inflammation. ೦ yes ೦ No"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Patient's signature: _________________________________________________________________________________________ Date: __________________________________________"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Please read additional details in the medical device labeling"
+      },
+      {
+        "type": "table",
+        "index": 0,
+        "rows": [
+          [
+            "Consent Form for Treatment with Hyaluronic Acid (Filler)",
+            "Patient Information : HN___________________________ Full Name : _______________________________________________________________________________________________________ Date of Birth : ____________________________________________________________________________________________________ Contact Number :________________________________________________________________________________________________"
+          ]
+        ]
+      },
+      {
+        "type": "footer",
+        "section": 0,
+        "text": "Michiko Clinic by Life Partner co., Ltd. | 9/2 Floor 1 Building 1 Supalai Park Phaholyothin 21 Chatuchak Bangkok 10900 Tel. 0954424615"
+      }
+    ]
+  },
+  {
+    "file": "(ENG) แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดโบท็อก.docx",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I consent to the doctors at Michiko Clinic conducting an examination and treatment on me, including the injection of Botulinum Toxin Type A (Botox). I acknowledge the details, benefits, risks, and precautions of Botox injection as follows: I understand that Botulinum Toxin Type A is a substance that weakens muscles and can be used to treat various facial issues (including forehead wrinkles, crow's feet, frown lines, nasal wrinkles, lifting corners of the mouth, relaxing jaw muscles) or reduce the size of enlarged muscles like jaw muscles, thighs, or calf muscles. It can also be used for facial contouring to enhance collagen production, leading to a lifted appearance. Additionally, it can be used to reduce sweating under the arms or in other areas. I am aware that individual responses to Botulinum Toxin Type A may vary, and if I am resistant to Botox, in whole or in part, it may result in less effective treatment or shorter-lasting results compared to others. I am aware that after Botox injection, the onset of effects in each injection site may vary during the first 3-7 days, and I may feel varying degrees of tightness at each injection site. I understand that I may need to wait for the full effect of Botox to be achieved or wait for a minimum of 2 weeks to see the best results. During the first month, I may experience significant tightness, especially if I respond well to Botox. These effects will gradually improve after the first month. I acknowledge the possible side effects and complications of Botulinum Toxin Type A injection, which are very rare and may include:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Redness or small greenish bumps at the injection sites, which will resolve on their own within 1-2 weeks after treatment."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Mild headaches, which may occur in some individuals but will resolve on their own."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Feeling of tightness at the injection sites, which will resolve on its own within 1-2 weeks after treatment."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Reduction or disappearance of wrinkles within 3-14 days after treatment, which may last approximately 4-6 months, depending on the individual. I understand that medical treatment cannot guarantee specific outcomes, and I certify that I have read and understood the contents of this document thoroughly before making a decision to proceed with treatment. In any case, neither I nor my representative will seek damages or any expenses from the doctor or Michiko Clinic."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I have previously received injections of Toxin (Botox) or not: ೦ No ೦ Yes. If yes, how was the result? ೦ Quite heavy/long-lasting ೦Normal result/lasted about 4 months ೦ short-lived"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I regularly take vitamin E, fish oil, Omega-3 supplements, or Ginkgo Biloba: ೦ No ೦ Yes Last taken on: ........................................"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I regularly take aspirin, ibuprofen, or blood thinners: ೦ No ೦ Yes. Last taken on: ........................................"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I had my last menstrual period on: ........................................................."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Are you currently planning a pregnancy? ೦ Yes ೦ No"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Do you currently have any skin issues on your face, such as acne, eczema, or others? Are you taking any medications for these conditions? ೦ No ೦ Yes. The medication I am currently taking is: ....................................................."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I consent to the administration of emotional numbing medications before or during treatment, which may cause emotional blunting: ೦ Yes ೦ No"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Patient's Name: _______________________________________________________________________________________ Date: _________________________________________________"
+      },
+      {
+        "type": "table",
+        "index": 0,
+        "rows": [
+          [
+            "Consent Form for Treatment with Botulinum Toxin Type A (Botox)",
+            "Patient Information : HN___________________________ Full Name : _______________________________________________________________________________________________________ Date of Birth : ____________________________________________________________________________________________________ Contact Number :________________________________________________________________________________________________"
+          ]
+        ]
+      },
+      {
+        "type": "footer",
+        "section": 0,
+        "text": "Michiko Clinic by Life Partner co., Ltd. | 9/2 Floor 1 Building 1 Supalai Park Phaholyothin 21 Chatuchak Bangkok 10900 Tel. 0954424615"
+      }
+    ]
+  },
+  {
+    "file": "(ENG) แบบฟอร์มการยินยอมเป็นเคสรีวิว (Full review).docx",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Patient Information : HN___________________________Date of Birth : _____________________________________________________"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I,..................................................................................................................... the undersigned, hereby grant permission and relinquish rights to capture, use and disclosure of photographs and video recordings of myself, including reproduction, publication, utilization, and retention of images taken before, during, and after my treatment, which may include my facial appearance."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I acknowledge that these photographs and/or videos containing my likeness constitute my personal data, and I consent to the collection, usage, and disclosure of such personal data by Life Partners Co., Ltd. (\"the Company\") and MICHIKO Clinic for the purposes outlined below."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Please mark \"Yes\" in the appropriate box if you consent to the respective purpose and mark \"No\" if you do not consent."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Yes No"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "For the purpose of assessing and recording my treatment progress."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "For educational, training, database compilation, and research purposes, including publication for educational or research purposes."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Be a case review for general public advertisement and marketing promotion of the company, as detailed in this document."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I understand that the pictures and video recordings may include sensitive personal information, health and beauty related data. I acknowledge that MICHIKO Clinic may utilize my photos and videos taken before, after and during my treatment and published on the social media media of the Michiko Clinic such as Facebook, Instagram, Line, Tik Tok, YouTube, etc. freely without obtaining further consent in exchange for the special discount I received. I confirm that for any procedure I receive a special discount more than other customers, I agree to allow Michiko Clinic to freely use my photos and videos for marketing purposes."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "I acknowledge that I have the right to withdraw my consent at any time in the future by notifying MICHIKO Clinic in writing or by sending an email to customerservice@michikoclinic.com, or by calling +66 64-165-5562, specifying the important message \"I wish to withdraw my consent for the use of my personal data for (please specify the purpose of data usage you wish to withdraw consent for).\" I understand that my withdrawal of consent will not affect the collection, usage, or disclosure of my personal data that I have previously consented to. I also understand that my right to withdraw consent may be subject to legal or contractual limitations, such as I can withdraw my consent once I have fully paid for the products, medical equipment, and medical services for my treatment with MICHIKO Clinic."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Patient’s signature: ____________________________________________________ Date : ________________________________________________________________"
+      },
+      {
+        "type": "table",
+        "index": 0,
+        "rows": [
+          [
+            "Privacy Consent Form for Pictures and Video Taken During Treatment Including Use in Social Media for Marketing Purposes (Data Privacy Consent)",
+            "Copy of ID card of the grantor (Full review)"
+          ]
+        ]
+      },
+      {
+        "type": "footer",
+        "section": 0,
+        "text": "Michiko Clinic by Life Partner co., Ltd. | 9/2 Floor 1 Building 1 Supalai Park Phaholyothin 21 Chatuchak Bangkok 10900 Tel. 0954424615"
+      }
+    ]
+  },
+  {
+    "file": "(ENG) แบบฟอร์มการเข้ารับการรักษาด้วย Ultraformer III.docx",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Name............................................................................ Identity card number....................................................... Age................years Phone number.................................................................."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Information Document for Patients"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Ultraformer III"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Treatment with Ultraformer III should only be performed under medical supervision after fully understanding the risks involved. Informed consent must be obtained."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Dear Patient,"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "The information below is intended to help you better understand Ultraformer III treatment and provide an opportunity to ask questions before proceeding."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• How it works:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Ultherapy uses focused ultrasound energy that penetrates deep into the skin, stimulating collagen production, which may cause a warm sensation or slight discomfort when the ultrasound energy is delivered. This sensation indicates that the ultrasound energy is reaching the correct depth and target area. The goal is to stimulate collagen production and tighten the skin. Patients may feel discomfort during the procedure, and doctors may provide different options for pain management."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "The Ultraformer III system is designed to deliver ultrasound energy at specific depths between 1.5 mm and 4.5 mm under the skin. This allows the treatment to reach deep layers of skin where collagen production takes place. This process helps improve skin elasticity and appearance over time."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "The treatment head used in Ultraformer III has been approved for use at specific depths (3.0 mm and 4.5 mm). In some cases, there may be slight discomfort or redness during treatment, which will gradually subside. The effect of collagen production continues over several months following treatment."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• After effects:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Some patients may experience redness or slight swelling for a few hours to a few days post-treatment. A small percentage might feel temporary numbness, tingling, or soreness, but these symptoms are usually mild and short-lived."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• Temporary effects:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "You may experience temporary redness or swelling in the treated area after Ultraformer III treatment. In rare cases, bruising or welts may occur, depending on skin sensitivity, but typically resolve on their own within a few days to weeks."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• Risks:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "While Ultraformer III is generally safe, minor side effects like swelling or numbness may appear. These are not permanent and will gradually disappear as inflammation subsides. There may be risks associated with treatment, similar to other medical procedures."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• Effectiveness:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Results appear gradually over 2–3 months after treatment, as collagen builds up. However, results may vary depending on individual skin conditions, and Ultraformer III is not a replacement for surgical facelifts."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Possible side effects include:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• Nerve inflammation or damage (which will be treated medically) or pain due to irritation of facial nerves that may radiate to nearby areas. This could occur due to focused ultrasound energy or muscle inflammation. This may happen temporarily after treatment due to inflammation or temporary nerve response."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• Patients who have received injectable fillers or substances that differ from the body’s natural tissue may experience side effects due to interaction with ultrasound energy. This may result in filler deformation or migration, especially if treatment is done soon after injection (within 3–6 months). Treatment providers must carefully assess this."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• Limited results: The Ultraformer III system might not yield noticeable results in some cases, or results may vary. Individuals with extremely saggy or fatty areas may not see the same improvement as those with firm tissue."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• The Ultraformer III has not been tested for use with certain implanted medical devices: For example, pacemakers, defibrillators, or metal implants. Therefore, the system should not be used on patients with such devices in the treatment area (e.g., face, neck) or on areas with metal implants or embedded materials."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• Avoid contact with the treatment area during the procedure: Avoid touching the treated area with hands or applying skin care products directly on it until advised otherwise."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Ultraformer III has not been tested on certain groups, including:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Pregnant or breastfeeding women, children, or people with:"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Pacemakers or implanted medical devices"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Bleeding disorders"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Skin infections or active skin diseases (e.g., herpes, eczema, psoriasis, autoimmune diseases)"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Diabetes / Epilepsy / Severe heart disease"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "Consent Form for Photographing and Video Recording During Treatment"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• I consent to allow the physician to be the one performing the procedure."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• I consent to allow the clinic to photograph or video record my facial expressions and movements both before and after the procedure, as well as during the procedure itself."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "• I understand and agree that photographs or videos may be used appropriately for educational and academic purposes to benefit treatment development, and may be shared with other doctors and staff of Michiko clinic."
+      },
+      {
+        "type": "table",
+        "index": 0,
+        "rows": [
+          [
+            "I give consent to the use of images for educational purposes or treatment records. ☐ Yes ☐ No The information provided by the physician/clinic has been explained and I understand it. ☐ Yes ☐ No I have not been coerced into giving any information regarding the treatment or procedure. ☐ Yes ☐ No I understand that the physician may use the images for reference regarding treatment results ☐ Yes ☐ No or facial changes. Patient Name: ............................................................ Age: ........... years Patient Signature: ....................................................... Date: ................................... Doctor/Nurse Name: .................................................. Signature: ................................................................. Date: ................................... Thank you for the information provided. All details relating to the treatment and your contact information will be kept confidential."
+          ]
+        ]
+      }
+    ]
+  },
+  {
+    "file": "ร้อยไหมจมูก-แบบฟอร์มแสดงความยินยอม.docx",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ายินยอมให้แพทย์ผู้ทำการรักษาของ MICHIKO Clinic ดำเนินการตรวจ ประเมิน และทำหัตถการร้อยไหมจมูก ให้แก่ข้าพเจ้า โดยข้าพเจ้าได้รับทราบและเข้าใจถึงรายละเอียด ขั้นตอน ประโยชน์ ข้อจำกัด รวมถึงความเสี่ยงและข้อควรระวังที่อาจเกิดขึ้นจากการทำหัตถการดังกล่าวแล้ว"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "การร้อยไหมจมูก เป็นหัตถการเสริมจมูกที่ใช้เส้นไหมละลายในการปรับรูปทรงจมูกให้ได้สัดส่วนมากยิ่งขึ้น โดยสามารถช่วยให้สันจมูกดูโด่งขึ้นหรือยกปลายจมูกให้เชิดขึ้นได้โดยไม่ต้องผ่าตัด ความเจ็บปวดน้อย และไม่ได้ประสงค์จะเสริมซิลิโคนถาวรในอนาคต"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ารับทราบว่า มีข้อจำกัดบางประการที่อาจส่งผลต่อความปลอดภัยของผู้เข้ารับบริการ การร้อยไหมจมูกไม่สามารถทำได้กับผู้ที่มีภาวะหรือโรคบางชนิด เช่น ภาวะเลือดออกง่ายหรือผิดปกติ, โรคภูมิคุ้มกันบางชนิด, ผู้ที่มีปัญหาเกี่ยวกับการไหลเวียนเลือด หรือผู้ที่มีแผลติดเชื้อ โรคผิวหนัง หรือผื่นเรื้อรังบริเวณที่จะทำหัตถการ"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ผู้เข้ารับบริการ รับทราบดีว่า การร้อยไหมจมูก จะทำให้เกิดผังผืดของเนื้อเยื้อในบริเวณที่ร้อยไหม ไม่ต่างจากการเสริมจมูก และข้าพเจ้าได้รับการแจ้งจากแพทย์และ/หรือตัวแทนของคลินิกแล้วว่า การร้อยไหมเหมาะกับบุคคลที่ไม่ได้มีแพลนที่จะเสริมจมูกในอนาคต หากคนไข้จะดำเนินการเสริมจมูกด้วยซิลิโคนในอนาคต ผู้เข้ารับบริการรับทราบว่าอาจมีความจำเป็นจะต้องขูดผังผืด ซึ่งผู้เข้ารับบริการจะรับผิดชอบค่าใช้จ่ายด้วยตนเอง"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ารับทราบถึงปฏิกิริยาที่อาจเกิดขึ้นหลังการทำหัตถการ เช่น บวม ช้ำบริเวณจมูก มีรอยแดง รู้สึกตึง หรือไม่สบายบริเวณที่ร้อยไหม และอาการระคายเคืองเล็กน้อย อาการดังกล่าวเป็นอาการปกติหลังทำหัตถการ และจะค่อยๆ ทุเลาและหายไปเอง โดยอาการบวมหรือแดงจะลดลงภายใน 3–7 วัน รอยช้ำอาจอยู่ได้ 7–14 วัน และความตึงหรือระคายเคืองมักหายไปภายใน 1–2 สัปดาห์"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าได้รับทราบแล้วว่า การรักษาทางการแพทย์ไม่อาจรับประกันผลลัพธ์ได้ตามที่ข้าพเจ้าคาดหวังเสมอไป โดยแพทย์ผู้ให้การรักษาได้แจ้งข้าพเจ้าเกี่ยวกับผลลัพธ์ของหัตถการร้อยไหมจมูกว่า สามารถสังเกตการเปลี่ยนแปลงของรูปทรงจมูกได้ทันทีหลังทำ และผลลัพธ์ที่ชัดเจนที่สุดจะปรากฏอย่างเต็มที่ภายในระยะเวลาประมาณ 1–2 สัปดาห์ หลังจากที่เส้นไหมปรับเข้าเนื้อเยื่อรอบบริเวณจมูก ทั้งนี้ ข้าพเจ้ายอมรับว่าผลลัพธ์ของหัตถการอาจแตกต่างกันไปในแต่ละบุคคล ขึ้นอยู่กับโครงสร้างกระดูกของผู้เข้ารับบริการแต่ละคน โดยอาจมีความเสี่ยงที่เมื่อร้อยไหมจมูกแล้ว สันจมูกอาจดูเบี้ยวได้ เนื่องจากไหมจมูกไม่สามารถปรับโครงสร้างในชั้นกระดูกของจมูกได้ แต่เป็นเพียงการเสริมความโด่งของจมูกตามโครงสร้างเดิมของผู้เข้ารับบริการ"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าขอรับรองว่า ข้าพเจ้าได้อ่านข้อความในหนังสือยินยอมรับการรักษาข้างต้นทั้งหมดและเข้าใจดีแล้ว และยินยอมเข้ารับการทำหัตถการร้อยไหมจมูกในครั้งนี้ โดยหากเกิดความเสียหายใดขึ้นจากความเสี่ยงและข้อมูลที่ข้าพเจ้ารับทราบแล้ว ข้าพเจ้าหรือผู้แทนของข้าพเจ้าจะไม่เรียกร้องค่าเสียหายใดๆ จากแพทย์หรือ MICHIKO Clinic"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ท่านเคยเข้ารับการผ่าตัดหรือหัตถการใด ๆ บริเวณจมูกหรือใบหน้ามาก่อนหรือไม่? ೦ ไม่ ೦ ใช่"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ท่านมีโรคภูมิคุ้มกันบางชนิด หรือภาวะทางร่างกายที่อาจส่งผลต่อการหายของแผลหรือการอักเสบหรือไม่? ೦ ไม่ ೦ ใช่"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ท่านมีแพลนที่จะเสริมจมูกด้วยซิลิโคนในอนาคตหรือไม่"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "೦ ไม่ ೦ ใช่"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ท่านอยู่ในช่วงวางแผนการตั้งครรภ์หรือไม่"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "೦ ไม่ ೦ ใช่"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ชื่อผู้เข้ารับการรักษา…………………………………………………………………………………………….. วันที่..............................."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "โปรดอ่านรายละเอียดเพิ่มเติมในเอกสารกำกับเครื่องมือแพทย์"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ชื่อแพทย์ผู้ให้การรักษา…………………………………………………………………………………………. วันที่...............................……………….."
+      },
+      {
+        "type": "table",
+        "index": 0,
+        "rows": [
+          [
+            "หนังสือแสดงความยินยอมเข้ารับการทำหัตถการ “ร้อยไหมจมูก”",
+            "ข้อมูลผู้ป่วย: HN___________________________ ชื่อเต็ม: ______________________________________________________________________________________________________________ วัน/เดือน/ปี เกิด: ___________________________________________________________________________________________________ หมายเลขโทรศัพท์:________________________________________________________________________________________________"
+          ]
+        ]
+      },
+      {
+        "type": "footer",
+        "section": 0,
+        "text": "มิชิโกะคลินิกเวชกรรม โดยบริษัท ไลฟ์ พาร์เนอร์ จำกัด | 9/2 ชั้น 1 ตึก 1 โครงการศุภาลัย ปาร์ค ถ.พหลโยธิน 21 เขต/แขวงจตุจักร กทม 10900 โทร 0954424615"
+      }
+    ]
+  },
+  {
+    "file": "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีด Sculptra.docx",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ายินยอมให้แพทย์ของทาง Michiko Clinic ดำเนินการตรวจและรักษาข้าพเจ้า รวมทั้งฉีด Sculptra ให้แก่ข้าพเจ้า โดยข้าพเจ้ารับทราบเกี่ยวกับรายละเอียด ข้อดีข้อเสีย และข้อควรระวังของการฉีด Sculptra แล้ว ดังต่อไปนี้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ScuIptra ถูกเตรียมขึ้นโดยแพทย์ของคุณและฉีดเข้าสู่ผิวหนังเพื่อเติมเต็มบริเวณที่มีร่องลึก โดยเฉพาะเพี่อแก้ไขปัญหาผิว เช่น รอยย่น ริ้วรอย รอยพับ รอยแผลเป็น และใช้สำหรับผิวหนังที่เสื่อมสภาพตามวัยหรือเติมเต็มร่องลึกจากการสูญเสียไขมันบริเวณใบหน้า (Lipoatrophy)"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "แพทย์ผู้ให้การรักษาได้อธิบายว่าควรใช้ Sculptra เมื่อใดและใช้อย่างไร ข้าพเจ้าได้มีโอกาสซักถามและได้รับคำตอบเป็นที่พอใจแล้ว ข้าพเจ้าได้รับข้อมูลว่าเมื่อใดที่ไม่ควรทำการรักษาด้วย ScuIptra รวมถึงข้อห้ามใช้ คำเตือนและข้อควรระวังในการใช้ผลิตภัณฑ์นี้ และปฏิกิริยาที่เกี่ยวข้องกับการฉีด ปฏิกิริยาที่อาจเกี่ยวข้องกับการฉีด ได้แก่ เลือดออกจากการแทงเข็มฉีดยาอาการปวด รอยแดงเฉพาะที่ ฟกช้ำ ห้อเลือด หรือบวม ซึ่งโดยทั่วไปอาการจะเกิดขึ้นชั่วคราวและค่อย ๆ หายได้เองภายใน 2-6 วัน ตุ่มใต้ผิวหนังที่มองไม่เห็นแต่สัมผัสได้ หรือก้อนนูนที่มองเห็นได้ รวมถึงก้อนนูนรอบดวงตา หรือรอยนูนแข็งบริเวณที่มีการฉีดผลิตภัณฑ์ที่อาจเกิดจากการแก้ไขที่มากเกินไป บางครั้งก้อนนูนเกี่ยวข้องกับการอักเสบหรือสีผิวเปลี่ยน การเกิดก้อนนูนใต้ผิวหนังตำแหน่งที่ฉีดยาในระยะต้น (ภายใน 3-6 สัปดาห์หลังการรักษา) อาจลดลงได้ด้วยการใช้เทคนิคการเจือจางและการฉีดที่เหมาะสม มีรายงานการเกิดก้อนนูนใต้ผิวหนังตำแหน่งที่ฉีดยาในระยะปลาย (ภายใน 1-14 เดือนหลังการฉีด) โดยบางครั้งอาจยาวนานถึง 2 ปี ในบางรายก้อนนูนหรือก้อนเนื้อเยื่ออักเสบ (Granuloma) ที่เกิดขึ้น จะสามารถหายได้เอง หรือภายหลังได้รับการรักษาด้วยการฉีดคอร์ติโคสเตียรอยด์ และ/หรือ สารต้านมะเร็ง (เช่น 5-fuorouracil) บางครั้งการผ่าตัดอาจมีความจำเป็นในกรณีที่ก้อนนูนมีขนาดใหญ่ขึ้น เกิดขึ้นในบริเวณที่สร้างความลำบากทางกายวิภาค (เช่น ใต้เปลือกตา) หรือยังคงมีอยู่หลังจากได้รับการรักษาอื่น อาการเกี่ยวกับหลอดเลือดอาจเกิดขึ้นได้หากมีการฉีดเข้าเส้นเลือด หรือผลของการกดทับเส้นเลือดที่เกี่ยวข้องกับการฉีดผลิตภัณฑ์อื่น ๆ อาจพบอาการ ได้แก่ ภาวะซีด สีผิวเปลี่ยน ภาวะเนื้อตาย หรือเกิดแผลบริเวณที่ฝังวัสดุหรือบริเวณที่ได้รับผลกระทบจากหลอดเลือดที่ไปเลี้ยงถูกกดทับ หรือพบน้อยรายที่เกิดภาวะขาดเลือดในอวัยวะเนื่องจากการเกิดลิ่มเลือดอุดตัน หลังทำหัตถการใบหน้า ได้รับรายงานน้อยรายแต่ร้ายแรงที่เกิดภาวะขาดเลือดที่สัมพันธ์กับความบกพร่องทางการมองเห็นชั่วคราวหรือถาวรตาบอด สมองขาดเลือด หรือโรคหลอดเลือดสมอง สำหรับผู้ป่วยที่เคยพบอาการไม่พึงประสงค์ที่มีนัยสำคัญทางคลินิก การตัดสินใจที่จะทำการรักษาอีกครั้งควรคำนึงถึงสาเหตุและนัยสำคัญของอาการไม่พึงประสงค์ที่เคยเกิดขึ้น"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "แพทย์ผู้ให้การรักษาได้แจ้งข้าพเจ้าว่าอาจมีการใช้ยาชาเฉพาะที่ เช่น Lidocaine เพื่อบรรเทาอาการปวด ข้าพเจ้าได้รับข้อมูลว่ายาชาเฉพาะที่ที่ใช้คืออะไรและใช้เมื่อใด รวมถึงข้อห้ามใช้ คำเตือนและข้อ ควรระวังในการใช้ยาชาเฉพาะที่ และผลข้างเคียงที่อาจเกิดขึ้น"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าได้รับทราบแล้วว่า การรักษาทางการแพทย์ ไม่อาจรับประกันผลการรักษาให้ได้ตามที่ข้าพเจ้าคาดหวังไว้เสมอไป โดยแพทย์ผู้ให้การรักษายังแจ้งข้าพเจ้าถึงผลการรักษาด้วย ScuIptra ว่าจะค่อยๆ ปรากฏขึ้นหลังฉีดประมาณ 2-3 สัปดาห์ ขึ้นอยู่กับบริเวณที่ทำการรักษาและเทคนิคการฉีด สำหรับการรักษาครั้งแรก ควรทำการแก้ไขเฉพาะจุด ผู้ป่วยควรได้รับการประเมินภายหลังการรักษาใน 4 สัปดาห์ เพื่อตรวจสอบว่าจำเป็นต้องมีแก้ไขเพิ่มเติมหรือไม่"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าได้รับคำตอบด้วยความเต็มใจไม่ปิดบังซ่อนเร้น เกี่ยวกับภาวะแพ้แบบภูมิไวเกินต่อยาชาเฉพาะที่ ScuIptra ส่วนประกอบอื่น และประวัติทางการแพทย์ของข้าพเจ้า ข้าพเจ้าได้รับเอกสารคำแนะนำภายหลังการรักษา พร้อมทั้งข้อมูลเกี่ยวกับเนื้อหานั้น ข้าพเจ้าเข้าใจถึงความสำคัญของการปฏิบัติตามคำแนะนำที่ระบุไว้ในเอกสาร ข้าพเจ้าได้แจ้งให้แพทย์ผู้รักษาของข้าพเจ้าทราบเกี่ยวกับประวัติการรักษาด้านความงามทั้งหมดของข้าพเจ้า รวมถึงการฉีด การผ่าตัด การผลัดเซลล์ผิวด้วยสารเคมี ฯลฯ"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าขอรับรองว่า ข้าพเจ้าได้อ่านข้อความในหนังสือยินยอมรับการรักษาข้างต้นทั้งหมดและเข้าใจดีแล้ว และยินยอมรับการรักษาด้วยการฉีดฟิลเลอร์ในครั้งนี้ โดยข้าพเจ้าหรือผู้แทนของข้าพเจ้าจะไม่เรียกร้องค่าเสียหายใดๆ จากแพทย์หรือ Michiko Clinic"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าให้ความยินยอมรับการทายาระงับความรู้สึกก่อนหรือระหว่างการรักษา ೦ ใช่ ೦ ไม่ใช่ ซึ่งอาจจะทำให้เกิดการระคายเคืองได้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าให้ความยินยอมสำหรับการใช้ยาระงับความรู้สึกก่อนหรือระหว่างการรักษา ೦ ใช่ ೦ ไม่ใช่"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ารับประทาน วิตามิน E น้ำมันตับปลา โอเมก้า 3 อาหารเสริมวิตามินรวม หรือ ใบแป๊ะก๊วย เป็นประจำหรือไม่ ೦ ไม่ ೦ ใช่ ทานครั้งสุดท้ายเมื่อ………………………………………………………………………………………………………………………"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ารับประทานยาแอสไพลิน เบบี้ แอสไพลิน หรือยาต้านการแข็งตัวของเลือด เป็นประจำหรือไม่ ೦ ไม่ ೦ ใช่ ทานครั้งสุดท้ายเมื่อ………………………………………………………………………………………………………………………"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าอยู่ในช่วงวางแผนการตั้งครรภ์หรือไม่ ೦ ใช่ ೦ ไม่ใช่"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ปัจจุบันข้าพเจ้ามีปัญหาโรคผิวหนัง เช่น สิว เริม หรืออื่นๆ บนใบหน้าหรือไม่ รวมทั้งกำลังรับประทานยารักษาอยู่หรือไม่ ೦ ไม่ ೦ ใช่ ยาที่ทานอยู่คือ ………………………………………………………………………………………………………………………"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ชื่อผู้เข้ารับการรักษา…………………………………………………………………………………………….. วันที่..............................."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "โปรดอ่านรายละเอียดเพิ่มเติมในเอกสารกำกับเครื่องมือแพทย์"
+      },
+      {
+        "type": "table",
+        "index": 0,
+        "rows": [
+          [
+            "หนังสือแสดงความยินยอมเข้ารับการรักษาด้วยสาร PLLA (S C U L P T R A)",
+            "ข้อมูลผู้ป่วย: HN___________________________ ชื่อเต็ม: ______________________________________________________________________________________________________________ วัน/เดือน/ปี เกิด: ___________________________________________________________________________________________________ หมายเลขโทรศัพท์:________________________________________________________________________________________________"
+          ]
+        ]
+      },
+      {
+        "type": "footer",
+        "section": 0,
+        "text": "มิชิโกะคลินิกเวชกรรม โดยบริษัท ไลฟ์ พาร์เนอร์ จำกัด | 9/2 ชั้น 1 ตึก 1 โครงการศุภาลัย ปาร์ค ถ.พหลโยธิน 21 เขต/แขวงจตุจักร กทม 10900 โทร 0954424615"
+      }
+    ]
+  },
+  {
+    "file": "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดฟิลเลอร์ (กรณีคนไข้มีสารไม่สลายอยู่บนใบหน้า).docx",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าได้แจ้งให้แพทย์ผู้ทำการรักษาทราบถึงหัตถการต่าง ๆ ที่ข้าพเจ้าได้ทำมาก่อน ซึ่งรวมถึงการฉีดสารต่าง ๆ รวมถึงซิลิโดคนเหลว และสารไม่สลายตัวมาจากสถานที่อื่น และต้องการให้แพทย์ฉีดฟิลเลอร์ใหม่เพิ่มเติมเพื่อแก้ไขปัญหารูปหน้าในปัจจุบัน"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ารับทราบว่ามีความเสี่ยงและภาวะแทรกซ้อนที่อาจเกิดขึ้นกับ คนไข้ที่เคยฉีดสารเหลวแบบไม่สลายตัวและต้องการฉีดฟิลเลอร์เพิ่มเติม ดังต่อไปนี้ว่าสามารถเกิดขึ้นได้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "1. อาจเกิดภาวะติดเชื้อ จากแบคทีเรียหรือสิ่งสกปรกที่แอบแฝงอยู่ในฟิลเลอร์หรือสารไม่สลายเดิม ซึ่งอาจจะแตกตัวออกมาเมื่อโดนเข็มของแพทย์และแพร่กระจายออกมาจากก้อนของสารเหลวที่ไม่สลายตัวเดิม และทำให้เกิดอาการติดเชื้อได้ (ทั้งนี้ไม่ได้เป็นการติดเชื้อจากฟิลเลอร์ตัวใหม่ และโดยไม่ใช่ความผิดของแพทย์ท่านที่ฉีดที่ มิชิโกะ คลินิกเวชกรรม) *หมายเหตุ ภาวะติดเชื้ออาจจะเกิดได้จากการมี sterile technique ที่ไม่ดีพอจากคนที่ฉีดให้ก่อนหน้า"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "2. อาจมีปฏิกิริยาตอบสนองจากภูมิคุ้มกันของตัวคนไข้เอง ต่อสารเหลวที่ไม่สลายตัวของเก่า และฟิลเลอร์ที่เป็นสารไฮยาลูโรนิคของใหม่ เนื่องจากเป็นสารคนละประเภทกัน อาจทำให้เกิดการอักเสบของเนื้อเยื่อมากกว่าปกติ จนเป็นหนอง (abcess/sterile abcess) รวมถึงอาจเกิดการอักเสบอย่างต่อเนื่องเรื้อรัง จนมีการฟอร์มตัวเป็นก้อนแข็งค้างในเนื้อเยื่อ(Granuloma) ได้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "โดยข้าพเจ้ารับทราบว่าความเสี่ยงและภาวะแทรกซ้อน และยืนยันว่ามีความต้องการที่จะฉีดฟิลเลอร์ที่เป็นสารไฮยาลูโรนิคซึ่งเป็นสารที่สลายตัวเข้าไปเพื่อแก้ไขปัญหารูปหน้าของข้าพเจ้า"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ายืนยันว่าแพทย์ได้แจ้งที่ความเสี่ยงและข้อปฏิบัติตัวหลังการฉีดฟิลเลอร์ใหม่เข้าไปในบริเวณที่มีสารเหลวแบบไม่สลายตัวว่า คนไข้จะต้องทานยาปฏิชีวนะอย่างเคร่งครัดตามจำนวนที่แพทย์สั่งให้ และจะปฏิบัติตามคำแนะนำที่ได้รับเกี่ยวกับการปฏิบัติภายหลังการรักษา ดังต่อไปนี้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "หลังฉีดฟิลเลอร์ทุกบริเวณในร่างกาย จะต้องไม่ไปทำหัตถการผ่าตัด ถอนฟัน รักษารากฟัน ภายใน 2 สัปดาห์"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "หลีกเลี่ยงไม่ให้น้ำประปาและสิ่งสกปรกเข้าแผลในช่วง 24 ชม.หลังฉีดฟิลเลอร์บนใบหน้าและน้องสาว และ 7-10 วันหลังฉีดฟิลเลอร์สะโพก"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "หลีกเลี่ยงความร้อนทุกชนิด เช่น การทำเลเซอร์ใบหน้า การอบไอน้ำ อบซาวน่า แช่ออนเซ็น เป็นเวลาอย่างน้อย 2-4 สัปดาห์"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "งดนวดหน้า ขัดหน้า ทำทรีทเม้นท์ เป็นระยะเวลาอย่างน้อย 2 สัปดาห์"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "งดเครื่องดื่มแอลกอฮอล์ เหล้า เบียร์ ไวน์ ของดิบ ของหมักดอง ปลาร้า 2 สัปดาห์ (หากทำไม่ได้ ควรงดอย่างน้อย 72 ชั่วโมง) มิเช่นนั้นอาจทำให้ฟิลเลอร์บวมได้ โดยสามารถประคบเย็น เพื่อลดอาการบวมช้ำใน 48 ชั่วโมงแรกหลังทำหัตถการได้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ระมัดระวังการกระทบกระแทก การเคลื่อนไหว และการขยับใบหน้าแรงๆ ในช่วง 1-2 สัปดาห์แรก"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ปฏิกิริยาที่สัมพันธ์กับการฉีดซึ่งอาจเกิดขึ้นทันทีหลังฉีด ได้แก่ อาการซ้ำ แดง คัน อาการบวม ปวด และตึงบริเวณที่ฉีด โดยปกติอาการดังกล่าวจะหายไปเองภายในเวลา 2-3 วัน หลังจากที่ฉีดที่ผิวหนัง และภายใน 1 สัปดาห์ หลังจากการฉีดบริเวณริมฝีปาก ในบางรายที่มีอาการอักเสบระดับรุนแรงน้อยถึงปานกลาง อาการจะหายไปภายใน 2-3 วัน จนถึง 2 สัปดาห์ ซึ่งมีการพบรายงานเรื่องการเกิดเป็นก้อนบริเวณที่ได้รับการรักษา และมีความผิดปกติที่อาจเกิดและคงอยู่หลายเดือน และพบได้น้อยมากที่คงอยู่เกิน 1 ปี"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ารับทราบว่าอาการของการอักเสบ ณ บริเวณที่ฉีดมีรายงานว่าอาจเกิดขึ้นได้ทันทีหลังฉีด หรืออาจเกิดล่าช้าออกไปได้ถึงหลายสัปดาห์ และในบางกรณีอาจมีอาการบวมขึ้นมาภายหลังการฉีดฟิลเลอร์ได้ หากคนไข้มีภาวะร่างกายอ่อนแอ พักผ่อนน้อย รับประทานของดิบ ของหมักดอง หรือของเค็ม และหากคนไข้เข้ารับการผ่าตัดในบริเวณอื่นๆ ของร่างกายภายใน 7-14 วันหลังทำฟิลเลอร์ อาจทำให้บริเวณที่ฉีดฟิลเลอร์อาจเกิดการอักเสบมากกว่าปกติ และมีหนองจากเม็ดเลือดขาวได้ และทำให้เนื้อเยื้อบริเวณที่ฉีดเกิดการยุบตัวและการฉีดฟิลเลอร์ไม่ได้ประสิทธิภาพตามที่คาดหวังได้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าได้รับทราบข้อมูลเรื่องความเสี่ยงที่อาจจะเกิดขึ้นระหว่างทำการรักษา โดยการฉีดฟิลเลอร์มีโอกาสที่จะเกิดความเสี่ยงเข้าไปในเส้นเลือดบริเวณใบหน้าโดยไม่ได้ตั้งใจ ซึ่งอาจทำให้เกิดหลอดเลือดอุดตัน หลอดเลือดถูกปิดกั้น ภาวะขาดเลือด เนื้อเยื่อตาย หรือเนื้อตายเนื่องจากขาดเลือดของบริเวณที่ฉีด เหตุการณ์ไม่พึงประสงค์อื่นที่พบได้น้อยแต่ร้ายแรง ได้แก่ ความบกพร่องทางการมองเห็นชั่วคราวหรือถาวร ตาบอด เลือดออกในสมอง หรือสมองขาดเลือด ซึ่งนำไปสู่โรคหลอดเลือดสมอง ผิวหนังตาย และเกิดความเสียหายต่อโครงสร้างใบหน้า"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ายินยอมให้แพทย์ของทาง Michiko Clinic ดำเนินการตรวจและรักษาข้าพเจ้า รวมทั้งฉีดฟิลเลอร์ ให้แก่ข้าพเจ้า โดยข้าพเจ้ารับทราบเกี่ยวกับรายละเอียด ข้อดีข้อเสีย และข้อควรระวังของการฉีดฟิลเลอร์แล้ว"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าได้รับทราบแล้วว่า การรักษาทางการแพทย์ ไม่อาจรับประกันผลการรักษาให้ได้ตามที่ข้าพเจ้าคาดหวังไว้เสมอไป ผลการรักษาด้วยฟิลเลอร์ขึ้นกับแต่ละบุคคล ข้าพเจ้ายอมรับว่าคำชี้แจงในหนังสือยินยอมนี้ถือเป็นสำคัญ มีความถูกต้องเหนือ ข้อมูลที่ได้รับแจ้งทางอื่นๆ ไม่ว่าจะเป็นด้วยวาจาหรือลายลักษณ์อักษรก่อนหน้านี้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าขอรับรองว่า ข้าพเจ้าได้อ่านข้อความในหนังสือยินยอมรับการรักษาข้างต้นทั้งหมดและเข้าใจดีแล้ว และยินยอมรับการรักษาด้วยการฉีดฟิลเลอร์ในครั้งนี้ โดยข้าพเจ้าหรือผู้แทนของข้าพเจ้าจะไม่เรียกร้องค่าเสียหายใดๆ จากแพทย์หรือ Michiko Clinic"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าให้ความยินยอมรับการทายาระงับความรู้สึกก่อนหรือระหว่างการรักษา ᪀ ใช่ ᪀ ไม่ใช่ ซึ่งอาจจะทำให้เกิดการระคายเคืองได้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าให้ความยินยอมสำหรับการใช้ยาระงับความรู้สึกก่อนหรือระหว่างการรักษา ᪀ ใช่ ᪀ ไม่ใช่"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ารับทราบความเสี่ยงและยินยอมเข้ารับการรักษาด้วยการฉีดฟิลเลอร์ และรับทราบข้อมูลเกี่ยวกับการดูแลตนเองหลังการรักษาโดยละเอียดแล้ว"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ลายมือชื่อผู้เข้ารับการรักษา…………………………………………………………………………………………….. วันที่..............................."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "โปรดอ่านรายละเอียดเพิ่มเติมในเอกสารกำกับเครื่องมือแพทย์"
+      },
+      {
+        "type": "table",
+        "index": 0,
+        "rows": [
+          [
+            "หนังสือแสดงความยินยอมเข้ารับการรักษาด้วยสาร Hyaluronic Acid (ฟิลเลอร์) แม้ว่าจะมีสารไม่สลายอยู่บนใบหน้า",
+            "ข้อมูลผู้ป่วย: HN___________________________ ชื่อเต็ม: ______________________________________________________________________________________________________________ วัน/เดือน/ปี เกิด: ___________________________________________________________________________________________________ หมายเลขโทรศัพท์:________________________________________________________________________________________________"
+          ]
+        ]
+      },
+      {
+        "type": "footer",
+        "section": 0,
+        "text": "มิชิโกะคลินิกเวชกรรม โดยบริษัท ไลฟ์ พาร์เนอร์ จำกัด | 9/2 ชั้น 1 ตึก 1 โครงการศุภาลัย ปาร์ค ถ.พหลโยธิน 21 เขต/แขวงจตุจักร กทม 10900 โทร 0954424615"
+      }
+    ]
+  },
+  {
+    "file": "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดสลายฟิลเลอร์.docx",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ๅ"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ายินยอมให้แพทย์ของทาง Michiko Clinic ดำเนินการตรวจและรักษาข้าพเจ้า รวมทั้งฉีดยาสลายฟิลเลอร์ให้แก่ข้าพเจ้า โดยข้าพเจ้าขอแจ้งรายละเอียดเกี่ยวกับฉีดสารเติมเต็มในบริเวณที่ข้าพเจ้าต้องการสลายออก ดังนี้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "สารเติมเต็มประเภทฟิลเลอร์ เคยฉีดบริเวณ .............................................................................................................................................................................................................."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ด้วยยี่ห้อ......................................................................................จำนวน...................................... cc"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "เมื่อช่วงวันที่................................................................................................................................................................................................................."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "สารเติมเต็มประเภทสารไม่สลายตัว ซิลิโคนเหลว หรือสารอื่นๆ ที่ไม่สลายตัว ೦ ไม่เคย ೦ เคย"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "เคยฉีดบริเวณ..............................................................................................................................................................................................................."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "เมื่อช่วงวันที่................................................................................................................................................................................................................. ೦ ฉีดโดยแพทย์ ೦ ฉีดโดยบุคคลที่ไม่ใช่แพทย์"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ารับทราบเกี่ยวกับรายละเอียด ข้อดีข้อเสีย และข้อควรระวังของการฉีดยาสลายฟิลเลอร์แล้วว่า การฉีดสลายฟิลเลอร์ (Dermal fillers) เป็นกระบวนการทางการแพทย์ที่ใช้สารไฮยาลูโรนิเดส (Hyaluronidase) ซึ่งเป็นเอนไซม์จากสัตว์ ที่สามารถย่อยสลายกรดไฮยาลูโรนิก (Hyaluronic Acid) หรือฟิลเลอร์ในผิวหนังได้ และทราบว่า สารไฮยาลูโรนิเดสสามารถสลายฟิลเลอร์ได้ในบริเวณที่เป็นวงกว้าง อาจไม่สามารถจำกัดพื้นที่หรือปริมาณของฟิลเลอร์ที่ต้องการสลายได้อย่างแม่นยำ และอาจทำให้ผิวหนังบวม แดง ปวดหรือคันในบริเวณที่ฉีด อาจเกิดได้ในช่วงเวลาสั้น ๆ หลังการฉีดแต่หากมีอาการผิวหนังที่ผิดปกติหรืออาการรุนแรง เช่น มีอาการหน้าบวม ตาบวม แน่นหน้าอก ผื่นขึ้นทั่วทั้งใบหน้าและลำตัว หายใจลำบาก ข้าพเจ้าจะรายงานให้แพทย์ทราบทันที"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าทราบดีว่าการฉีดยาสลายฟิลเลอร์ แพทย์จะดำเนินการฉีดในหลายชั้นใต้ผิวหนัง ในบริเวณที่คาดว่าแพทย์ท่านเดิมได้ฉีดฟิลเลอร์ไว้ โดยอาศัยการสักประวัติจากคนไข้และการคลำจากบนผิว จึงอาจทำให้เส้นเลือดฝอยแตก และมีอาการช้ำในบริเวณที่มีการสลายฟิลเลอร์ได้ นอกจากนั้น การฉีดสารสลายฟิลเลอร์อาจจะไม่สามารถสลายฟิลเลอร์เดิมให้หมดได้ภายในครั้งเดียวและอาจจำเป็นต้องสลาย 1 - 3 ครั้งจึงจะหมด ซึ่งต้องอาศัยการติดตามผลหลังฉีดอีกครั้ง"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าทราบดีว่าผลลัพธ์ของการฉีดสลายฟิลเลอร์ไม่สามารถคาดเดาได้ทันที และอาจต้องใช้เวลาให้สารสลายฟิลเลอร์ทำปฏิกิริยา โดยปริมาณและความเข้มข้นของสารสลายฟิลเลอร์ที่แพทย์ใช้ จะขึ้นอยู่กับยี่ห้อและปริมาณของฟิลเลอร์ที่คนไข้ฉีดมาก่อนหน้า โดยสารไฮยาลูโรนิเดสจะค่อยๆ สลายกรดไฮยาลูโรนิกอย่างต่อเนื่องจนครบระยะเวลา 7 วัน ดังนั้น หากต้องการฉีดฟิลเลอร์เพิ่มในบริเวณที่มีการสลายจึงควรรอระยะให้ครบ 7 วันก่อน จึงจะทำการฉีดฟิลเลอร์ในบริเวณดังกล่าว"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าทราบดีว่า สารไฮยาลูโรนิเดสไม่สามารถสลายฟิลเลอร์ปลอม ซิลิโคนเหลว ไขมันปลาวาฬ หรือสารอื่นๆ ที่ไม่ใช่ฟิลเลอร์ที่เป็นกรดไฮยาลูโรนิก (Hyaluronic Acid) ได้ หากข้าพเจ้าเคยฉีดสารแปลกปลอมอื่นๆ หรือฉีดกับบุคคลที่ไม่ใช่แพทย์ อาจทำให้สารแปลกปลอมดังกล่าวนั้น ไม่สามารถถูกสลายได้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าทราบดีว่าภายหลังการฉีดสารสลายฟิลเลอร์ ข้าพเจ้าไม่ควรแตะหรือกดบริเวณที่ฉีดสลายฟิลเลอร์ เพราะอาจทำให้สารสลายฟิลเลอร์ย้ายไปยังบริเวณอื่นและเกิดผลลัพธ์ที่ไม่ตรงกับคาดหวัง ข้าพเจ้าเข้าใจและรับรู้ถึงความเสี่ยงและผลข้างเคียงที่อาจเกิดขึ้นจากการใช้ยาสลายฟิลเลอร์ และข้าพเจ้ายอมรับความเสี่ยงดังกล่าวข้าพเจ้าได้รับข้อมูลเกี่ยวกับกระบวนการการให้ยาสลายฟิลเลอร์ และรับรู้ถึงขั้นตอนการดำเนินงานทั้งหมด ข้าพเจ้าได้ตอบคำถามเกี่ยวกับการรักษาด้วยยาสลายฟิลเลอร์และได้รับคำแนะนำเพียงพอ ข้าพเจ้าได้รับคำแนะนำในการดูแลตัวเองหลังการรักษาด้วยยาสลายฟิลเลอร์ และจะปฏิบัติตามคำแนะนำหรือคำแนะนำที่ได้รับเพื่อการดูแลตัวเองหลังการรักษาด้วยยาสลายฟิลเลอร์"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าได้รับทราบแล้วว่า การรักษาทางการแพทย์ ไม่อาจรับประกันผลการรักษาให้ได้ตามที่ข้าพเจ้าคาดหวังไว้เสมอไป ผลการรักษาด้วยสารสลายฟิลเลอร์ขึ้นกับแต่ละบุคคล ข้าพเจ้ายอมรับว่าคำชี้แจงในหนังสือยินยอมนี้ถือเป็นสำคัญ มีความถูกต้องเหนือข้อมูลที่ได้รับแจ้งทางอื่นๆ ไม่ว่าจะเป็นด้วยวาจาหรือลายลักษณ์อักษรก่อนหน้านี้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าต้องการเข้ารับการรักษาต่อไปนี้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ต้องการให้แพทย์สลายฟิลเลอร์ในบริเวณที่มีปัญหาทั้งหมด"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ต้องการให้แพทย์สลายฟิลเลอร์ในบริเวณที่มีปัญหาบางส่วน ซึ่งข้าพเจ้าทราบดีว่า อาจจะทำให้ปัญหาที่ข้าพเจ้าเป็นกังวลไม่ได้รับการแก้ไขอย่างเต็มที่และตรงจุด และทราบดีว่าสารไฮยาลูโรนิเดสสามารถสลายฟิลเลอร์ได้ในบริเวณที่เป็นวงกว้าง อาจไม่สามารถจำกัดพื้นที่หรือปริมาณของฟิลเลอร์ที่ต้องการสลายได้อย่างแม่นยำ"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าขอรับรองว่า ข้าพเจ้าได้อ่านข้อความในหนังสือยินยอมรับการรักษาข้างต้นทั้งหมดและเข้าใจดีแล้ว โดยข้าพเจ้าหรือผู้แทนของข้าพเจ้าจะไม่เรียกร้องค่าเสียหายใดๆ จากแพทย์หรือ Michiko Clinic"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ายินยอมรับการรักษาด้วยการฉีดสารสลายฟิลเลอร์ในครั้งนี้ ᪀ ใช่ ᪀ ไม่ใช่"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าให้ความยินยอมในการทดสอบอาการแพ้ของสารไฮยาลูโรนิเดสก่อนการฉีดสารฟิลเลอร์ ᪀ ใช่ ᪀ ไม่ใช่"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าให้ความยินยอมรับการทายาระงับความรู้สึกก่อนหรือระหว่างการรักษา ᪀ ใช่ ᪀ ไม่ใช่ ซึ่งอาจจะทำให้เกิดการระคายเคืองได้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าไม่มีประวัติการแพ้ยาชาชนิดแบบฉีด ให้ความยินยอมรับการฉีดยาชา ᪀ ใช่ ᪀ ไม่ใช่ เพื่อระงับความรู้สึกก่อนหรือระหว่างการรักษา"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าไม่มีประวัติการฟิลเลอร์ปลอม ซิลิโคนเหลว ไขมันปลาวาฬ หรือสารอื่นๆ ᪀ ใช่ ᪀ ไม่ใช่"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ลายมือชื่อผู้เข้ารับการรักษา…………………………………………………………………………………………….. วันที่..............................."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "โปรดอ่านรายละเอียดเพิ่มเติมในเอกสารกำกับเครื่องมือแพทย์"
+      },
+      {
+        "type": "table",
+        "index": 0,
+        "rows": [
+          [
+            "หนังสือแสดงความยินยอมเข้ารับการรักษาด้วยไฮยาลูโรนิเดส (Hyaluronidase) (สารสลายฟิลเลอร์)",
+            "ข้อมูลผู้ป่วย: HN___________________________ ชื่อเต็ม: ______________________________________________________________________________________________________________ วัน/เดือน/ปี เกิด: ___________________________________________________________________________________________________ หมายเลขโทรศัพท์:________________________________________________________________________________________________"
+          ]
+        ]
+      },
+      {
+        "type": "footer",
+        "section": 0,
+        "text": "มิชิโกะคลินิกเวชกรรม โดยบริษัท ไลฟ์ พาร์เนอร์ จำกัด | 9/2 ชั้น 1 ตึก 1 โครงการศุภาลัย ปาร์ค ถ.พหลโยธิน 21 เขต/แขวงจตุจักร กทม 10900 โทร 0954424615"
+      }
+    ]
+  },
+  {
+    "file": "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดโบท็อก.docx",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ายินยอมให้แพทย์ของทาง Michiko Clinic ดำเนินการตรวจและรักษาข้าพเจ้า รวมทั้งฉีด Botulinum Toxin Type A (โบท็อก) ให้แก่ข้าพเจ้า โดยข้าพเจ้ารับทราบเกี่ยวกับรายละเอียด ข้อดีข้อเสีย และข้อควรระวังของการฉีดโบท็อกแล้ว ดังต่อไปนี้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้า รับทราบดีว่า สาร Botulinum Toxin Type A เป็นสารที่ทำให้กล้ามเนื้ออ่อนแรง สามารถนำมารักษาปัญหาริ้วรอย (ซึ่งรวมถึง ริ้วรอยหน้าผาก ริ้วรอยหางตา (รอยตีนกา) ริ้วรอยหว่างคิ้ว (รอยขมวดคิ้ว) รอยย่นจมูก ยกมุมปาก คลายกล้ามเนื้อบริเวณคาง) หรือลดขนาดของกล้ามเนื้อที่ใหญ่ เช่น กล้ามเนื้อกราม น่อง ปีกจมูก หรือหากนำมาฉีดเพื่อลิฟติ้งจะสามารถช่วยจัดเรียงคอลลาเจน ทำให้ใบหน้าดูยกขึ้นได้ หรือนำมาฉีดเพื่อลดเหงื่อบริเวณใต้วงแขนหรือส่วนอื่นๆ โดยข้าพเจ้าได้ทราบแล้วว่า คนไข้แต่คนจะมีความไวต่อการตอบสนองต่อสาร Botulinum Toxin Type A ไม่เท่ากัน โดยหากข้าพเจ้ามีภาวะดื้อโบท็อกไม่ว่าทั้งหมด หรือบางส่วน จะทำให้ผลการรักษาไม่เป็นไปตามที่คาดหวัง หรืออาจจะทำให้ผลลัพธ์ของการรักษาอยู่สั้นกว่าบุคคลอื่น"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าทราบดีว่า หลังฉีดโบท็อก ในช่วง 3 – 7 วันแรก การออกฤทธิ์ของสาร Botulinum Toxin Type A ในแต่ละจุดที่ฉีดอาจไม่เท่ากัน ทำให้อาจรู้สึกได้ว่าความตึงของริ้วรอยแต่ละจุดดูแตกต่างกัน และทราบว่าจะข้าพเจ้าจะต้องรอให้โบท็อกออกฤทธิ์ให้เต็มที่ หรือรอให้ครบ 2 สัปดาห์ก่อน จึงจะสามารถเห็นผลลัพธ์หลังฉีดได้ดีที่สุด โดยในช่วง 1 เดือนหลังฉีดโบท็อกอาจรู้สึกตึงค่อนข้างมาก ในบุคคลที่ตอบสนองต่อโบท็อกค่อนข้างดี โดยอาการดังกล่าวจะค่อยๆ ดีขึ้น เมื่อครบ 1 เดือน"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้า ทราบถึงผลข้างเคียงและภาวะแทรกซ้อน จากการฉีดสาร Botulinum Toxin Type A ซึ่งพบได้น้อยมาก ดังนี้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "อาจมีอาการแดง เป็นจุดหรือจ้ำเขียว ตามรอยเข็ม ซึ่งจะหายได้เอง 1-2 สัปดาห์ หลังทำการรักษา"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ปวดศีรษะเล็กน้อย พบได้ในบางคน ซึ่งหายได้เอง"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "รู้สึกตึงๆ บริเวณที่ฉีดยา ซึ่งจะหายได้เองภายใน 1-2 สัปดาห์ หลังทำการรักษา"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "หลังฉีดสาร Botulinum Toxin Type A จะเห็นว่าริ้วรอยลดลง หรือหายไปภายใน 3-14 วัน และจะคงอยู่ได้นานประมาณ 4-6 เดือน ขึ้นกับแต่ละบุคคล"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าได้รับทราบแล้วว่า การรักษาทางการแพทย์ ไม่อาจรับประกันผลการรักษาให้ได้ตามที่ข้าพเจ้าคาดหวังเสมอไป"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าขอรับรองว่า ข้าพเจ้าได้อ่านเอกสารนี้และเข้าใจเนื้อหาดังกล่าวเป็นอย่างดี ก่อนตัดสินใจ รับการรักษา และไม่ว่ากรณีใดๆ ก็ตาม ข้าพเจ้าหรือผู้แทนของข้าพเจ้า จะไม่เรียกร้องค่าเสียหายหรือ ค่าใช้จ่ายใดๆ จากแพทย์หรือ Michiko Clinic"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ท่านเคยฉีดท็อกซิน (โบท็อกซ์) มาก่อนหรือไม่ ೦ ไม่เคย ೦ เคย โดยผลลัพธ์เป็นอย่างไร ೦ ตึงค่อนข้างมาก/อยู่นาน ೦ ตึงกำลังพอดี/อยู่ได้ประมาณ 4 เดือน ೦ ไม่ค่อยตึง/ผลลัพธ์อยู่ค่อนข้างสั้น"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ท่านรับประทาน วิตามิน E น้ำมันตับปลา โอเมก้า 3 อาหารเสริมวิตามินรวม หรือ ใบแป๊ะก๊วย เป็นประจำหรือไม่ ೦ ไม่ ೦ ใช่ ทานครั้งสุดท้ายเมื่อ………………………………………………………………………………………………………………………"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ท่านรับประทานยาแอสไพลิน เบบี้ แอสไพลิน หรือยาต้านการแข็งตัวของเลือด เป็นประจำหรือไม่ ೦ ไม่ ೦ ใช่ ทานครั้งสุดท้ายเมื่อ………………………………………………………………………………………………………………………"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ท่านมีประจำเดือนครั้งสุดท้ายเมื่อไหร่ ………………………………………………………………………………………………………………………"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ท่านอยู่ในช่วงวางแผนการตั้งครรภ์หรือไม่ ೦ ใช่ ೦ ไม่ใช่"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ปัจจุบันท่านมีปัญหาโรคผิวหนัง เช่น สิว เริม หรืออื่นๆ บนใบหน้าหรือไม่ รวมทั้งกำลังรับประทานยารักษาอยู่หรือไม่ ೦ ไม่ ೦ ใช่ ยาที่ทานอยู่คือ ………………………………………………………………………………………………………………………"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าให้ความยินยอมรับการทายาระงับความรู้สึกก่อนหรือระหว่างการรักษาซึ่งอาจจะทำให้เกิดการระคายเคืองได้ ೦ ใช่ ೦ ไม่ใช่"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ลายมือชื่อผู้เข้ารับการรักษา.………………………………………………………………………………………….. วันที่............................... ปี"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "โปรดอ่านรายละเอียดเพิ่มเติมในเอกสารกำกับเครื่องมือแพทย์"
+      },
+      {
+        "type": "table",
+        "index": 0,
+        "rows": [
+          [
+            "หนังสือแสดงความยินยอมเข้ารับการรักษาด้วยสาร Botulinum Toxin Type A (โบท็อก)",
+            "ข้อมูลผู้ป่วย: HN___________________________ ชื่อเต็ม: __________________________________________________________________________________________________________ วัน/เดือน/ปี เกิด: _______________________________________________________________________________________________ หมายเลขโทรศัพท์:_____________________________________________________________________________________________"
+          ]
+        ]
+      },
+      {
+        "type": "footer",
+        "section": 0,
+        "text": "มิชิโกะคลินิกเวชกรรม โดยบริษัท ไลฟ์ พาร์เนอร์ จำกัด | 9/2 ชั้น 1 ตึก 1 โครงการศุภาลัย ปาร์ค ถ.พหลโยธิน 21 เขต/แขวงจตุจักร กทม 10900 โทร 0954424615"
+      }
+    ]
+  },
+  {
+    "file": "แบบฟอร์มการยินยอมเป็นเคสรีวิว (Full review).docx",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้อมูลผู้ป่วย: HN___________________________ วัน/เดือน/ปี เกิด: ___________________________________"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้า ……………………………………………………………………………………………………….. ตกลงให้ความยินยอมแก่ บริษัท ไลฟ์ พาร์ทเนอร์ จำกัด (\"บริษัทฯ\") และ/หรือ มิชิโกะคลินิกเวชกรรม (MICHIKO Clinic) ในการถ่ายภาพ ถ่ายวิดีโอ และใช้ภาพถ่ายที่มีลักษณะของภาพนิ่ง ภาพเคลื่อนไหว เก็บรักษารูปถ่ายก่อนและหลังการรักษา และ/หรือ เสียงของข้าพเจ้า ซึ่งอาจมีภาพหน้าของข้าพเจ้าและมีข้อมูลส่วนบุคคลที่เป็นความลับและข้อมูลที่เกี่ยวข้องกับสุขภาพ และรูปลักษณ์ของข้าพเจ้า เพื่อการโฆษณาและจัดทำสื่อประชาสัมพันธ์ทางการตลาดต่างๆ ของมิชิโกะคลินิกเวชกรรม ซึ่งจะมีการเผยแพร่เป็นสาธารณะ (เคสรีวิว) ในสื่อต่างๆ เช่น เฟสบุ๊ค อินสตาแกรม ไลน์ ติ๊กต๊อก ยูทูป และอื่นๆ เพื่อแลกกับส่วนลดพิเศษที่ข้าพเจ้าได้รับ จากการทำ"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "หัตถการ……………………………..…………………………. จำนวน………………..……….. มูลค่า……………………………….…… บาท"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "โดยได้รับส่วนลดมูลค่า……….………………………….(เท่ากับร้อยละ……………………) คงเหลือยอดชำระ…………………….………………….บาท"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "โดยข้าพเจ้ายินยอมให้บริษัทสามารถเผยแพร่ภาพและวิดีโอที่ปรากฎใบหน้าและเสียงของข้าพเจ้าได้อย่างอิสระ โดยให้ถือว่าลายมือชื่อของข้าพเจ้าในเอกสารคือการให้ความยินยอมเป็นที่สุด โดยไม่ต้องขอรับความยินยอมใดๆของข้าพเจ้า เพิ่มเติม เพื่อแลกกับส่วนลดพิเศษที่ข้าพเจ้าได้รับ มากกว่าลูกค้าท่านอื่นๆ ภายใต้เงื่อนไขที่ข้าพเจ้าตกลงและรับทราบว่า (1) ข้อมูลส่วนบุคคลของข้าพเจ้าในรูปแบบต่างๆ ที่บริษัทได้เก็บรวบรวม อาจได้รับการเปิดเผยและเผยแพร่ในสื่อต่างๆ ของบริษัทที่เปิดเป็นสาธารณะ และอาจถูกส่งต่อให้แก่ผู้ให้บริการภายนอกที่บริษัทว่าจ้างในการจัดทำสื่อดังกล่าว (2) สื่อประชาสัมพันธ์ที่บริษัทจัดทำขึ้น ซึ่งอาจมีข้อมูลส่วนบุคคลของข้าพเจ้ัา จะได้รับการจัดทำ จัดพิมพ์และเผนแพร่อย่างถาวร ทั้งในรูปแบบกระดาษ สื่อดิจิตอล และ/หรือ รูปแบบการสื่อสารอื่นๆ และเก็บรักษาไว้ตราบเท่าที่บริษัทยังมีความจำเป็นทางด้านธุรกิจ โดยบริษัทรับประกันไม่ให้กระทบสิทธิของข้าพเจ้าในฐานะเจ้าของข้อมูลมากเกินสมควร"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าเข้าใจดีว่า การเป็นเคสรีวิว ข้าพเจ้าจะต้องเข้ามาติดตามผลตามวันที่แพทย์นัดหรือภายใน 1 เดือนนับแต่วันที่ทำหัตถการ หากข้าพเจ้าไม่ได้เข้ามาภายในกำหนดเวลาดังกล่าว ข้าพเจ้ายินยอมให้มิชิโกะคลินิกเวชกรรม (MICHIKO Clinic) เรียกเก็บเงินสำหรับส่วนลดที่ข้าพเจ้าได้รับไปเต็มจำนวนและตกลงจะไม่เรียกร้องค่าเสียหายใดๆ จากภาพ/วิดีโอของข้าพเจ้าที่ได้ถูกโพสลงไปแล้ว เนื่องจากข้าพเจ้าเป็นฝ่ายผิดสัญญา"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ายอมรับและรับทราบว่า แม้ข้าพเจ้าจะมีสิทธิภายใต้กฎหมายที่เกี่ยวข้องในการใช้สิทธิถอนความยินยอม และ/หรือ ขอให้บริษัทลบหรือทำลายข้อมูลส่วนบุคคลที่ข้าพเจ้าได้อนุญาตให้บริษัทใช้ข้อมูลส่วนบุคคลของข้าพเจ้าภายใต้เอกสารฉบับนี้ได้ โดยการแจ้งเป็นหนังสือและส่งอีเมลไปยัง customerservice@michikoclinic.com หรือทางโทรศัพท์หมายเลข 064-165-5562 ทั้งนี้ ข้าพเจ้ารับทราบว่า การถอนความยินยอมของข้าพเจ้าดังกล่าวจะไม่ส่งผลกระทบต่อการเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคลที่ข้าพเจ้าได้ให้ความยินยอมไปแล้ว และในบางกรณีอาจไม่อยู่ในวิสัยที่บริษัทจะสามารถลบหรือทำลายข้อมูลส่วนบุคคลของข้าพเจ้าที่ได้มีการตีพิมพ์และเผยแพร่ไปผ่านช่องทางต่างๆ ได้ทั้งหมด แม้บริษัทจะใช้ความพยายามอย่างดีที่สุดในการดำเนินการดังกล่าวแล้วภายใต้ขอบเขตสูงสุดที่กฎหมายที่เกี่ยวข้องอาจอนุญาต ข้าพเจ้าตกลงสละสิทธิในการเรียกร้องค่าเสียหายจากเหตุที่บริษัทอาจไม่สามารถดำเนินการลบหรือทำลายข้อมูลส่วนบุคคลทั้งหมดออกจากสื่อประชาสัมพันธ์ต่างๆ ดังกล่าวนั้นได้ทั้งหมด และข้าพเจ้าเข้าใจเป็นอย่างดีว่า สิทธิในการถอนความยินยอมของข้าพเจ้าอาจถูกจำกัดโดยกฎหมายหรือสัญญาที่ให้ประโยชน์แก่ข้าพเจ้า เช่น ข้าพเจ้าจะถอนความยินยอมได้ต่อเมื่อข้าพเจ้าได้ชำระค่าใช้จ่ายเต็มจำนวนของผลิตภัณฑ์ อุปกรณ์/เวชภัณฑ์ทางการแพทย์ และค่าบริการทางการแพทย์สำหรับการรักษาของข้าพเจ้า ในส่วนที่ข้าพเจ้าได้รับส่วนลดพิเศษคืนแก่มิชิโกะคลินิกเวชกรรมเรียบร้อยแล้ว เป็นต้น"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "กรุณากากบาทลงในช่อง \"ได้\" ในกรณีที่ท่านให้ความยินยอมสำหรับวัตถุประสงค์นั้น และกากบาทในช่อง \"ไม่ได้\" กรณีที่ท่านไม่ให้ความยินยอม"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ได้ ไม่ได้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "เพื่อการประเมินและบันทึกความคืบหน้าของการรักษาของข้าพเจ้า"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "เพื่อการศึกษา การฝึกอบรม เก็บไว้เป็นฐานข้อมูล และเพื่อตีพิมพ์ประกอบการศึกษาหรือการวิจัย"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "เป็นเคสรีวิว เพื่อการโฆษณาทั่วไปต่อสาธารณะ และเพื่อการส่งเสริมการตลาดของบริษัท ตามรายละเอียดที่ระบุในหนังสือฉบับนี้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ลายมือของผู้ป่วย: ____________________________________________________ วันที่: _____________________________________________________________________"
+      },
+      {
+        "type": "table",
+        "index": 0,
+        "rows": [
+          [
+            "หนังสือแสดงความยินยอมให้ใช้ และเผยแพร่รูปถ่ายหรือวิดีโอระหว่างการรักษา เพื่อวัตถุประสงค์ในการทำการตลาดของคลินิก (Data Privacy Consent)",
+            "สำเนาบัตรประชาชนผู้แสดงความยินยอม (เคสรีวิว)"
+          ]
+        ]
+      },
+      {
+        "type": "footer",
+        "section": 0,
+        "text": "มิชิโกะคลินิกเวชกรรม โดยบริษัท ไลฟ์ พาร์เนอร์ จำกัด | 9/2 ชั้น 1 ตึก 1 โครงการศุภาลัย ปาร์ค ถ.พหลโยธิน 21 เขต/แขวงจตุจักร กทม 10900 โทร 0954424615"
+      }
+    ]
+  },
+  {
+    "file": "แบบฟอร์มการยินยอมเป็นเคสรีวิว (เฉพาะภาพ).docx",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้อมูลผู้ป่วย: HN___________________________ วัน/เดือน/ปี เกิด: ___________________________________"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้า ……………………………………………………………………………………………………….. ตกลงให้ความยินยอมแก่ บริษัท ไลฟ์ พาร์ทเนอร์ จำกัด (\"บริษัทฯ\") และ/หรือ มิชิโกะคลินิกเวชกรรม (MICHIKO Clinic) ในการถ่ายภาพ และใช้ภาพถ่ายที่มีลักษณะของภาพนิ่งของข้าพเจ้า เก็บรักษารูปถ่ายก่อนและหลังการรั4กษา ที่ปรากฎภาพใบหน้าของข้าพเจ้า เพื่อการโฆษณาและจัดทำสื่อประชาสัมพันธ์ทางการตลาดต่างๆ ของมิชิโกะคลินิกเวชกรรม ซึ่งจะมีการเผยแพร่เป็นสาธารณะ (เคสรีวิว) ในสื่อต่างๆ เช่น เฟสบุ๊ค อินสตาแกรม ไลน์ ติ๊กต๊อก ยูทูป และอื่นๆ เพื่อแลกกับส่วนลดพิเศษที่ข้าพเจ้าได้รับ"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "โดยข้าพเจ้ายินยอมให้บริษัทสามารถเผยแพร่ภาพเดียวและภาพรีวิว ที่ปรากฎใบหน้าและเสียงของข้าพเจ้าได้อย่างอิสระ โดยให้ถือว่าลายมือชื่อของข้าพเจ้าในเอกสารคือการให้ความยินยอมเป็นที่สุด โดยไม่ต้องขอรับความยินยอมใดๆของข้าพเจ้าเพิ่มเติม เพื่อแลกกับส่วนลดพิเศษที่ข้าพเจ้าได้รับ มากกว่าลูกค้าท่านอื่นๆ ภายใต้เงื่อนไขที่ข้าพเจ้าตกลงและรับทราบว่า (1) ข้อมูลส่วนบุคคลของข้าพเจ้าในรูปแบบต่างๆ ที่บริษัทได้เก็บรวบรวม อาจได้รับการเปิดเผยและเผยแพร่ในสื่อต่างๆ ของบริษัทที่เปิดเป็นสาธารณะ และอาจถูกส่งต่อให้แก่ผู้ให้บริการภายนอกที่บริษัทว่าจ้างในการจัดทำสื่อดังกล่าว (2) สื่อประชาสัมพันธ์ที่บริษัทจัดทำขึ้น ซึ่งอาจมีข้อมูลส่วนบุคคลของข้าพเจ้ัา จะได้รับการจัดทำ จัดพิมพ์และเผนแพร่อย่างถาวร ทั้งในรูปแบบกระดาษ สื่อดิจิตอล และ/หรือ รูปแบบการสื่อสารอื่นๆ และเก็บรักษาไว้ตราบเท่าที่บริษัทยังมีความจำเป็นทางด้านธุรกิจ"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าเข้าใจดีว่า การเป็นเคสรีวิว ข้าพเจ้าจะต้องเข้ามาติดตามผลตามวันที่แพทย์นัดหรือภายใน 1 เดือนนับแต่วันที่ทำหัตถการ หากข้าพเจ้าไม่ได้เข้ามาภายในกำหนดเวลาดังกล่าว ข้าพเจ้ายินยอมให้มิชิโกะคลินิกเวชกรรม (MICHIKO Clinic) เรียกเก็บเงินสำหรับส่วนลดที่ข้าพเจ้าได้รับไปเต็มจำนวนและตกลงจะไม่เรียกร้องค่าเสียหายใดๆ จากภาพ/วิดีโอของข้าพเจ้าที่ได้ถูกโพสลงไปแล้ว เนื่องจากข้าพเจ้าเป็นฝ่ายผิดสัญญา"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ายอมรับและรับทราบว่า แม้ข้าพเจ้าจะมีสิทธิภายใต้กฎหมายที่เกี่ยวข้องในการใช้สิทธิถอนความยินยอม และ/หรือ ขอให้บริษัทลบหรือทำลายข้อมูลส่วนบุคคลที่ข้าพเจ้าได้อนุญาตให้บริษัทใช้ข้อมูลส่วนบุคคลของข้าพเจ้าภายใต้เอกสารฉบับนี้ได้ โดยการแจ้งเป็นหนังสือและส่งอีเมลไปยัง customerservice@michikoclinic.com หรือทางโทรศัพท์หมายเลข 064-165-5562 ทั้งนี้ ข้าพเจ้ารับทราบว่า การถอนความยินยอมของข้าพเจ้าดังกล่าวจะไม่ส่งผลกระทบต่อการเก็บรวบรวม ใช้ หรือเปิดเผยข้อมูลส่วนบุคคลที่ข้าพเจ้าได้ให้ความยินยอมไปแล้ว และในบางกรณีอาจไม่อยู่ในวิสัยที่บริษัทจะสามารถลบหรือทำลายข้อมูลส่วนบุคคลของข้าพเจ้าที่ได้มีการตีพิมพ์และเผยแพร่ไปผ่านช่องทางต่างๆ ได้ทั้งหมด แม้บริษัทจะใช้ความพยายามอย่างดีที่สุดในการดำเนินการดังกล่าวแล้วภายใต้ขอบเขตสูงสุดที่กฎหมายที่เกี่ยวข้องอาจอนุญาต ข้าพเจ้าตกลงสละสิทธิในการเรียกร้องค่าเสียหายจากเหตุที่บริษัทอาจไม่สามารถดำเนินการลบหรือทำลายข้อมูลส่วนบุคคลทั้งหมดออกจากสื่อประชาสัมพันธ์ต่างๆ ดังกล่าวนั้นได้ทั้งหมด และข้าพเจ้าเข้าใจเป็นอย่างดีว่า สิทธิในการถอนความยินยอมของข้าพเจ้าอาจถูกจำกัดโดยกฎหมายหรือสัญญาที่ให้ประโยชน์แก่ข้าพเจ้า เช่น ข้าพเจ้าจะถอนความยินยอมได้ต่อเมื่อข้าพเจ้าได้ชำระค่าใช้จ่ายเต็มจำนวนของผลิตภัณฑ์ อุปกรณ์/เวชภัณฑ์ทางการแพทย์ และค่าบริการทางการแพทย์สำหรับการรักษาของข้าพเจ้า ในส่วนที่ข้าพเจ้าได้รับส่วนลดพิเศษคืนแก่มิชิโกะคลินิกเวชกรรมเรียบร้อยแล้ว เป็นต้น"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "กรุณากากบาทลงในช่อง \"ได้\" ในกรณีที่ท่านให้ความยินยอมสำหรับวัตถุประสงค์นั้น และกากบาทในช่อง \"ไม่ได้\" กรณีที่ท่านไม่ให้ความยินยอม"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ได้ ไม่ได้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "เพื่อการประเมินและบันทึกความคืบหน้าของการรักษาของข้าพเจ้า"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "เพื่อการศึกษา การฝึกอบรม เก็บไว้เป็นฐานข้อมูล และเพื่อตีพิมพ์ประกอบการศึกษาหรือการวิจัย"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "เป็นเคสรีวิว เพื่อการโฆษณาทั่วไปต่อสาธารณะ และเพื่อการส่งเสริมการตลาดของบริษัท ตามรายละเอียดที่ระบุในหนังสือฉบับนี้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ลายมือของผู้ป่วย: ____________________________________________________ วันที่: _____________________________________________________________________"
+      },
+      {
+        "type": "table",
+        "index": 0,
+        "rows": [
+          [
+            "หนังสือแสดงความยินยอมให้ใช้ และเผยแพร่ภาพระหว่างการรักษา เพื่อวัตถุประสงค์ในการทำการตลาดของคลินิก (Data Privacy Consent)",
+            "สำเนาบัตรประชาชนผู้แสดงความยินยอม (เคสรีวิว)"
+          ]
+        ]
+      },
+      {
+        "type": "footer",
+        "section": 0,
+        "text": "มิชิโกะคลินิกเวชกรรม โดยบริษัท ไลฟ์ พาร์เนอร์ จำกัด | 9/2 ชั้น 1 ตึก 1 โครงการศุภาลัย ปาร์ค ถ.พหลโยธิน 21 เขต/แขวงจตุจักร กทม 10900 โทร 0954424615"
+      }
+    ]
+  },
+  {
+    "file": "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดฟิลเลอร์.docx",
+    "blocks": [
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ายินยอมให้แพทย์ของทาง Michiko Clinic ดำเนินการตรวจและรักษาข้าพเจ้า รวมทั้งฉีดฟิลเลอร์ ให้แก่ข้าพเจ้า โดยข้าพเจ้ารับทราบเกี่ยวกับรายละเอียด ข้อดีข้อเสีย และข้อควรระวังของการฉีดฟิลเลอร์แล้ว"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ารับทราบถึงการใช้และข้อบ่งใช้เกี่ยวกับผลิตภัณฑ์ฟิลเลอร์ที่จะนำมารักษาข้าพเจ้า โดยแพทย์ผู้ทำการรักษาได้อธิบายถึงวิธีการใช้และเวลาที่เหมาะสมในการใช้ผลิตภัณฑ์ ข้าพเจ้ามีโอกาสได้สอบถามเพิ่มเติมเกี่ยวกับข้อมูลที่ต้องการ พร้อมกับได้รับทราบคำตอบอย่างเป็นที่น่าพอใจ รวมทั้งได้รับทราบข้อมูลเกี่ยวกับข้อห้ามใช้ คำเตือน ข้อควรระวัง และเหตุการณ์ไม่พึงประสงค์จากการใช้ผลิตภัณฑ์ โดยข้าพเจ้าทราบเกี่ยวกับปริมาณของผลิตภัณฑ์ที่ต้องใช้และค่าใช้จ่ายของการรักษา"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าได้รับทราบข้อมูลเรื่องความเสี่ยงที่อาจจะเกิดขึ้นระหว่างทำการรักษา โดยการฉีดฟิลเลอร์มีโอกาสที่จะเกิดความเสี่ยงเข้าไปในเส้นเลือดบริเวณที่ฉีดโดยไม่ได้ตั้งใจ ซึ่งอาจทำให้เกิดหลอดเลือดอุดตัน หลอดเลือดถูกปิดกั้น ภาวะขาดเลือด เนื้อเยื่อตาย หรือเนื้อตายเนื่องจากขาดเลือดของบริเวณที่ฉีด และอาจมีความเสี่ยงที่จะเกิดเหตุการณ์ไม่พึงประสงค์อื่นที่พบได้น้อยแต่ร้ายแรง เช่น ความบกพร่องทางการมองเห็นชั่วคราวหรือถาวร ตาบอด เลือดออกในสมอง หรือสมองขาดเลือด ผิวหนังตาย เกิดการอักเสบ หรือเกิดความเสียหายต่อโครงสร้างของบริเวณที่ได้รับการฉีดฟิลเลอร์ เช่น มีอาการชาชั่วคราวหรือถาวร จากการบาดเจ็บของเส้นประสาท"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ปฏิกิริยาที่สัมพันธ์กับการฉีดซึ่งอาจเกิดขึ้นทันทีหลังฉีด ได้แก่ ปวด บวม แดง ช้ำ คัน และตึงบริเวณที่ฉีด โดยทั่วไปปกติอาการดังกล่าวอาจจะหายไปเองภายในเวลา 1-2 สัปดาห์หลังจากการฉีด ในบางรายที่มีอาการอักเสบระดับรุนแรงน้อยถึงปานกลาง อาการจะหายไปภายใน 2 สัปดาห์ และอาจมีบางรายที่มีความผิดปกติที่อาจเกิดขึ้นและคงอยู่หลายเดือนหรือมากกว่า 1 ปี เช่น เป็นก้อนบริเวณที่ได้รับการรักษา เนื้อยุบจากการอักเสบ หรือ ความผิดปกติอื่นๆ ที่ได้แจ้งข้างต้น ซึ่งพบได้น้อยมาก"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ารับทราบว่าอาการของการอักเสบ ณ บริเวณที่ฉีดมีรายงานว่าอาจเกิดขึ้นได้ทันทีหลังฉีด หรืออาจเกิดล่าช้าออกไปได้ถึงหลายสัปดาห์ และในบางกรณีอาจมีอาการบวมขึ้นมาภายหลังการฉีดฟิลเลอร์ได้ หากคนไข้มีภาวะร่างกายอ่อนแอ พักผ่อนน้อย ร่างการอักเสบมากผิดปกติ รับประทานของดิบ ของหมักดอง หรือของเค็ม และหากคนไข้เข้ารับการผ่าตัดในบริเวณอื่นๆ ของร่างกายภายใน 7-14 วันหลังทำฟิลเลอร์ อาจทำให้บริเวณที่ฉีดฟิลเลอร์อาจเกิดการอักเสบมากกว่าปกติ และมีหนองจากเม็ดเลือดขาวได้ และทำให้เนื้อเยื่อบริเวณที่ฉีดเกิดการยุบตัวและการฉีดฟิลเลอร์ไม่ได้ประสิทธิภาพตามที่คาดหวังได้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ในกรณีที่แพทย์ผู้รักษาใช้ผลิตภัณฑ์ฟิลเลอร์ที่มีส่วนผสมของยาชาเฉพาะที่ (ไลโดเคน 0.3%) ข้าพเจ้าได้รับทราบว่าการใส่ไลโดเคนในส่วนผสมนั้นเพื่อลดอาการเจ็บปวดระหว่างการฉีดและรักษา ซึ่งจะมีผลประมาณ 2-4 ชั่วโมง"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "แพทย์ผู้ทำการรักษาได้แจ้งให้ข้าพเจ้าทราบถึงบริเวณที่จะทำการรักษา วิธีการรักษา และผลลัพธ์ที่จะเกิดขึ้นจากการรักษาขึ้นอยู่กับปริมาณฟิลเลอร์ที่ใช้ ซึ่งโดยปกติจะอยู่ได้ประมาณ 6-18 เดือน ทั้งนี้ระยะเวลาขึ้นอยู่กับหลายปัจจัยที่เกี่ยวข้องด้วย เช่น ยี่ห้อของฟิลเลอร์ที่ฉีด อายุ ลักษณะผิวหนัง และกิจวัตรประจำวันของแต่ละบุคคล อาจจำเป็นต้องทำการรักษาเพิ่มเติมเพื่อให้ได้ผลลัพธ์ที่ต้องการหรือประคองผลการรักษาให้อยู่ในระดับที่ต้องการ"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าขอยืนยันว่าข้าพเจ้าจะปฏิบัติตามคำแนะนำที่ได้รับเกี่ยวกับการปฏิบัติภายหลังการรักษา ดังต่อไปนี้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "หลังฉีดฟิลเลอร์ทุกบริเวณในร่างกาย จะต้องไม่ไปทำหัตถการผ่าตัดหรือทำทันตกรรม เช่น ทำศัลยกรรมตา ศัลยกรรมจมูก ถอนฟัน รักษารากฟัน ผ่าพันคุด ภายใน 2 สัปดาห์"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "หลีกเลี่ยงไม่ให้น้ำประปาและสิ่งสกปรกเข้าแผลในช่วง 24 ชม.หลังฉีดฟิลเลอร์บนใบหน้าและน้องสาว และ 7-10 วันหลังฉีดฟิลเลอร์สะโพก"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "หลีกเลี่ยงความร้อนทุกชนิด เช่น การทำเลเซอร์ การอบไอน้ำ อบซาวน่า แช่ออนเซ็น เป็นเวลาอย่างน้อย 2-4 สัปดาห์"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "งดทำทรีทเม้นท์ งดนวดและขัดผิวบริเวณที่ทำการฉีดฟิลเลอร์ เป็นระยะเวลาอย่างน้อย 2 สัปดาห์"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "งดเครื่องดื่มแอลกอฮอล์ เหล้า เบียร์ ไวน์ ของดิบ ของหมักดอง ปลาร้า 2 สัปดาห์ (หากทำไม่ได้ ควรงดอย่างน้อย 72 ชั่วโมง) มิเช่นนั้นอาจทำให้ฟิลเลอร์บวมและเกิดการอักเสบได้ โดยสามารถประคบเย็น รับประทานยาลดบวม เพื่อลดอาการบวมช้ำใน 48 ชั่วโมงแรกหลังทำหัตถการได้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ระมัดระวังการกระทบกระแทก การเคลื่อนไหว และการขยับอวัยวะที่ฉีดฟิลเลอร์แรงๆ ในช่วง 1-2 สัปดาห์แรก"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าได้แจ้งให้แพทย์ผู้ทำการรักษาทราบถึงหัตถการต่าง ๆ ที่ข้าพเจ้าได้ทำมาก่อน ซึ่งรวมถึงการฉีดสารต่าง ๆ การผ่าตัด การลอกผิวด้วยสารเคมีและอื่น ๆ และข้าพเจ้ารับทราบว่า หากข้าพเจ้าได้เคยฉีดฟิลเลอร์ หรือสารไม่สลายตัวมาจากสถานที่อื่น และโดยแพทย์ท่านอื่น อาจมีความเป็นไปได้ ที่แบคทีเรียหรือสิ่งสกปรกที่แอบแฝงอยู่ในฟิลเลอร์หรือสารไม่สลายเดิม จะแตกตัวออกมา และทำให้ข้าพเจ้าเกิดอาการติดเชื้อได้ โดยไม่ใช่ความผิดของแพทย์ท่านที่ฉีดที่ มิชิโกะ คลินิกเวชกรรม"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าได้รับทราบแล้วว่า การรักษาทางการแพทย์ ไม่อาจรับประกันผลการรักษาให้ได้ตามที่ข้าพเจ้าคาดหวังไว้เสมอไป ผลการรักษาด้วยฟิลเลอร์ขึ้นกับแต่ละบุคคล ข้าพเจ้ายอมรับว่าคำชี้แจงในหนังสือยินยอมนี้ถือเป็นสำคัญ มีความถูกต้องเหนือ ข้อมูลที่ได้รับแจ้งทางอื่นๆ ไม่ว่าจะเป็นด้วยวาจาหรือลายลักษณ์อักษรก่อนหน้านี้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าขอรับรองว่า ข้าพเจ้าได้อ่านข้อความในหนังสือยินยอมรับการรักษาข้างต้นทั้งหมดและเข้าใจดีแล้ว และยินยอมรับการรักษาด้วยการฉีดฟิลเลอร์ในครั้งนี้ โดยข้าพเจ้าหรือผู้แทนของข้าพเจ้าจะไม่เรียกร้องค่าเสียหายใดๆ จากแพทย์หรือ Michiko Clinic ᪀ ใช่ ᪀ ไม่ใช่"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าให้ความยินยอมรับการทายาระงับความรู้สึกก่อนหรือระหว่างการรักษา ᪀ ใช่ ᪀ ไม่ใช่ ซึ่งอาจจะทำให้เกิดการระคายเคืองได้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้าให้ความยินยอมสำหรับการใช้ยาระงับความรู้สึกก่อนหรือระหว่างการรักษา ᪀ ใช่ ᪀ ไม่ใช่"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ซึ่งมีความเสี่ยงที่จะทำให้เส้นประสาทอักเสบชั่วคราวหรือถาวรได้"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ข้าพเจ้ารับทราบความเสี่ยงและยินยอมเข้ารับการรักษาด้วยการฉีดฟิลเลอร์ และรับทราบข้อมูลเกี่ยวกับการดูแลตนเองหลังการรักษาโดยละเอียดแล้ว"
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "ลายมือชื่อผู้เข้ารับการรักษา…………………………………………………………………………………………….. วันที่..............................."
+      },
+      {
+        "type": "paragraph",
+        "style": "normal",
+        "text": "โปรดอ่านรายละเอียดเพิ่มเติมในเอกสารกำกับเครื่องมือแพทย์"
+      },
+      {
+        "type": "table",
+        "index": 0,
+        "rows": [
+          [
+            "หนังสือแสดงความยินยอมเข้ารับการรักษาด้วยสาร Hyaluronic Acid (ฟิลเลอร์)",
+            "ข้อมูลผู้ป่วย: HN___________________________ ชื่อเต็ม: ____________________________________________________________________________________________________________ วัน/เดือน/ปี เกิด: _________________________________________________________________________________________________ หมายเลขโทรศัพท์:________________________________________________________________________________________________"
+          ]
+        ]
+      }
+    ]
+  }
+]

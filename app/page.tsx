@@ -306,14 +306,10 @@ export default function Home() {
     <div className="shell">
       <aside>
         <div className="brand">
-          <i>M</i>
-          <span>
-            <b>Michiko</b>
-            <small>SMART LEDGER</small>
-          </span>
+          <img src="https://michikoclinic.github.io/Michiko-Smart-Ledger/github-pages/michiko-logo.png" alt="Michiko Aesthetics" />
         </div>
         <nav>
-          <button>⌂ ภาพรวม</button>
+          <a className="main-home" href="https://michikoclinic.github.io/Michiko-Smart-Ledger/">⌂ กลับหน้าหลัก</a>
           <button
             className={view !== "history" ? "active" : ""}
             onClick={() => setView("patients")}

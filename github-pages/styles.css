@@ -117,12 +117,12 @@ td.detail .payment-total-line{display:table!important;width:auto!important;max-w
 .print-repeat-heading{display:none}.ledger-card tbody td:nth-child(2),.range-print-page tbody td:nth-child(2){white-space:nowrap!important;word-break:keep-all!important;overflow-wrap:normal!important}
 @media print{
 .print-heading{display:none!important}.print-repeat-heading{display:table-row!important}
-.print-repeat-heading th,.range-repeat-heading th{width:100%!important;padding:0 0 5px!important;border:0!important;border-bottom:2px solid #85202d!important;background:#fff!important}
+.print-repeat-heading th,.range-repeat-heading th{width:auto!important;padding:0 0 5px!important;border:0!important;border-bottom:2px solid #85202d!important;background:#fff!important}
 .print-repeat-heading th>div,.range-repeat-heading th>div{display:flex;align-items:center;gap:10px;text-align:left!important}
 .print-repeat-heading img,.range-repeat-heading img{width:92px;height:38px;object-fit:contain}
 .print-repeat-heading span,.range-repeat-heading span{display:grid;gap:1px}.print-repeat-heading b,.range-repeat-heading b{font-size:12pt}.print-repeat-heading small,.range-repeat-heading small{font-size:7pt;font-weight:500}
 .print-repeat-heading time,.range-repeat-heading time{margin-left:auto;font-size:8pt;font-weight:800;white-space:nowrap}
 .ledger-card tbody tr,.range-print-page tbody tr{break-inside:avoid!important;page-break-inside:avoid!important}
-.ledger-card th:nth-child(2),.ledger-card td:nth-child(2){width:6%!important}.ledger-card th:nth-child(4),.ledger-card td:nth-child(4){width:37%!important}
+.ledger-card th:nth-child(2),.ledger-card td:nth-child(2){width:5%!important}.ledger-card th:nth-child(4),.ledger-card td:nth-child(4){width:38%!important}
 body:not(.range-print)::after,body.range-print .range-print-page::after{content:"มีต่อหน้าถัดไป";position:fixed;right:7mm;bottom:1mm;padding:1px 5px;background:#fff;color:#000;font-size:7pt;font-weight:800}
 }

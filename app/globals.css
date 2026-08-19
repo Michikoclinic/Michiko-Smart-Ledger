@@ -18,3 +18,20 @@ header{background:#fffdfbde;backdrop-filter:blur(14px);border-bottom-color:#eddf
 .confirm{background:linear-gradient(145deg,#fdf0e9,#f8e7e0)}.choice{border-color:#ead8d0;border-radius:16px;box-shadow:0 8px 20px #8959420b}.buttons button{border-color:#e4d3cb;border-radius:11px}.buttons .yes{background:linear-gradient(135deg,#c88168,#aa6753);border-color:#b76f59}.buttons .no{background:#a86461;border-color:#a86461}
 .signbox>button{border-color:#d9977d;background:#fff7f2;color:#b76247}.signbox>button.done{background:#f6e2da}.progress{background:#eadfd9}.progress i{background:linear-gradient(90deg,#e69a77,#d96e4c)}
 .record mark.completed{background:#f1e6d8;color:#856641}.toast{background:#f4eadf;color:#775c45;border-color:#e4d2bc}.overlay{background:#4d332d99;backdrop-filter:blur(8px)}.modal{background:#fffaf7;border:1px solid #f0ddd4}.modal input,canvas{border-color:#dfc5ba}
+
+/* Exact Michiko Smart Ledger design tokens */
+:root{--ink:#36251f;--muted:#806d65;--line:#eadfd9;--cream:#f5f0eb;--pale:#fbf7f4;--green:#703429;--orange:#a86455;--paper:#fffdfb;--shadow:0 18px 40px rgba(54,37,31,.12)}
+body{color:var(--ink);background:#f5f0eb;font-family:"Segoe UI",Tahoma,"Noto Sans Thai",sans-serif}
+aside{background:#2f211d;color:#fff8f4;border:0;box-shadow:none;padding:28px 20px}
+.brand{border-bottom:1px solid rgba(255,255,255,.1)}.brand i,.mobileM{background:#fff;color:#703429;box-shadow:none;border-radius:8px}.brand b{color:#fff8f4}.brand small,.clinic small{color:#dbc8bd;opacity:1}
+nav{gap:8px}nav button{color:#fff8f4;border-radius:8px;padding:12px 14px}nav button:hover,nav button.active{background:rgba(255,255,255,.12);color:#fff}
+.clinic{border-top-color:rgba(255,255,255,.12);color:#fff8f4}.clinic>i{background:#fff8f4;color:#703429;border-radius:8px}
+header{background:#fffdfb;border-bottom:1px solid var(--line);backdrop-filter:none}header h1{color:var(--ink)}header>span{background:var(--paper);border-color:var(--line)}
+.hero h2,.title h2,.confirm>h2,.signbox h2,.modal h2{color:var(--ink)}.hero em,header em,.confirm>em,.signbox em,.modal em{color:var(--brand,#703429)}
+.primary{background:#703429;border-radius:8px;box-shadow:none}.primary:hover{background:#5e2b22;transform:none;box-shadow:none}
+.search,.patient,.patientbar,.record,.empty{background:var(--paper);border-color:var(--line);border-radius:8px;box-shadow:var(--shadow)}.search{border-radius:8px}.search>div{background:white;border-color:var(--line);border-radius:8px}.search>div:focus-within{border-color:#a86455;box-shadow:0 0 0 3px rgba(168,100,85,.12)}
+.patient{border-radius:8px;box-shadow:none}.patient:hover{border-color:#a86455;box-shadow:0 8px 20px rgba(54,37,31,.09)}.patient i,.patientbar i,.paper article>i,.choice>i{background:#f3e6df;color:#703429}.patient strong,.back,.record>a,.record>button{color:#703429}
+.paper{background:var(--paper);border-color:var(--line);border-radius:8px;box-shadow:var(--shadow)}.title{background:#fffdfb}.title>b{color:#703429}.paper p{color:#5e4b44}.paper article:nth-child(even){background:#fbf7f4}
+.confirm{background:#fbf7f4}.choice{border-color:var(--line);border-radius:8px;box-shadow:none}.buttons button{border-color:var(--line);border-radius:8px}.buttons .yes{background:#703429;border-color:#703429}.buttons .no{background:#ad3838;border-color:#ad3838}
+.signbox>button{border-color:#a86455;background:#fff8f4;color:#703429;border-radius:8px}.signbox>button.done{background:#f1e2db}.progress{background:#eadfd9}.progress i{background:#a86455}
+.record mark.completed{background:#efe7dd;color:#703429}.toast{background:#fbf7f4;color:#703429;border-color:var(--line)}.modal{background:#fffdfb;border-color:var(--line);border-radius:8px}.modal input,canvas{border-color:var(--line);border-radius:8px}

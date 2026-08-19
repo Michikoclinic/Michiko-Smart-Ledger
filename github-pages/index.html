@@ -7,14 +7,15 @@
   <title>Michiko Smart Ledger</title>
   <link rel="icon" type="image/png" href="accounting-icon.png?v=20260813d">
   <link rel="apple-touch-icon" href="accounting-icon.png?v=20260813d">
-  <link rel="stylesheet" href="styles.css?v=20260815a">
+  <link rel="stylesheet" href="styles.css?v=20260819hub">
 </head>
 <body>
   <div class="auth-gate" id="authGate"><section class="auth-card" role="dialog" aria-modal="true" aria-labelledby="authTitle"><img src="michiko-logo.png" alt="Michiko Aesthetics"><p class="eyebrow">MICHIKO SMART LEDGER</p><h1 id="authTitle">เข้าสู่ระบบ Reception</h1><p>กรอกรหัสผ่านเพื่อเปิดสมุดรายวัน</p><form id="loginForm"><label><span>รหัสผ่าน</span><input id="loginPassword" type="password" autocomplete="current-password" required></label><p class="auth-error" id="authError" role="alert" hidden></p><button class="primary" id="loginButton" type="submit">เข้าสู่ระบบ</button></form></section></div>
   <div class="branch-gate" id="branchGate" hidden><section class="branch-gate-card" role="dialog" aria-modal="true" aria-labelledby="branchGateTitle"><p class="eyebrow">MICHIKO SMART LEDGER</p><h2 id="branchGateTitle">เลือกสาขาเพื่อเริ่มงาน</h2><p>ข้อมูลจะแสดงแยกตามสาขาที่เลือก</p><div class="branch-choice-grid"><button type="button" data-branch-choice="พหลโยธิน 21"><strong>พหลโยธิน 21</strong><span>เข้าสู่สมุดรายวันสาขานี้</span></button><button type="button" data-branch-choice="EmSphere"><strong>EmSphere</strong><span>เข้าสู่สมุดรายวันสาขานี้</span></button></div></section></div>
+  <div class="branch-gate" id="appGate" hidden><section class="branch-gate-card app-gate-card" role="dialog" aria-modal="true" aria-labelledby="appGateTitle"><p class="eyebrow">MICHIKO WORKSPACE</p><h2 id="appGateTitle">เลือกงานที่ต้องการเข้า</h2><p id="chosenBranchLabel">สาขาที่เลือก</p><div class="app-choice-grid"><button type="button" id="openLedger"><strong>Smart Ledger</strong><span>สมุดรายวันและสรุปยอด</span></button><a id="openConsent" href="https://michiko-digital-consent.michiko-9481.chatgpt.site/"><strong>Digital Consent</strong><span>เอกสารยินยอมและลายเซ็น</span></a></div><button class="change-branch" type="button" id="changeBranch">← เปลี่ยนสาขา</button></section></div>
   <header class="topbar" id="top">
     <img class="brand-logo" src="michiko-logo.png" alt="Michiko Aesthetics">
-    <nav><a class="active" href="#ledger">สมุดรายวัน</a><a href="#daily">สรุปยอด</a><a href="#monthly">ยอดสะสม</a><a href="https://michiko-digital-consent.michiko-9481.chatgpt.site/">Digital Consent</a></nav>
+    <nav><a href="#" id="mainMenuButton">หน้าหลัก</a><a class="active" href="#ledger">สมุดรายวัน</a><a href="#daily">สรุปยอด</a><a href="#monthly">ยอดสะสม</a></nav>
     <div class="profile"><span><small>Reception</small><small class="sync-status" id="syncStatus">ข้อมูลในเครื่อง</small></span><button class="logout-button" id="logoutButton" type="button" hidden>ออกจากระบบ</button></div>
   </header>
 
@@ -67,7 +68,7 @@
   <section class="range-report" id="rangeReport" aria-hidden="true"></section>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js?v=20260813a"></script>
-  <script src="app.js?v=20260815c"></script>
+  <script src="app.js?v=20260819hub"></script>
 </body>
 </html>
 

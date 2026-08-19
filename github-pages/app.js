@@ -171,9 +171,14 @@ render();
 
 
 const branchGate=document.querySelector("#branchGate");
+const appGate=document.querySelector("#appGate");
 const branchSessionKey="michiko-branch-chosen-session-v1";
-function chooseEntryBranch(branchName){const branch=document.querySelector("#branch");branch.value=branchName;document.querySelector("#branchName").textContent=branchName;updateBranchPaymentLabels();saveLastView();loadSavedLedger();render();try{sessionStorage.setItem(branchSessionKey,"1")}catch{}branchGate.hidden=true}
+function showAppGate(){const branchName=document.querySelector("#branch").value;document.querySelector("#chosenBranchLabel").textContent=`สาขา ${branchName}`;document.querySelector("#openConsent").href=`https://michiko-digital-consent.michiko-9481.chatgpt.site/?branch=${encodeURIComponent(branchName)}`;branchGate.hidden=true;appGate.hidden=false}
+function chooseEntryBranch(branchName){const branch=document.querySelector("#branch");branch.value=branchName;document.querySelector("#branchName").textContent=branchName;updateBranchPaymentLabels();saveLastView();loadSavedLedger();render();showAppGate()}
 branchGate.querySelectorAll("[data-branch-choice]").forEach(button=>button.addEventListener("click",()=>chooseEntryBranch(button.dataset.branchChoice)));
+document.querySelector("#openLedger").addEventListener("click",()=>{try{sessionStorage.setItem(branchSessionKey,"1")}catch{}appGate.hidden=true});
+document.querySelector("#changeBranch").addEventListener("click",()=>{appGate.hidden=true;branchGate.hidden=false});
+document.querySelector("#mainMenuButton").addEventListener("click",event=>{event.preventDefault();showAppGate()});
 try{branchGate.hidden=sessionStorage.getItem(branchSessionKey)==="1"}catch{branchGate.hidden=false}
 
 const backupPrefix="michiko-";
@@ -236,7 +241,7 @@ const authError=document.querySelector("#authError");
 const logoutButton=document.querySelector("#logoutButton");
 const receptionEmail="customerservice@michikoclinic.com";
 function showAuthError(message){authError.textContent=message;authError.hidden=!message}
-function setSignedIn(signedIn){authGate.hidden=signedIn;logoutButton.hidden=!signedIn;if(!signedIn){branchGate.hidden=true;setTimeout(()=>loginPassword.focus(),0)}}
+function setSignedIn(signedIn){authGate.hidden=signedIn;logoutButton.hidden=!signedIn;if(!signedIn){branchGate.hidden=true;appGate.hidden=true;setTimeout(()=>loginPassword.focus(),0)}}
 async function initializeAuth(){
   const config=window.MICHIKO_SUPABASE;
   if(!config?.url||!config?.publishableKey||!window.supabase?.createClient){showAuthError("เชื่อมต่อระบบเข้าสู่ระบบไม่ได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วรีเฟรชหน้า");setSignedIn(false);return}

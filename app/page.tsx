@@ -913,7 +913,7 @@ export default function Home() {
               {visibleParagraphs.map((text, i) => (
                   <p key={i}>{text}</p>
                 ))}
-              {formId === "filler" && <div className="document-screening"><b>ข้อมูลเพิ่มเติมก่อนรับบริการ</b>{screeningQuestions.map((question,i)=><p key={question}>☑ {question} <strong>{screening[i].answer ? "มี" : "ไม่มี"}</strong>{screening[i].detail ? ` — ${screening[i].detail}` : ""}</p>)}</div>}
+              {formId === "filler" && <div className="document-screening"><b>ข้อมูลเพิ่มเติมก่อนรับบริการ</b>{screeningQuestions.map((question,i)=><div className="document-screening-row" key={question}><p>{question}</p><span className={!screening[i].answer ? "checked" : ""}>ไม่มี {!screening[i].answer ? "☑" : "☐"}</span><span className={screening[i].answer ? "checked" : ""}>มี {screening[i].answer ? "☑" : "☐"}</span>{screening[i].answer && <small>รายละเอียด: {screening[i].detail || "ไม่ได้ระบุ"}</small>}</div>)}</div>}
             </div>
             <div className="document-signatures">
               <div>

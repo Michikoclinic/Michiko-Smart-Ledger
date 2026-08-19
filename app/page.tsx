@@ -1,15 +1,38 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import consentDocuments from "../extracted_consents.json";
+import html2canvas from "html2canvas";
+import { jsPDF } from "jspdf";
+
+declare global {
+  interface Window {
+    google?: {
+      accounts: {
+        oauth2: {
+          initTokenClient: (options: {
+            client_id: string;
+            scope: string;
+            callback: (response: { access_token?: string; error?: string }) => void;
+            error_callback?: (error: unknown) => void;
+          }) => { requestAccessToken: (options?: { prompt?: string }) => void };
+        };
+      };
+    };
+  }
+}
+
+const DRIVE_FOLDER_ID = "1G-egL6keG6dadSrf5Zre4NWDUwD9N6at";
 type Patient = { hn: string; name: string; birth: string };
 type Rec = Patient & {
   id: number;
   signedAt: string;
-  status: "completed" | "upload_failed";
+  status: "uploading" | "completed" | "upload_failed";
   fileId?: string;
+  driveUrl?: string;
   formName?: string;
   language?: "th" | "en";
   signatureImage?: string;
+  screening?: Array<{ answer: boolean | null; detail: string }>;
 };
 const patients: Patient[] = [
   { hn: "HN01284", name: "สมหญิง ใจดี", birth: "12 มี.ค. 2533" },
@@ -30,9 +53,8 @@ const consentForms: {
     name: "ฉีดฟิลเลอร์",
     en: "Filler Injection",
     group: "หัตถการฉีด",
-    bilingual: true,
+    bilingual: false,
     thFile: "01_ฉีดฟิลเลอร์_Filler_3.docx",
-    enFile: "(ENG) แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดฟิลเลอร์.docx",
   },
   {
     id: "filler-permanent",
@@ -193,6 +215,15 @@ export default function Home() {
     setRecs(r);
     localStorage.setItem("michiko-consents", JSON.stringify(r));
   };
+  const updateRecord = (id: number, patch: Partial<Rec>) => {
+    setRecs((current) => {
+      const next = current.map((record) =>
+        record.id === id ? { ...record, ...patch } : record,
+      );
+      localStorage.setItem("michiko-consents", JSON.stringify(next));
+      return next;
+    });
+  };
   const choose = (p: Patient) => {
     setPatient(p);
     setAns([null, null]);
@@ -273,6 +304,103 @@ export default function Home() {
     c.lineTo(p.x, p.y);
     c.stroke();
   };
+  const loadGoogleIdentity = () =>
+    new Promise<void>((resolve, reject) => {
+      if (window.google?.accounts.oauth2) return resolve();
+      const existing = document.querySelector<HTMLScriptElement>(
+        'script[src="https://accounts.google.com/gsi/client"]',
+      );
+      const script = existing ?? document.createElement("script");
+      script.addEventListener("load", () => resolve(), { once: true });
+      script.addEventListener("error", () => reject(new Error("เปิดหน้าต่าง Google ไม่สำเร็จ")), { once: true });
+      if (!existing) {
+        script.src = "https://accounts.google.com/gsi/client";
+        script.async = true;
+        document.head.appendChild(script);
+      }
+    });
+
+  const getDriveToken = async () => {
+    const config = await fetch("/api/google-config", { cache: "no-store" });
+    const { clientId } = (await config.json()) as { clientId?: string };
+    if (!clientId) throw new Error("ยังไม่ได้ใส่ Google OAuth Client ID");
+    await loadGoogleIdentity();
+    return new Promise<string>((resolve, reject) => {
+      const client = window.google!.accounts.oauth2.initTokenClient({
+        client_id: clientId,
+        scope: "https://www.googleapis.com/auth/drive.file",
+        callback: (response) =>
+          response.access_token
+            ? resolve(response.access_token)
+            : reject(new Error(response.error || "Google ไม่อนุญาตการเชื่อมต่อ")),
+        error_callback: () => reject(new Error("ปิดหน้าต่างเชื่อมต่อ Google ก่อนเสร็จ")),
+      });
+      client.requestAccessToken({ prompt: "consent" });
+    });
+  };
+
+  const createPdf = async () => {
+    const documentElement = document.querySelector<HTMLElement>(".signed-document");
+    if (!documentElement) throw new Error("ไม่พบเอกสารสำหรับสร้าง PDF");
+    const canvasImage = await html2canvas(documentElement, {
+      scale: 2,
+      backgroundColor: "#ffffff",
+      useCORS: true,
+    });
+    const pdf = new jsPDF("p", "mm", "a4");
+    const width = 210;
+    const pageHeight = 297;
+    const height = (canvasImage.height * width) / canvasImage.width;
+    const image = canvasImage.toDataURL("image/jpeg", 0.94);
+    let remaining = height;
+    let y = 0;
+    pdf.addImage(image, "JPEG", 0, y, width, height);
+    remaining -= pageHeight;
+    while (remaining > 0) {
+      y = remaining - height;
+      pdf.addPage();
+      pdf.addImage(image, "JPEG", 0, y, width, height);
+      remaining -= pageHeight;
+    }
+    return pdf.output("blob");
+  };
+
+  const uploadRecord = async (record: Rec) => {
+    try {
+      updateRecord(record.id, { status: "uploading" });
+      await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
+      const [token, pdf] = await Promise.all([getDriveToken(), createPdf()]);
+      const safeName = record.name.replace(/[\\/:*?"<>|]/g, "_");
+      const fileName = `${record.hn}_${safeName}_${record.formName || "Consent"}_${record.id}.pdf`;
+      const metadata = new Blob(
+        [JSON.stringify({ name: fileName, parents: [DRIVE_FOLDER_ID], mimeType: "application/pdf" })],
+        { type: "application/json" },
+      );
+      const body = new FormData();
+      body.append("metadata", metadata);
+      body.append("file", pdf, fileName);
+      const response = await fetch(
+        "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink",
+        { method: "POST", headers: { Authorization: `Bearer ${token}` }, body },
+      );
+      if (!response.ok) throw new Error("Google Drive ปฏิเสธการอัปโหลด");
+      const uploaded = (await response.json()) as { id: string; webViewLink?: string };
+      updateRecord(record.id, {
+        status: "completed",
+        fileId: uploaded.id,
+        driveUrl: uploaded.webViewLink || `https://drive.google.com/file/d/${uploaded.id}/view`,
+      });
+      setNotice("บันทึกและส่ง PDF เข้า Google Drive สำเร็จแล้ว");
+    } catch (error) {
+      updateRecord(record.id, { status: "upload_failed" });
+      setNotice(
+        error instanceof Error
+          ? `สร้าง PDF แล้ว แต่ยังส่งเข้า Drive ไม่สำเร็จ: ${error.message}`
+          : "สร้าง PDF แล้ว แต่ยังส่งเข้า Drive ไม่สำเร็จ",
+      );
+    }
+  };
+
   const submit = () => {
     if (!patient) return;
     const time = new Date().toLocaleString("th-TH", {
@@ -288,18 +416,20 @@ export default function Home() {
       language,
       signedAt: time,
       signatureImage,
-      status: fail ? "upload_failed" : "completed",
-      ...(fail ? {} : { fileId: `DRV-${Date.now().toString().slice(-7)}` }),
+      screening,
+      status: "uploading",
     };
     save([r, ...recs]);
-    setNotice(
-      fail
-        ? "สร้างเอกสารแล้ว แต่ยังอัปโหลดไป Google Drive ไม่สำเร็จ"
-        : "บันทึก Consent สำเร็จแล้ว — ตรวจสอบเอกสารก่อนบันทึกเป็น PDF",
-    );
+    setNotice("กำลังสร้าง PDF และส่งเข้า Google Drive…");
     setFail(false);
     setView("history");
     setShowDocument(true);
+    if (fail) {
+      updateRecord(r.id, { status: "upload_failed" });
+      setNotice("สร้าง PDF แล้ว แต่ยังส่งเข้า Drive ไม่สำเร็จ — กดลองใหม่ได้");
+    } else {
+      void uploadRecord(r);
+    }
     window.scrollTo(0, 0);
   };
   return (
@@ -772,28 +902,25 @@ export default function Home() {
                   <mark className={r.status}>
                     {r.status === "completed"
                       ? "● เก็บใน Drive แล้ว"
-                      : "! รออัปโหลด"}
+                      : r.status === "uploading"
+                        ? "● กำลังอัปโหลด"
+                        : "! รออัปโหลด"}
                   </mark>
                   {r.status === "upload_failed" ? (
                     <button
-                      onClick={() =>
-                        save(
-                          recs.map((x) =>
-                            x.id === r.id
-                              ? {
-                                  ...x,
-                                  status: "completed",
-                                  fileId: `DRV-${Date.now()}`,
-                                }
-                              : x,
-                          ),
-                        )
-                      }
+                      onClick={() => {
+                        setPatient({ hn: r.hn, name: r.name, birth: r.birth });
+                        setSignedAt(r.signedAt);
+                        setSignatureImage(r.signatureImage || "");
+                        if (r.screening) setScreening(r.screening);
+                        setShowDocument(true);
+                        void uploadRecord(r);
+                      }}
                     >
                       ↻ อัปโหลดอีกครั้ง
                     </button>
                   ) : (
-                    <a href="https://drive.google.com" target="_blank">
+                    <a href={r.driveUrl || `https://drive.google.com/file/d/${r.fileId}/view`} target="_blank" rel="noreferrer">
                       เปิดเอกสาร ↗
                     </a>
                   )}
@@ -912,7 +1039,7 @@ export default function Home() {
             </div>
             <div className="document-body">
               {visibleParagraphs.map((text, i) => (
-                  <p key={i}>{text}</p>
+                  <p className={/^(การยินยอม|Consent|ความเสี่ยงและผลข้างเคียง|Possible Risks|ข้อปฏิบัติหลังฉีด|Post-Treatment Care)/.test(text) ? "document-section-title" : ""} key={i}>{text}</p>
                 ))}
               {formId === "filler" && <div className="document-screening"><b>ข้อมูลเพิ่มเติมก่อนรับบริการ</b>{screeningQuestions.map((question,i)=><div className="document-screening-row" key={question}><p>{question}</p><span className={!screening[i].answer ? "checked" : ""}>ไม่มี {!screening[i].answer ? "☑" : "☐"}</span><span className={screening[i].answer ? "checked" : ""}>มี {screening[i].answer ? "☑" : "☐"}</span>{screening[i].answer && <small>รายละเอียด: {screening[i].detail || "ไม่ได้ระบุ"}</small>}</div>)}</div>}
             </div>

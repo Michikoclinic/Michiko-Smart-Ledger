@@ -80,7 +80,7 @@ function updateDate(value){
  document.querySelector("#weekdayLabel").textContent=weekday;
  document.querySelector("#dailyDate").textContent=full;
  document.querySelector("#monthRange").textContent=`รวมวันที่ 1–${date.getDate()} ${new Intl.DateTimeFormat("th-TH",{month:"long",year:"numeric"}).format(date)}`;
- const printDate=document.querySelector("#printDate"); printDate.textContent=`วันที่ ${full}`; printDate.dateTime=value;
+ const printDate=document.querySelector("#printDate"); printDate.textContent=`วันที่ ${full}`; printDate.dateTime=value;document.querySelectorAll(".print-date-copy").forEach(element=>{element.textContent=`วันที่ ${full}`;element.dateTime=value});
 }
 function moveDate(days){const date=new Date(`${ledgerDate.value}T12:00:00`);date.setDate(date.getDate()+days);ledgerDate.value=`${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`;updateDate(ledgerDate.value);saveLastView();loadSavedLedger();render()}
 ledgerDate.addEventListener("change",()=>{updateDate(ledgerDate.value);saveLastView();loadSavedLedger();render()});

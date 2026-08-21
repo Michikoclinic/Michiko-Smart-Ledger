@@ -855,13 +855,23 @@ export default function Home() {
                     ยังไม่มีต้นฉบับภาษาคู่ที่คลินิกตรวจรับรอง — แสดงเฉพาะข้อความต้นฉบับเพื่อป้องกันความคลาดเคลื่อน
                   </div>
                 )}
-                {bilingualRows.map((row, i) => (
+                {currentForm.id === "filler" ? bilingualRows.map((row, i) => (
                   <div className="bilingual-row" key={`${i}-${row.th.slice(0, 20)}`}>
-                    <i>{i + 1}</i>
                     <p lang="th">{row.th || "—"}</p>
                     <p lang="en">{row.en || "—"}</p>
                   </div>
-                ))}
+                )) : (
+                  <div className="language-columns">
+                    <section lang="th">
+                      <h3>ภาษาไทย</h3>
+                      {thaiParagraphs.length ? thaiParagraphs.map((text, i) => <p key={i}>{text}</p>) : <p className="language-missing">ยังไม่มีต้นฉบับภาษาไทยที่ผ่านการตรวจรับรอง</p>}
+                    </section>
+                    <section lang="en">
+                      <h3>English</h3>
+                      {englishParagraphs.length ? englishParagraphs.map((text, i) => <p key={i}>{text}</p>) : <p className="language-missing">Approved English source is not yet available.</p>}
+                    </section>
+                  </div>
+                )}
               </div>
               {currentQuestions.length > 0 && (
                 <div className="screening">
@@ -1206,12 +1216,17 @@ export default function Home() {
               </span>
             </div>
             <div className="document-body">
-              {bilingualRows.map((row, i) => (
-                <div className="document-bilingual-row" key={i}>
-                  <p lang="th">{row.th || "—"}</p>
-                  <p lang="en">{row.en || "—"}</p>
-                </div>
-              ))}
+              {currentForm.id === "filler" ? bilingualRows.map((row, i) => (
+                  <div className="document-bilingual-row" key={i}>
+                    <p lang="th">{row.th || "—"}</p>
+                    <p lang="en">{row.en || "—"}</p>
+                  </div>
+                )) : (
+                  <div className="document-language-columns">
+                    <section lang="th"><h3>ภาษาไทย</h3>{thaiParagraphs.map((text, i) => <p key={i}>{text}</p>)}</section>
+                    <section lang="en"><h3>English</h3>{englishParagraphs.map((text, i) => <p key={i}>{text}</p>)}</section>
+                  </div>
+                )}
               {currentQuestions.length > 0 && <div className="document-screening"><b>คำถามก่อนรับบริการ / Pre-treatment questions</b>{currentQuestions.map((question,i)=><div className="document-screening-row" key={question.th}><p>{question.th}<small>{question.en}</small></p><span className={screening[i]?.answer === false ? "checked" : ""}>ไม่มี / No {screening[i]?.answer === false ? "☑" : "☐"}</span><span className={screening[i]?.answer === true ? "checked" : ""}>มี / Yes {screening[i]?.answer === true ? "☑" : "☐"}</span>{screening[i]?.answer === true && <small>รายละเอียด / Details: {screening[i]?.detail || "ไม่ได้ระบุ"}</small>}</div>)}</div>}
             </div>
             <div className="document-signatures">

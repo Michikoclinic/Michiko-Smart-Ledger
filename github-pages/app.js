@@ -27,9 +27,9 @@ let phraseUsage={};
 let showAllPhrases=false;
 try{frequentPhrases=JSON.parse(localStorage.getItem(phraseStorageKey)||"[]").filter(item=>typeof item==="string")}catch{frequentPhrases=[]}
 try{phraseUsage=JSON.parse(localStorage.getItem(phraseUsageKey)||"{}")}catch{phraseUsage={}}
-const money=n=>new Intl.NumberFormat("th-TH",{maximumFractionDigits:0}).format(n||0);
-const parseMoney=value=>Number(String(value??"").replace(/,/g,""))||0;
-const formatMoneyInput=value=>{const digits=String(value??"").replace(/\D/g,"").replace(/^0+(?=\d)/,"");return digits?Number(digits).toLocaleString("en-US"):""};
+const money=value=>{const number=Number(value)||0;const hasSatang=Math.round(Math.abs(number)*100)%100!==0;return new Intl.NumberFormat("th-TH",{minimumFractionDigits:hasSatang?2:0,maximumFractionDigits:2}).format(number)};
+const parseMoney=value=>{const number=Number(String(value??"").replace(/,/g,""));return Number.isFinite(number)?Math.round(number*100)/100:0};
+const formatMoneyInput=value=>{const raw=String(value??"").replace(/,/g,"").replace(/[^\d.]/g,"");if(!raw)return "";const hasDecimal=raw.includes(".");const [wholePart,...decimalParts]=raw.split(".");const whole=(wholePart||"0").replace(/^0+(?=\d)/,"");const formattedWhole=Number(whole||0).toLocaleString("en-US");if(!hasDecimal)return formattedWhole;return `${formattedWhole}.${decimalParts.join("").slice(0,2)}`};
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
 function formatNumbersInText(text){return String(text).replace(/\d[\d,]*/g,(token,offset,source)=>{const previous=source[offset-1]||"";const next=source[offset+token.length]||"";const digits=token.replace(/,/g,"");if(/[A-Za-z]/.test(previous)||/[A-Za-z]/.test(next))return digits;return digits.length>=4?Number(digits).toLocaleString("en-US"):token})}
 const calculationNumber=value=>Number(String(value??"").replace(/,/g,""))||0;
@@ -89,7 +89,7 @@ document.querySelector("#previousDate").onclick=()=>moveDate(-1);
 document.querySelector("#nextDate").onclick=()=>moveDate(1);
 const modal=document.querySelector("#modal");
 const monthModal=document.querySelector("#monthModal");
-document.querySelectorAll(".payment-amount,.month-input-grid input").forEach(input=>{input.type="text";input.inputMode="numeric";input.addEventListener("input",()=>{input.value=formatMoneyInput(input.value)})});
+document.querySelectorAll(".payment-amount,.month-input-grid input").forEach(input=>{input.type="text";input.inputMode="decimal";input.addEventListener("input",()=>{input.value=formatMoneyInput(input.value)})});
 document.querySelectorAll("[data-payment]").forEach(box=>box.addEventListener("change",()=>{const option=box.closest(".payment-option");const amount=option.querySelector(".payment-amount");option.classList.toggle("selected",box.checked);amount.disabled=!box.checked;if(box.checked)amount.focus();else amount.value=""}));
 const entryForm=document.querySelector("#entryForm");
 const detailInput=entryForm.elements.detail;

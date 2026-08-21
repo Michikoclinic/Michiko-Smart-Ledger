@@ -49,7 +49,6 @@ type Rec = Patient & {
   screening?: Array<{ answer: boolean | null; detail: string }>;
   answers?: Record<string, ConsentAnswer>;
   consentVersion?: string;
-  physicianSignatureImage?: string;
 };
 const patients: Patient[] = [
   { hn: "HN01284", name: "สมหญิง ใจดี", birth: "12 มี.ค. 2533" },
@@ -1047,7 +1046,6 @@ export default function Home() {
                 <span>{patient.name}</span>
                 <small>ลงนามอิเล็กทรอนิกส์ {signedAt}</small>
               </div>
-              {currentDefinition.physicianSignature === "supported" && <div className="physician-signature-placeholder"><b>ลายมือชื่อแพทย์หรือพยาบาล / Physician or Nurse Signature</b><span>สำหรับเจ้าหน้าที่ผู้ให้การรักษา</span><small>Staff completion required where applicable</small></div>}
             </div>
             <footer>
               มิชิโกะ คลินิกเวชกรรม &nbsp; | &nbsp; MICHIKO Aesthetics

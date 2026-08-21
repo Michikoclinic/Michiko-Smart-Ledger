@@ -32,7 +32,6 @@ export type ConsentDefinition = {
   acknowledgement: BilingualText;
   translationReviewRequired: boolean;
   contentConflicts: string[];
-  physicianSignature: "none" | "supported";
 };
 export type ConsentAnswer = { value: string; detail?: string };
 
@@ -46,19 +45,18 @@ type ConsentMetadata = {
   group: string;
   th?: string;
   en?: string;
-  physician?: boolean;
   review?: boolean;
 };
 
 const metadata: ConsentMetadata[] = [
-  { id: "filler", title: { th: "ฉีดฟิลเลอร์ Hyaluronic Acid", en: "Hyaluronic Acid Filler Injection" }, group: "หัตถการฉีด", th: "01_ฉีดฟิลเลอร์_Filler_3.docx", physician: true },
-  { id: "filler-permanent", title: { th: "ฉีดฟิลเลอร์ กรณีมีสารไม่สลาย", en: "Filler Injection with Existing Permanent Filler" }, group: "หัตถการฉีด", th: "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดฟิลเลอร์ (กรณีคนไข้มีสารไม่สลายอยู่บนใบหน้า).docx", physician: true },
-  { id: "botox", title: { th: "ฉีดโบท็อก", en: "Botulinum Toxin Type A Injection" }, group: "หัตถการฉีด", th: "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดโบท็อก.docx", en: "(ENG) แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดโบท็อก.docx", physician: true },
-  { id: "sculptra", title: { th: "ฉีด Sculptra / PLLA", en: "Sculptra / PLLA Injection" }, group: "หัตถการฉีด", th: "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีด Sculptra.docx", en: "(ENG) แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีด Sculptra.docx", physician: true },
-  { id: "dissolve", title: { th: "ฉีดสลายฟิลเลอร์", en: "Hyaluronidase Filler Dissolving Injection" }, group: "หัตถการฉีด", th: "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดสลายฟิลเลอร์.docx", en: "(Eng) แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดสลายฟิลเลอร์.docx", physician: true },
-  { id: "ultraformer", title: { th: "Ultraformer III", en: "Ultraformer III Treatment" }, group: "เครื่องมือยกกระชับ", th: "(TH) แบบฟอร์มการเข้ารับการรักษาด้วย Ultraformer III.docx", en: "(ENG) แบบฟอร์มการเข้ารับการรักษาด้วย Ultraformer III.docx", physician: true },
+  { id: "filler", title: { th: "ฉีดฟิลเลอร์ Hyaluronic Acid", en: "Hyaluronic Acid Filler Injection" }, group: "หัตถการฉีด", th: "01_ฉีดฟิลเลอร์_Filler_3.docx" },
+  { id: "filler-permanent", title: { th: "ฉีดฟิลเลอร์ กรณีมีสารไม่สลาย", en: "Filler Injection with Existing Permanent Filler" }, group: "หัตถการฉีด", th: "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดฟิลเลอร์ (กรณีคนไข้มีสารไม่สลายอยู่บนใบหน้า).docx" },
+  { id: "botox", title: { th: "ฉีดโบท็อก", en: "Botulinum Toxin Type A Injection" }, group: "หัตถการฉีด", th: "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดโบท็อก.docx", en: "(ENG) แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดโบท็อก.docx" },
+  { id: "sculptra", title: { th: "ฉีด Sculptra / PLLA", en: "Sculptra / PLLA Injection" }, group: "หัตถการฉีด", th: "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีด Sculptra.docx", en: "(ENG) แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีด Sculptra.docx" },
+  { id: "dissolve", title: { th: "ฉีดสลายฟิลเลอร์", en: "Hyaluronidase Filler Dissolving Injection" }, group: "หัตถการฉีด", th: "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดสลายฟิลเลอร์.docx", en: "(Eng) แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดสลายฟิลเลอร์.docx" },
+  { id: "ultraformer", title: { th: "Ultraformer III", en: "Ultraformer III Treatment" }, group: "เครื่องมือยกกระชับ", th: "(TH) แบบฟอร์มการเข้ารับการรักษาด้วย Ultraformer III.docx", en: "(ENG) แบบฟอร์มการเข้ารับการรักษาด้วย Ultraformer III.docx" },
   { id: "xerf", title: { th: "XERF", en: "XERF Treatment" }, group: "เครื่องมือยกกระชับ", en: "(Eng) Xerf-แบบฟอร์มแสดงความยินยอมเข้ารับบริการ.docx" },
-  { id: "nose-thread", title: { th: "ร้อยไหมจมูก", en: "Nose Thread Lift" }, group: "หัตถการร้อยไหม", th: "ร้อยไหมจมูก-แบบฟอร์มแสดงความยินยอม.docx", physician: true },
+  { id: "nose-thread", title: { th: "ร้อยไหมจมูก", en: "Nose Thread Lift" }, group: "หัตถการร้อยไหม", th: "ร้อยไหมจมูก-แบบฟอร์มแสดงความยินยอม.docx" },
   { id: "full-review", title: { th: "ยินยอมเป็นเคสรีวิว แบบเต็ม", en: "Full Photo / Video / Review Consent" }, group: "การใช้ภาพและรีวิว", th: "แบบฟอร์มการยินยอมเป็นเคสรีวิว (Full review).docx", en: "(ENG) แบบฟอร์มการยินยอมเป็นเคสรีวิว (Full review).docx", review: true },
   { id: "photo-review", title: { th: "ยินยอมเป็นเคสรีวิว เฉพาะภาพ", en: "Photo Review Consent" }, group: "การใช้ภาพและรีวิว", th: "แบบฟอร์มการยินยอมเป็นเคสรีวิว (เฉพาะภาพ).docx", review: true },
 ];
@@ -249,7 +247,6 @@ export const consentDefinitions: ConsentDefinition[] = metadata.map((item) => {
     acknowledgement,
     translationReviewRequired: paired.review,
     contentConflicts: paired.conflicts,
-    physicianSignature: item.physician ? "supported" : "none",
   };
 });
 

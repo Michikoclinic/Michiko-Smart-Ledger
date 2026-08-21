@@ -307,10 +307,16 @@ export default function Home() {
         if (!refreshResponse.ok || !refreshed.access_token || !refreshed.refresh_token) {
           throw new Error("expired session");
         }
-        localStorage.setItem(STAFF_SESSION_KEY, JSON.stringify(refreshed));
-        setStaffSession(refreshed.access_token);
+        const nextSession: StaffSession = {
+          access_token: refreshed.access_token,
+          refresh_token: refreshed.refresh_token,
+          ...(typeof refreshed.expires_at === "number" ? { expires_at: refreshed.expires_at } : {}),
+        };
+        localStorage.setItem(STAFF_SESSION_KEY, JSON.stringify(nextSession));
+        setStaffSession(nextSession.access_token);
       } catch {
         localStorage.removeItem(STAFF_SESSION_KEY);
+        setStaffSession("");
       } finally {
         setAuthChecked(true);
       }
@@ -328,8 +334,13 @@ export default function Home() {
       });
       const result = (await response.json()) as Partial<StaffSession> & { error_description?: string; msg?: string };
       if (!response.ok || !result.access_token || !result.refresh_token) throw new Error(result.error_description || result.msg || "รหัสผ่านไม่ถูกต้อง");
-      localStorage.setItem(STAFF_SESSION_KEY, JSON.stringify(result));
-      setStaffSession(result.access_token);
+      const session: StaffSession = {
+        access_token: result.access_token,
+        refresh_token: result.refresh_token,
+        ...(typeof result.expires_at === "number" ? { expires_at: result.expires_at } : {}),
+      };
+      localStorage.setItem(STAFF_SESSION_KEY, JSON.stringify(session));
+      setStaffSession(session.access_token);
     } catch (error) {
       setAuthError(error instanceof Error ? error.message : "เข้าสู่ระบบไม่สำเร็จ");
     } finally {
@@ -694,6 +705,7 @@ export default function Home() {
         <button className="staff-logout" onClick={() => {
           localStorage.removeItem(STAFF_SESSION_KEY);
           setStaffSession("");
+          setAuthError("");
         }}>ออกจากระบบ</button>
       </aside>
       <main>

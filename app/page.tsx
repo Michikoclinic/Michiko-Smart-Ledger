@@ -25,6 +25,12 @@ const DRIVE_FOLDER_ID = "1G-egL6keG6dadSrf5Zre4NWDUwD9N6at";
 const SUPABASE_URL = "https://ssbohutktcxshylobysr.supabase.co";
 const SUPABASE_KEY = "sb_publishable_6C8m3Uv_IY9okF2wXVr5kg_l-2-_VhV";
 const STAFF_EMAIL = "customerservice@michikoclinic.com";
+const STAFF_SESSION_KEY = "michiko-staff-session";
+type StaffSession = {
+  access_token: string;
+  refresh_token: string;
+  expires_at?: number;
+};
 type Patient = { hn: string; name: string; birth: string };
 type Rec = Patient & {
   id: number;
@@ -276,20 +282,40 @@ export default function Home() {
   useEffect(() => {
     const s = localStorage.getItem("michiko-consents");
     if (s) setRecs(JSON.parse(s));
-    const token = localStorage.getItem("michiko-staff-session") || "";
-    if (!token) {
+    const storedSession = localStorage.getItem(STAFF_SESSION_KEY);
+    if (!storedSession) {
       setAuthChecked(true);
       return;
     }
-    fetch(`${SUPABASE_URL}/auth/v1/user`, {
-      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}` },
-    })
-      .then((response) => {
-        if (!response.ok) throw new Error("expired");
-        setStaffSession(token);
-      })
-      .catch(() => localStorage.removeItem("michiko-staff-session"))
-      .finally(() => setAuthChecked(true));
+    const restoreSession = async () => {
+      try {
+        const session = JSON.parse(storedSession) as StaffSession;
+        if (!session.access_token || !session.refresh_token) throw new Error("invalid session");
+        const userResponse = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+          headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${session.access_token}` },
+        });
+        if (userResponse.ok) {
+          setStaffSession(session.access_token);
+          return;
+        }
+        const refreshResponse = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=refresh_token`, {
+          method: "POST",
+          headers: { apikey: SUPABASE_KEY, "Content-Type": "application/json" },
+          body: JSON.stringify({ refresh_token: session.refresh_token }),
+        });
+        const refreshed = (await refreshResponse.json()) as Partial<StaffSession>;
+        if (!refreshResponse.ok || !refreshed.access_token || !refreshed.refresh_token) {
+          throw new Error("expired session");
+        }
+        localStorage.setItem(STAFF_SESSION_KEY, JSON.stringify(refreshed));
+        setStaffSession(refreshed.access_token);
+      } catch {
+        localStorage.removeItem(STAFF_SESSION_KEY);
+      } finally {
+        setAuthChecked(true);
+      }
+    };
+    void restoreSession();
   }, []);
   const signInStaff = async (password: string) => {
     setAuthBusy(true);
@@ -300,9 +326,9 @@ export default function Home() {
         headers: { apikey: SUPABASE_KEY, "Content-Type": "application/json" },
         body: JSON.stringify({ email: STAFF_EMAIL, password }),
       });
-      const result = (await response.json()) as { access_token?: string; error_description?: string; msg?: string };
-      if (!response.ok || !result.access_token) throw new Error(result.error_description || result.msg || "รหัสผ่านไม่ถูกต้อง");
-      localStorage.setItem("michiko-staff-session", result.access_token);
+      const result = (await response.json()) as Partial<StaffSession> & { error_description?: string; msg?: string };
+      if (!response.ok || !result.access_token || !result.refresh_token) throw new Error(result.error_description || result.msg || "รหัสผ่านไม่ถูกต้อง");
+      localStorage.setItem(STAFF_SESSION_KEY, JSON.stringify(result));
       setStaffSession(result.access_token);
     } catch (error) {
       setAuthError(error instanceof Error ? error.message : "เข้าสู่ระบบไม่สำเร็จ");
@@ -666,7 +692,7 @@ export default function Home() {
           </span>
         </div>
         <button className="staff-logout" onClick={() => {
-          localStorage.removeItem("michiko-staff-session");
+          localStorage.removeItem(STAFF_SESSION_KEY);
           setStaffSession("");
         }}>ออกจากระบบ</button>
       </aside>

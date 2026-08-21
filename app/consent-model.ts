@@ -146,10 +146,29 @@ function toSections(items: BilingualText[]): ConsentSection[] {
 
 const yesNo = (id: string, th: string, en: string, detail = true): ConsentQuestion => ({
   id, label: { th, en }, type: "yes_no", required: true,
-  options: [
-    { value: "no", label: { th: "ไม่มี / ไม่", en: "No" } },
-    { value: "yes", label: { th: "มี / ใช่", en: "Yes" } },
-  ],
+  options: (() => {
+    const wording = `${th} ${en}`;
+    if (/ยินยอม|consent/i.test(wording)) return [
+      { value: "no", label: { th: "ไม่ยินยอม", en: "No" } },
+      { value: "yes", label: { th: "ยินยอม", en: "Yes" } },
+    ];
+    if (/เคย|previously|history of|have you (?:had|been|received|taken)/i.test(wording)) return [
+      { value: "no", label: { th: "ไม่เคย", en: "No" } },
+      { value: "yes", label: { th: "เคย", en: "Yes" } },
+    ];
+    if (/ต้องการ|would you like/i.test(wording)) return [
+      { value: "no", label: { th: "ไม่ต้องการ", en: "No" } },
+      { value: "yes", label: { th: "ต้องการ", en: "Yes" } },
+    ];
+    if (/มี|กำลัง|รับประทาน|do you have|are you|do you (?:take|regularly)/i.test(wording)) return [
+      { value: "no", label: { th: "ไม่มี", en: "No" } },
+      { value: "yes", label: { th: "มี", en: "Yes" } },
+    ];
+    return [
+      { value: "no", label: { th: "ไม่ใช่", en: "No" } },
+      { value: "yes", label: { th: "ใช่", en: "Yes" } },
+    ];
+  })(),
   ...(detail ? { detailWhen: ["yes"], detailLabel: { th: "โปรดระบุ", en: "Please specify" }, detailType: "text" as const } : {}),
 });
 const consentChoice = (id: string, th: string, en: string): ConsentQuestion => ({

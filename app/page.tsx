@@ -187,19 +187,14 @@ export default function Home() {
   const currentForm =
     consentForms.find((f) => f.id === formId) ?? consentForms[0];
   const currentDefinition = consentDefinitionById[currentForm.id] ?? consentDefinitions[0];
-  const currentConfirms = [
-    {
-      h: "การรับทราบและยินยอม / Acknowledgement & Consent",
-      p: `${currentDefinition.acknowledgement.th} / ${currentDefinition.acknowledgement.en}`,
-      yes: "ข้าพเจ้าได้อ่านและยอมรับข้อความข้างต้น",
-    },
-  ];
   const currentQuestions = currentDefinition.questions.filter((question) => !question.showWhen || answers[question.showWhen.questionId]?.value === question.showWhen.value);
   const screeningIncomplete = currentQuestions.some((question) => {
     const answer = answers[question.id];
     if (question.required && !answer?.value) return true;
     return Boolean(answer?.value && question.detailWhen?.includes(answer.value) && !answer.detail?.trim());
   });
+  const signatureReady = !screeningIncomplete && ans[0] === true;
+  const canSubmitConsent = signatureReady && signed && Boolean(signatureImage) && (!currentForm.review || Boolean(idPhoto));
   const startForm = (id: string) => {
     const f = consentForms.find((x) => x.id === id);
     setFormId(id);
@@ -680,12 +675,12 @@ export default function Home() {
                         )}
                         <div className="screening-buttons">
                           {(question.options ?? []).map((option) => (
-                            <button key={option.value} className={answer?.value === option.value ? "selected" : ""} onClick={() => setAnswers((current) => {
+                            <button type="button" aria-pressed={answer?.value === option.value} key={option.value} className={`answer-choice ${answer?.value === option.value ? "selected" : ""}`} onClick={() => setAnswers((current) => {
                               const next = { ...current, [question.id]: { value: option.value, detail: question.detailWhen?.includes(option.value) ? current[question.id]?.detail || "" : "" } };
                               currentDefinition.questions.filter((candidate) => candidate.showWhen?.questionId === question.id && candidate.showWhen.value !== option.value).forEach((candidate) => delete next[candidate.id]);
                               return next;
                             })}>
-                              {option.label.th}<small>{option.label.en}</small>
+                              {answer?.value === option.value && <span className="choice-check" aria-hidden="true">✓</span>}<span>{option.label.th}</span><small>{option.label.en}</small>
                             </button>
                           ))}
                         </div>
@@ -758,71 +753,15 @@ export default function Home() {
                   </label>
                 </div>
               )}
-              <div className="confirm">
-                <em>
-                  {language === "th"
-                    ? "การตัดสินใจของผู้รับบริการ"
-                    : "YOUR DECISION"}
-                </em>
-                <h2>
-                  {language === "th"
-                    ? "กรุณายืนยันทีละข้อ"
-                    : "Please confirm each item"}
-                </h2>
-                <p>
-                  {language === "th"
-                    ? "อ่านข้อความให้ครบก่อนเลือก การเลือก “ไม่ยินยอม” จะหยุดขั้นตอนและแจ้งเจ้าหน้าที่"
-                    : "Read each statement before selecting. Choosing decline will stop the process and notify staff."}
-                </p>
-                {currentConfirms.map((c, i) => (
-                  <div
-                    className={`choice ${ans[i] === false ? "declined" : ""}`}
-                    key={c.h}
-                  >
-                    <i>{i + 1}</i>
-                    <div>
-                      <h3>{c.h}</h3>
-                      <p>{c.p}</p>
-                      <div className="buttons">
-                        <button
-                          className={ans[i] === true ? "yes" : ""}
-                          onClick={() =>
-                            setAns((a) => a.map((x, j) => (j === i ? true : x)))
-                          }
-                        >
-                          ✓ {language === "th" ? c.yes : "I consent"}
-                        </button>
-                        <button
-                          className={ans[i] === false ? "no" : ""}
-                          onClick={() =>
-                            setAns((a) =>
-                              a.map((x, j) => (j === i ? false : x)),
-                            )
-                          }
-                        >
-                          ×{" "}
-                          {language === "th" ? "ไม่ยินยอม" : "I do not consent"}
-                        </button>
-                      </div>
-                      {ans[i] === false && (
-                        <mark>
-                          {language === "th"
-                            ? "กรุณาแจ้งเจ้าหน้าที่ก่อนดำเนินการต่อ"
-                            : "Please contact a staff member before continuing."}
-                        </mark>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="consent-signature-card">
+              <div className="confirm final-agreement"><em>การรับทราบและยินยอม / Acknowledgement &amp; Consent</em><h2>ยืนยันการอ่านเอกสาร</h2><p>{currentDefinition.acknowledgement.th}</p><p lang="en">{currentDefinition.acknowledgement.en}</p><button type="button" aria-pressed={ans[0] === true} className={`final-agreement-button ${ans[0] === true ? "selected" : ""}`} onClick={() => { const next = ans[0] === true ? null : true; setAns([next]); if (next !== true) { setSigned(false); setSignatureImage(""); setSignedAt(""); } }}><span>{ans[0] === true ? "✓ ยืนยันแล้ว — ข้าพเจ้าได้อ่านและยอมรับ" : "ยืนยันว่าได้อ่านและยอมรับ"}</span><small>{ans[0] === true ? "Confirmed — I have read and agree" : "I have read and agree"}</small></button></div>
+              <div className={`consent-signature-card ${signatureReady ? "ready" : "locked"}`}>
                 <div>
                   <em>ลายมือชื่อผู้รับบริการ / Patient Signature</em>
-                  <h2>{signed ? "บันทึกลายมือชื่อแล้ว" : "ลงลายมือชื่อหลังอ่านและยอมรับข้อมูล"}</h2>
-                  <p>รองรับนิ้วมือ เมาส์ Stylus และ Apple Pencil</p>
+                  <h2>{signed ? "บันทึกลายมือชื่อแล้ว" : signatureReady ? "พร้อมสำหรับลงลายมือชื่อ" : "กรุณาตอบคำถามและยืนยันการอ่านก่อน"}</h2>
+                  <p>{signatureReady ? "รองรับนิ้วมือ เมาส์ Stylus และ Apple Pencil" : "Please complete the questions and agreement first."}</p>
                   {signatureImage && <img src={signatureImage} alt="ตัวอย่างลายมือชื่อผู้รับบริการ" />}
                 </div>
-                <button className={signed ? "secondary-light" : "primary"} onClick={() => {
+                <button disabled={!signatureReady} className={signed ? "secondary-light" : "primary"} onClick={() => {
                   setValidationAttempted(true);
                   if (screeningIncomplete) {
                     requestAnimationFrame(() => document.querySelector<HTMLElement>("[data-question-error='true']")?.scrollIntoView({ behavior: "smooth", block: "center" }));
@@ -838,7 +777,8 @@ export default function Home() {
               <div className="submit">
                 <span>บันทึกข้อมูลก่อน แล้วจึงเลือกปริ้นหรือบันทึก PDF ภายหลังได้</span>
                 <button
-                  className="primary"
+                  disabled={!canSubmitConsent}
+                  className="primary consent-submit"
                   onClick={submitConsent}
                 >
                   ยืนยันและส่งแบบฟอร์ม <small>Confirm &amp; Submit</small>{" "}

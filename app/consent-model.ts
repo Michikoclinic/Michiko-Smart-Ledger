@@ -93,9 +93,9 @@ function pairedInline(lines: string[]) {
       items.push({ th: line, en: lines[index + 1] });
       index += 1;
     } else {
-      items.push(mostlyEnglish(line)
-        ? { th: "[ต้องจัดทำคำแปลภาษาไทยและให้ผู้เชี่ยวชาญตรวจรับรอง]", en: line }
-        : { th: line, en: "[English translation requires clinical and legal review]" });
+      // Keep unverified counterparts empty in the patient-facing model. The
+      // review state remains available on the definition for staff/developers.
+      items.push(mostlyEnglish(line) ? { th: "", en: line } : { th: line, en: "" });
     }
   }
   return items;
@@ -113,8 +113,8 @@ function pairContent(thFile?: string, enFile?: string) {
   const thSourceIsEnglish = Boolean(th.length && englishRatio(th) > 0.7);
   const count = Math.max(th.length, en.length);
   const items = Array.from({ length: count }, (_, index) => ({
-    th: (!thSourceIsEnglish && th[index]) || "[ต้องจัดทำคำแปลภาษาไทยและให้ผู้เชี่ยวชาญตรวจรับรอง]",
-    en: en[index] || "[English translation requires clinical and legal review]",
+    th: (!thSourceIsEnglish && th[index]) || "",
+    en: en[index] || "",
   }));
   const conflicts = th.length && en.length && th.length !== en.length
     ? [`จำนวนข้อความ TH (${th.length}) และ EN (${en.length}) ไม่เท่ากัน ต้องตรวจการจับคู่เชิงความหมาย`]
@@ -123,7 +123,7 @@ function pairContent(thFile?: string, enFile?: string) {
   return { items, conflicts, review: !th.length || !en.length || thSourceIsEnglish };
 }
 
-function toSections(items: BilingualText[], review: boolean): ConsentSection[] {
+function toSections(items: BilingualText[]): ConsentSection[] {
   const sections: ConsentSection[] = [];
   let current: ConsentSection = {
     id: "important-information",
@@ -143,12 +143,6 @@ function toSections(items: BilingualText[], review: boolean): ConsentSection[] {
     }
   });
   if (current.items.length || !sections.length) sections.push(current);
-  if (review) sections.unshift({
-    id: "translation-review",
-    type: "text",
-    title: { th: "สถานะการแปล", en: "Translation Status" },
-    items: [{ th: "ต้นฉบับมีเพียงภาษาเดียว เนื้อหาอีกภาษาต้องได้รับการตรวจรับรองจากผู้เชี่ยวชาญก่อนใช้งานจริง", en: "The source exists in one language only. The counterpart requires clinical and legal review before production use." }],
-  });
   return sections;
 }
 
@@ -187,6 +181,7 @@ const questions: Record<string, ConsentQuestion[]> = {
     ] },
     yesNo("supplements", "รับประทานวิตามิน E น้ำมันปลา โอเมก้า 3 วิตามินรวม หรือใบแป๊ะก๊วยเป็นประจำหรือไม่?", "Do you regularly take vitamin E, fish oil, omega-3, multivitamins, or ginkgo?"),
     { ...yesNo("blood-thinner", "รับประทานแอสไพริน ไอบูโพรเฟน หรือยาต้านการแข็งตัวของเลือดหรือไม่?", "Do you take aspirin, ibuprofen, or blood-thinning medication?"), detailLabel: { th: "รับประทานครั้งล่าสุดเมื่อ", en: "Last taken" }, detailType: "date" },
+    { id: "last-menstrual-period", label: { th: "ประจำเดือนครั้งสุดท้ายเมื่อใด?", en: "When was your last menstrual period?" }, type: "date", required: true },
     yesNo("pregnancy-plan", "อยู่ในช่วงวางแผนตั้งครรภ์หรือไม่?", "Are you planning a pregnancy?", false),
     yesNo("facial-skin-condition", "มีโรคผิวหนังหรือกำลังใช้ยารักษาผิวบริเวณใบหน้าหรือไม่?", "Do you have a facial skin condition or use medication for it?"),
     yesNo("topical-anesthesia", "ยินยอมรับการทายาระงับความรู้สึกก่อนหรือระหว่างการรักษาหรือไม่?", "Do you consent to topical anesthesia before or during treatment?", false),
@@ -200,16 +195,16 @@ const questions: Record<string, ConsentQuestion[]> = {
     yesNo("injectable-anesthesia", "ยินยอมให้ใช้ยาระงับความรู้สึกชนิดฉีดก่อนหรือระหว่างการรักษาหรือไม่?", "Do you consent to injectable anesthesia before or during treatment?", false),
   ],
   dissolve: [
+    consentChoice("treatment-consent", "ยินยอมรับการรักษาด้วยการฉีดสารสลายฟิลเลอร์ในครั้งนี้หรือไม่?", "Do you consent to hyaluronidase treatment to dissolve filler in this session?"),
     yesNo("non-ha-filler", "เคยฉีดฟิลเลอร์ปลอม ซิลิโคนเหลว หรือสารที่ไม่ใช่ Hyaluronic Acid หรือไม่?", "Have you received fake filler, liquid silicone, or a non-HA substance?"),
     yesNo("allergy-test", "ต้องการทดสอบการแพ้ก่อนฉีดหรือไม่?", "Would you like an allergy test before injection?", false),
     yesNo("topical-anesthesia", "ยินยอมรับการทายาระงับความรู้สึกก่อนหรือระหว่างการรักษาหรือไม่?", "Do you consent to topical numbing cream before or during treatment?", false),
     yesNo("injectable-anesthetic-allergy", "มีประวัติแพ้ยาชาชนิดฉีดหรือไม่?", "Do you have a history of allergy to injectable anesthetic?"),
   ],
   ultraformer: [
-    yesNo("image-education", "ยินยอมให้ใช้ภาพเพื่อการศึกษา หรือบันทึกผลการรักษาหรือไม่?", "Do you consent to image use for education or treatment records?", false),
-    yesNo("information-explained", "ได้รับคำอธิบายข้อมูลจากแพทย์หรือคลินิกและเข้าใจแล้วหรือไม่?", "Has the physician or clinic explained the information, and do you understand it?", false),
-    yesNo("voluntary-information", "ยืนยันว่าไม่ได้ถูกบังคับให้ให้ข้อมูลเกี่ยวกับการรักษาหรือไม่?", "Do you confirm that you were not coerced into providing treatment information?", false),
-    yesNo("result-reference", "เข้าใจว่าแพทย์อาจใช้ภาพอ้างอิงผลการรักษาหรือการเปลี่ยนแปลงของใบหน้าหรือไม่?", "Do you understand that images may be used to reference treatment results or facial changes?", false),
+    consentChoice("physician-procedure", "ยินยอมให้แพทย์เป็นผู้ดำเนินหัตถการหรือไม่?", "Do you consent to the physician performing the procedure?"),
+    consentChoice("photo-video-recording", "ยินยอมให้คลินิกถ่ายภาพหรือวิดีโอก่อน ระหว่าง และหลังหัตถการหรือไม่?", "Do you consent to the clinic photographing or recording video before, during, and after the procedure?"),
+    consentChoice("education-sharing", "ยินยอมให้ใช้ภาพหรือวิดีโอเพื่อการศึกษาและแบ่งปันกับแพทย์หรือเจ้าหน้าที่ของ Michiko Clinic หรือไม่?", "Do you consent to appropriate educational use and sharing with Michiko Clinic doctors and staff?"),
   ],
   xerf: [
     yesNo("implanted-device", "มีเครื่องกระตุ้นหัวใจหรืออุปกรณ์อิเล็กทรอนิกส์ฝังในร่างกายหรือไม่?", "Do you have a pacemaker or another implanted electronic device?"),
@@ -248,7 +243,7 @@ export const consentDefinitions: ConsentDefinition[] = metadata.map((item) => {
     group: item.group,
     review: item.review ?? false,
     sources: { th: item.th, ...(item.en ? { en: item.en } : {}) },
-    sections: toSections(sectionItems, paired.review),
+    sections: toSections(sectionItems),
     questions: questions[item.id] ?? [],
     acknowledgement,
     translationReviewRequired: paired.review,

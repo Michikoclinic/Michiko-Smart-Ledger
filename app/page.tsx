@@ -639,11 +639,6 @@ export default function Home() {
                 </p>
               </div>
               <div className="source-content">
-                {currentDefinition.translationReviewRequired && (
-                  <div className="translation-review-note">
-                    เนื้อหาบางส่วนมีต้นฉบับเพียงภาษาเดียว คำแปลต้องได้รับการตรวจรับรองทางการแพทย์และกฎหมายก่อนใช้งานจริง
-                  </div>
-                )}
                 {currentDefinition.sections.map((section) => (
                   <section className={`consent-section ${section.type}`} key={section.id}>
                     <header>
@@ -673,6 +668,17 @@ export default function Home() {
                       <div>
                         <b>{question.label.th}{question.required && " *"}</b>
                         <small>{question.label.en}</small>
+                        {(question.type === "date" || question.type === "text") && (
+                          <input
+                            className="question-direct-input"
+                            type={question.type}
+                            value={answer?.value || ""}
+                            onChange={(event) => setAnswers((current) => ({
+                              ...current,
+                              [question.id]: { value: event.target.value },
+                            }))}
+                          />
+                        )}
                         <div className="screening-buttons">
                           {(question.options ?? []).map((option) => (
                             <button key={option.value} className={answer?.value === option.value ? "selected" : ""} onClick={() => setAnswers((current) => {

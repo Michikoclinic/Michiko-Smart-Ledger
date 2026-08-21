@@ -26,10 +26,11 @@ type Patient = { hn: string; name: string; birth: string };
 type Rec = Patient & {
   id: number;
   signedAt: string;
-  status: "uploading" | "completed" | "upload_failed";
+  status: "saved" | "uploading" | "completed" | "upload_failed";
   fileId?: string;
   driveUrl?: string;
   formName?: string;
+  formId?: string;
   language?: "th" | "en";
   signatureImage?: string;
   screening?: Array<{ answer: boolean | null; detail: string }>;
@@ -53,14 +54,15 @@ const consentForms: {
     name: "ฉีดฟิลเลอร์",
     en: "Filler Injection",
     group: "หัตถการฉีด",
-    bilingual: false,
+    bilingual: true,
     thFile: "01_ฉีดฟิลเลอร์_Filler_3.docx",
   },
   {
     id: "filler-permanent",
     name: "ฉีดฟิลเลอร์ — กรณีมีสารไม่สลาย",
+    en: "Filler Injection with Existing Permanent Filler",
     group: "หัตถการฉีด",
-    bilingual: false,
+    bilingual: true,
     thFile:
       "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดฟิลเลอร์ (กรณีคนไข้มีสารไม่สลายอยู่บนใบหน้า).docx",
   },
@@ -105,14 +107,15 @@ const consentForms: {
     name: "Xerf",
     en: "Xerf Treatment",
     group: "เครื่องมือยกกระชับ",
-    bilingual: false,
+    bilingual: true,
     enFile: "(Eng) Xerf-แบบฟอร์มแสดงความยินยอมเข้ารับบริการ.docx",
   },
   {
     id: "nose-thread",
     name: "ร้อยไหมจมูก",
+    en: "Nose Thread Lift",
     group: "หัตถการร้อยไหม",
-    bilingual: false,
+    bilingual: true,
     thFile: "ร้อยไหมจมูก-แบบฟอร์มแสดงความยินยอม.docx",
   },
   {
@@ -128,8 +131,9 @@ const consentForms: {
   {
     id: "photo-review",
     name: "ยินยอมเป็นเคสรีวิว — เฉพาะภาพ",
+    en: "Photo Review Consent",
     group: "การใช้ภาพและรีวิว",
-    bilingual: false,
+    bilingual: true,
     review: true,
     thFile: "แบบฟอร์มการยินยอมเป็นเคสรีวิว (เฉพาะภาพ).docx",
   },
@@ -198,13 +202,14 @@ export default function Home() {
     [signed, setSigned] = useState(false),
     [recs, setRecs] = useState<Rec[]>([]),
     [notice, setNotice] = useState(""),
-    [fail, setFail] = useState(false),
     [formId, setFormId] = useState("filler"),
     [language, setLanguage] = useState<"th" | "en">("th"),
     [idPhoto, setIdPhoto] = useState<string>(""),
     [signatureImage, setSignatureImage] = useState(""),
     [signedAt, setSignedAt] = useState(""),
-    [showDocument, setShowDocument] = useState(false);
+    [showDocument, setShowDocument] = useState(false),
+    [activeRecordId, setActiveRecordId] = useState<number | null>(null),
+    [pdfBusy, setPdfBusy] = useState(false);
   const canvas = useRef<HTMLCanvasElement>(null),
     drawing = useRef(false);
   useEffect(() => {
@@ -251,8 +256,70 @@ export default function Home() {
     setView("consent");
     window.scrollTo(0, 0);
   };
-  const documentFile =
-    language === "en" ? currentForm.enFile : currentForm.thFile;
+  const paragraphsFor = (file?: string) => {
+    const document = consentDocuments.find((item) => item.file === file);
+    const blocks = (document?.blocks ?? []) as Array<{
+      type: string;
+      text?: string;
+      rows?: string[][];
+    }>;
+    return blocks
+      .flatMap((block) =>
+        block.type === "paragraph" && block.text
+          ? [block.text]
+          : block.type === "table"
+            ? (block.rows ?? []).map((row) => row.filter(Boolean).join(" · "))
+            : [],
+      )
+      .filter((text, index, all) => text && all.indexOf(text) === index)
+      .filter(
+        (text) =>
+          !text.includes("HN:") &&
+          !text.includes("ลายมือชื่อผู้รับบริการ") &&
+          !text.includes("Patient's Name:") &&
+          !text.includes("ข้อมูลผู้ป่วย:") &&
+          !text.includes("คำถามก่อนรับบริการ") &&
+          !text.includes("Pre-Treatment Questions") &&
+          !text.includes("มีโรคผิวหนัง") &&
+          !text.includes("กำลังตั้งครรภ์") &&
+          !text.includes("ยินยอมรับการทายาชา") &&
+          !text.includes("หนังสือแสดงความยินยอมเข้ารับการฉีดฟิลเลอร์") &&
+          !text.includes("มิชิโกะ คลินิกเวชกรรม |"),
+      );
+  };
+  const isMostlyEnglish = (text: string) =>
+    (text.match(/[A-Za-z]/g)?.length ?? 0) > text.length * 0.45;
+  const makeReferenceRows = (paragraphs: string[]) => {
+    const rows: Array<{ th: string; en: string }> = [];
+    for (let index = 0; index < paragraphs.length; index += 1) {
+      const text = paragraphs[index];
+      const englishDivider = /\s\/\s(?=[A-Za-z])/.exec(text);
+      const slash = englishDivider?.index ?? -1;
+      if (slash > -1) {
+        rows.push({ th: text.slice(0, slash), en: text.slice(slash + 3) });
+      } else if (!isMostlyEnglish(text) && isMostlyEnglish(paragraphs[index + 1] || "")) {
+        rows.push({ th: text, en: paragraphs[index + 1] });
+        index += 1;
+      } else {
+        rows.push(isMostlyEnglish(text) ? { th: "", en: text } : { th: text, en: "" });
+      }
+    }
+    return rows;
+  };
+  const thaiParagraphs = paragraphsFor(currentForm.thFile);
+  const englishParagraphs = paragraphsFor(currentForm.enFile);
+  const bilingualRows = currentForm.id === "filler"
+    ? makeReferenceRows(thaiParagraphs)
+    : Array.from(
+        { length: Math.max(thaiParagraphs.length, englishParagraphs.length) },
+        (_, index) => ({
+          th: thaiParagraphs[index] || "",
+          en: englishParagraphs[index] || "",
+        }),
+      );
+  const hasCompleteBilingualSource = currentForm.id === "filler" ||
+    Boolean(currentForm.thFile && currentForm.enFile);
+  const documentFile = language === "en" ? currentForm.enFile : currentForm.thFile;
   const currentDocument = consentDocuments.find((d) => d.file === documentFile);
   const rawBlocks = (currentDocument?.blocks ?? []) as Array<{
     type: string;
@@ -342,8 +409,10 @@ export default function Home() {
   const createPdf = async () => {
     const documentElement = document.querySelector<HTMLElement>(".signed-document");
     if (!documentElement) throw new Error("ไม่พบเอกสารสำหรับสร้าง PDF");
+    const isAppleTouch = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
     const canvasImage = await html2canvas(documentElement, {
-      scale: 2,
+      scale: isAppleTouch ? 1 : Math.min(window.devicePixelRatio || 1, 1.5),
       backgroundColor: "#ffffff",
       useCORS: true,
     });
@@ -366,6 +435,8 @@ export default function Home() {
   };
 
   const uploadRecord = async (record: Rec) => {
+    if (pdfBusy) return;
+    setPdfBusy(true);
     try {
       updateRecord(record.id, { status: "uploading" });
       await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
@@ -398,6 +469,8 @@ export default function Home() {
           ? `สร้าง PDF แล้ว แต่ยังส่งเข้า Drive ไม่สำเร็จ: ${error.message}`
           : "สร้าง PDF แล้ว แต่ยังส่งเข้า Drive ไม่สำเร็จ",
       );
+    } finally {
+      setPdfBusy(false);
     }
   };
 
@@ -413,25 +486,31 @@ export default function Home() {
       id: Date.now(),
       formName:
         language === "en" && currentForm.en ? currentForm.en : currentForm.name,
+      formId,
       language,
       signedAt: time,
       signatureImage,
       screening,
-      status: "uploading",
+      status: "saved",
     };
     save([r, ...recs]);
-    setNotice("กำลังสร้าง PDF และส่งเข้า Google Drive…");
-    setFail(false);
+    setActiveRecordId(r.id);
+    setNotice("บันทึกเอกสารแล้ว สามารถเลือกปริ้นหรือบันทึก PDF เข้า Drive ได้");
     setView("history");
     setShowDocument(true);
-    if (fail) {
-      updateRecord(r.id, { status: "upload_failed" });
-      setNotice("สร้าง PDF แล้ว แต่ยังส่งเข้า Drive ไม่สำเร็จ — กดลองใหม่ได้");
-    } else {
-      void uploadRecord(r);
-    }
     window.scrollTo(0, 0);
   };
+  const openSavedDocument = (record: Rec) => {
+    setPatient({ hn: record.hn, name: record.name, birth: record.birth });
+    setSignedAt(record.signedAt);
+    setSignatureImage(record.signatureImage || "");
+    setFormId(record.formId || "filler");
+    setLanguage(record.language || "th");
+    if (record.screening) setScreening(record.screening);
+    setActiveRecordId(record.id);
+    setShowDocument(true);
+  };
+  const activeRecord = recs.find((record) => record.id === activeRecordId);
   return (
     <div className="shell">
       <aside>
@@ -545,8 +624,7 @@ export default function Home() {
                 <em>ขั้นตอนที่ 2</em>
                 <h2>เลือกแบบฟอร์ม Consent</h2>
                 <p>
-                  ระบบจะแสดงภาษาไทยก่อนเสมอ และเปลี่ยนเป็น English
-                  ได้ในเอกสารที่รองรับ
+                  ทุกแบบฟอร์มจัดภาษาไทยและ English ไว้แถวเดียวกัน เพื่ออ่านเทียบกันได้ง่าย
                 </p>
               </div>
             </div>
@@ -576,33 +654,10 @@ export default function Home() {
             </button>
             <div className="consent-tools">
               <div>
-                <small>ภาษาของเอกสาร</small>
-                <div className="language-switch">
-                  {currentForm.thFile && (
-                    <button
-                      className={language === "th" ? "active" : ""}
-                      onClick={() => setLanguage("th")}
-                    >
-                      ไทย
-                    </button>
-                  )}
-                  {currentForm.enFile && (
-                    <button
-                      className={language === "en" ? "active" : ""}
-                      onClick={() => setLanguage("en")}
-                    >
-                      English
-                    </button>
-                  )}
-                </div>
+                <small>รูปแบบเอกสาร</small>
+                <b>ภาษาไทย / English ในแถวเดียวกัน</b>
               </div>
-              <span>
-                {currentForm.bilingual
-                  ? "มีเอกสาร 2 ภาษา"
-                  : currentForm.thFile
-                    ? "เอกสารภาษาไทย"
-                    : "English document"}
-              </span>
+              <span>ยึดรูปแบบเดียวกับแบบฟอร์ม Filler</span>
             </div>
             <div className="patientbar">
               <div>
@@ -655,13 +710,16 @@ export default function Home() {
                 </p>
               </div>
               <div className="source-content">
-                {visibleParagraphs.map((text, i) => (
-                  <div
-                    className="source-paragraph"
-                    key={`${i}-${text.slice(0, 20)}`}
-                  >
+                {!hasCompleteBilingualSource && (
+                  <div className="translation-review-note">
+                    ยังไม่มีต้นฉบับภาษาคู่ที่คลินิกตรวจรับรอง — แสดงเฉพาะข้อความต้นฉบับเพื่อป้องกันความคลาดเคลื่อน
+                  </div>
+                )}
+                {bilingualRows.map((row, i) => (
+                  <div className="bilingual-row" key={`${i}-${row.th.slice(0, 20)}`}>
                     <i>{i + 1}</i>
-                    <p>{text}</p>
+                    <p lang="th">{row.th || "—"}</p>
+                    <p lang="en">{row.en || "—"}</p>
                   </div>
                 ))}
               </div>
@@ -835,14 +893,7 @@ export default function Home() {
                 </button>
               </div>
               <div className="submit">
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={fail}
-                    onChange={(e) => setFail(e.target.checked)}
-                  />{" "}
-                  ทดสอบ Drive ขัดข้อง
-                </label>
+                <span>บันทึกข้อมูลก่อน แล้วจึงเลือกปริ้นหรือบันทึก PDF ภายหลังได้</span>
                 <button
                   className="primary"
                   disabled={
@@ -853,9 +904,7 @@ export default function Home() {
                   }
                   onClick={submit}
                 >
-                  {language === "th"
-                    ? "ยืนยันและสร้าง PDF"
-                    : "Confirm and create PDF"}{" "}
+                  {language === "th" ? "บันทึกเอกสาร" : "Save document"}{" "}
                   ›
                 </button>
               </div>
@@ -904,25 +953,20 @@ export default function Home() {
                       ? "● เก็บใน Drive แล้ว"
                       : r.status === "uploading"
                         ? "● กำลังอัปโหลด"
-                        : "! รออัปโหลด"}
+                        : r.status === "saved"
+                          ? "● บันทึกแล้ว"
+                          : "! รออัปโหลด"}
                   </mark>
-                  {r.status === "upload_failed" ? (
-                    <button
-                      onClick={() => {
-                        setPatient({ hn: r.hn, name: r.name, birth: r.birth });
-                        setSignedAt(r.signedAt);
-                        setSignatureImage(r.signatureImage || "");
-                        if (r.screening) setScreening(r.screening);
-                        setShowDocument(true);
-                        void uploadRecord(r);
-                      }}
-                    >
-                      ↻ อัปโหลดอีกครั้ง
-                    </button>
-                  ) : (
+                  {r.status === "completed" ? (
                     <a href={r.driveUrl || `https://drive.google.com/file/d/${r.fileId}/view`} target="_blank" rel="noreferrer">
-                      เปิดเอกสาร ↗
+                      เปิด PDF ↗
                     </a>
+                  ) : (
+                    <button
+                      onClick={() => openSavedDocument(r)}
+                    >
+                      เปิดเอกสาร
+                    </button>
                   )}
                 </div>
               ))
@@ -1014,15 +1058,24 @@ export default function Home() {
               ← กลับไปประวัติ
             </button>
             <b>ตัวอย่างเอกสารหลังลงนาม</b>
-            <button className="primary" onClick={() => window.print()}>
-              พิมพ์ / บันทึกเป็น PDF
-            </button>
+            <div className="document-actions">
+              <button
+                className="secondary-light"
+                disabled={!activeRecord || pdfBusy}
+                onClick={() => activeRecord && void uploadRecord(activeRecord)}
+              >
+                {pdfBusy ? "กำลังสร้าง PDF…" : "บันทึก PDF เข้า Drive"}
+              </button>
+              <button className="primary" onClick={() => window.print()}>
+                ปริ้น
+              </button>
+            </div>
           </div>
           <article className="signed-document">
             <h1>
-              หนังสือแสดงความยินยอมเข้ารับการฉีดฟิลเลอร์ (Hyaluronic Acid)
+              หนังสือแสดงความยินยอม: {currentForm.name}
             </h1>
-            <h2>Informed Consent for Hyaluronic Acid Filler Injection</h2>
+            <h2>Informed Consent: {currentForm.en || currentForm.name}</h2>
             <div className="document-meta">
               <span>
                 <b>HN:</b> {patient.hn}
@@ -1038,9 +1091,12 @@ export default function Home() {
               </span>
             </div>
             <div className="document-body">
-              {visibleParagraphs.map((text, i) => (
-                  <p className={/^(การยินยอม|Consent|ความเสี่ยงและผลข้างเคียง|Possible Risks|ข้อปฏิบัติหลังฉีด|Post-Treatment Care)/.test(text) ? "document-section-title" : ""} key={i}>{text}</p>
-                ))}
+              {bilingualRows.map((row, i) => (
+                <div className="document-bilingual-row" key={i}>
+                  <p lang="th">{row.th || "—"}</p>
+                  <p lang="en">{row.en || "—"}</p>
+                </div>
+              ))}
               {formId === "filler" && <div className="document-screening"><b>ข้อมูลเพิ่มเติมก่อนรับบริการ</b>{screeningQuestions.map((question,i)=><div className="document-screening-row" key={question}><p>{question}</p><span className={!screening[i].answer ? "checked" : ""}>ไม่มี {!screening[i].answer ? "☑" : "☐"}</span><span className={screening[i].answer ? "checked" : ""}>มี {screening[i].answer ? "☑" : "☐"}</span>{screening[i].answer && <small>รายละเอียด: {screening[i].detail || "ไม่ได้ระบุ"}</small>}</div>)}</div>}
             </div>
             <div className="document-signatures">

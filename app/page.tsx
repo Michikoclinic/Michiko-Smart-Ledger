@@ -187,11 +187,65 @@ const confirms = [
     yes: "ยินยอมตามแบบฟอร์ม",
   },
 ];
-const screeningQuestions = [
-  "มีโรคผิวหนัง สิว เริม หรือแผลบนใบหน้า?",
-  "กำลังตั้งครรภ์หรือให้นมบุตร?",
-  "มีประวัติแพ้ยา ยาชา หรือผลิตภัณฑ์ที่ใช้ในการรักษา?",
-];
+type ScreeningQuestion = { th: string; en: string };
+const questionsByForm: Record<string, ScreeningQuestion[]> = {
+  filler: [
+    { th: "มีโรคผิวหนัง สิว เริม หรือแผลบนใบหน้าหรือไม่?", en: "Do you have an active skin condition, acne, herpes, or a facial wound?" },
+    { th: "กำลังตั้งครรภ์หรือให้นมบุตรหรือไม่?", en: "Are you pregnant or breastfeeding?" },
+    { th: "มีประวัติแพ้ยา ยาชา หรือผลิตภัณฑ์ที่ใช้รักษาหรือไม่?", en: "Do you have an allergy to medication, anesthetic, or treatment products?" },
+  ],
+  "filler-permanent": [
+    { th: "เคยฉีดสารไม่สลาย ซิลิโคนเหลว หรือสารอื่นบริเวณที่จะรักษาหรือไม่?", en: "Have you received permanent filler, liquid silicone, or another substance in the treatment area?" },
+    { th: "มีประวัติอักเสบ ติดเชื้อ หรือเป็นก้อนจากสารเดิมหรือไม่?", en: "Have you had inflammation, infection, or nodules from the existing material?" },
+    { th: "ต้องการใช้ยาชาก่อนหรือระหว่างการรักษาหรือไม่?", en: "Would you like anesthesia before or during treatment?" },
+  ],
+  botox: [
+    { th: "เคยฉีดโบท็อกซ์มาก่อนหรือไม่?", en: "Have you previously received botulinum toxin injections?" },
+    { th: "รับประทานวิตามิน E น้ำมันปลา โอเมก้า 3 วิตามินรวม หรือใบแป๊ะก๊วยเป็นประจำหรือไม่?", en: "Do you regularly take vitamin E, fish oil, omega-3, multivitamins, or ginkgo?" },
+    { th: "รับประทานแอสไพริน ไอบูโพรเฟน หรือยาต้านการแข็งตัวของเลือดหรือไม่?", en: "Do you take aspirin, ibuprofen, or blood-thinning medication?" },
+    { th: "อยู่ในช่วงวางแผนตั้งครรภ์หรือไม่?", en: "Are you planning a pregnancy?" },
+    { th: "มีโรคผิวหนังหรือกำลังใช้ยารักษาผิวบริเวณใบหน้าหรือไม่?", en: "Do you have a facial skin condition or use medication for it?" },
+    { th: "ต้องการใช้ยาชาก่อนหรือระหว่างการรักษาหรือไม่?", en: "Would you like anesthesia before or during treatment?" },
+  ],
+  sculptra: [
+    { th: "มีประวัติแพ้ส่วนประกอบของ Sculptra ยา หรือยาชาหรือไม่?", en: "Are you allergic to Sculptra ingredients, medication, or anesthetic?" },
+    { th: "รับประทานวิตามิน E น้ำมันปลา โอเมก้า 3 วิตามินรวม หรือใบแป๊ะก๊วยเป็นประจำหรือไม่?", en: "Do you regularly take vitamin E, fish oil, omega-3, multivitamins, or ginkgo?" },
+    { th: "รับประทานแอสไพรินหรือยาต้านการแข็งตัวของเลือดหรือไม่?", en: "Do you take aspirin or blood-thinning medication?" },
+    { th: "อยู่ในช่วงวางแผนตั้งครรภ์หรือไม่?", en: "Are you planning a pregnancy?" },
+    { th: "มีโรคผิวหนังหรือกำลังใช้ยารักษาผิวบริเวณใบหน้าหรือไม่?", en: "Do you have a facial skin condition or use medication for it?" },
+    { th: "ต้องการใช้ยาชาก่อนหรือระหว่างการรักษาหรือไม่?", en: "Would you like anesthesia before or during treatment?" },
+  ],
+  dissolve: [
+    { th: "เคยฉีดฟิลเลอร์ปลอม ซิลิโคนเหลว หรือสารที่ไม่ใช่ Hyaluronic Acid หรือไม่?", en: "Have you received fake filler, liquid silicone, or a non-HA substance?" },
+    { th: "มีประวัติแพ้สาร Hyaluronidase หรือไม่?", en: "Do you have a history of allergy to hyaluronidase?" },
+    { th: "ต้องการทดสอบการแพ้ก่อนฉีดหรือไม่?", en: "Would you like an allergy patch test before injection?" },
+    { th: "มีประวัติแพ้ยาชาชนิดฉีดหรือไม่?", en: "Do you have a history of allergy to injectable anesthetic?" },
+    { th: "ต้องการใช้ยาชาก่อนหรือระหว่างการรักษาหรือไม่?", en: "Would you like anesthesia before or during treatment?" },
+  ],
+  ultraformer: [],
+  xerf: [
+    { th: "มีเครื่องกระตุ้นหัวใจหรืออุปกรณ์อิเล็กทรอนิกส์ฝังในร่างกายหรือไม่?", en: "Do you have a pacemaker or another implanted electronic device?" },
+    { th: "เคยได้รับการวินิจฉัยหรือรักษาโรคมะเร็งหรือไม่?", en: "Have you been diagnosed with or treated for cancer?" },
+    { th: "รับประทานยากลุ่มอนุพันธ์วิตามินเอในช่วง 6 เดือนที่ผ่านมาหรือไม่?", en: "Have you taken vitamin A derivative medication within the past six months?" },
+    { th: "กำลังตั้งครรภ์หรือไม่?", en: "Are you currently pregnant?" },
+  ],
+  "nose-thread": [
+    { th: "เคยผ่าตัดหรือทำหัตถการบริเวณจมูกหรือใบหน้าหรือไม่?", en: "Have you had surgery or a procedure on your nose or face?" },
+    { th: "มีโรคภูมิคุ้มกันหรือภาวะที่กระทบต่อการหายของแผลหรือไม่?", en: "Do you have an immune condition or a condition affecting wound healing?" },
+    { th: "มีแผนเสริมจมูกด้วยซิลิโคนในอนาคตหรือไม่?", en: "Do you plan to have a silicone nose implant in the future?" },
+    { th: "อยู่ในช่วงวางแผนตั้งครรภ์หรือไม่?", en: "Are you planning a pregnancy?" },
+  ],
+  "full-review": [
+    { th: "ยินยอมให้ใช้ภาพและวิดีโอเพื่อประเมินและบันทึกผลการรักษาหรือไม่?", en: "Do you consent to photos and videos for treatment evaluation and records?" },
+    { th: "ยินยอมให้ใช้เพื่อการศึกษาและฝึกอบรมหรือไม่?", en: "Do you consent to use for education and training?" },
+    { th: "ยินยอมให้เผยแพร่เป็นเคสรีวิวและสื่อการตลาดหรือไม่?", en: "Do you consent to public review and marketing use?" },
+  ],
+  "photo-review": [
+    { th: "ยินยอมให้ใช้ภาพเพื่อประเมินและบันทึกผลการรักษาหรือไม่?", en: "Do you consent to photos for treatment evaluation and records?" },
+    { th: "ยินยอมให้ใช้ภาพเพื่อการศึกษาและฝึกอบรมหรือไม่?", en: "Do you consent to photo use for education and training?" },
+    { th: "ยินยอมให้เผยแพร่ภาพเป็นเคสรีวิวและสื่อการตลาดหรือไม่?", en: "Do you consent to publishing photos for reviews and marketing?" },
+  ],
+};
 export default function Home() {
   const [view, setView] = useState("patients"),
     [q, setQ] = useState(""),
@@ -199,7 +253,7 @@ export default function Home() {
     [ans, setAns] = useState<(boolean | null)[]>([null, null]),
     [screening, setScreening] = useState<
       Array<{ answer: boolean | null; detail: string }>
-    >(screeningQuestions.map(() => ({ answer: null, detail: "" }))),
+    >(questionsByForm.filler.map(() => ({ answer: null, detail: "" }))),
     [add, setAdd] = useState(false),
     [sign, setSign] = useState(false),
     [signed, setSigned] = useState(false),
@@ -272,7 +326,7 @@ export default function Home() {
   const choose = (p: Patient) => {
     setPatient(p);
     setAns([null, null]);
-    setScreening(screeningQuestions.map(() => ({ answer: null, detail: "" })));
+    setScreening(questionsByForm.filler.map(() => ({ answer: null, detail: "" })));
     setSigned(false);
     setSignatureImage("");
     setSignedAt("");
@@ -283,15 +337,16 @@ export default function Home() {
   };
   const currentForm =
     consentForms.find((f) => f.id === formId) ?? consentForms[0];
+  const currentQuestions = questionsByForm[currentForm.id] || [];
+  const screeningIncomplete = currentQuestions.length > 0 && screening.some(
+    (item) => item.answer === null || (item.answer === true && !item.detail.trim()),
+  );
   const startForm = (id: string) => {
     const f = consentForms.find((x) => x.id === id);
     setFormId(id);
     setLanguage(f?.thFile ? "th" : "en");
     setAns([null, null]);
-    setScreening(screeningQuestions.map(() => ({ answer: null, detail: "" })));
-    setSigned(false);
-    setSignatureImage("");
-    setSignedAt("");
+    setScreening((questionsByForm[id] || []).map(() => ({ answer: null, detail: "" })));
     setIdPhoto("");
     setView("consent");
     window.scrollTo(0, 0);
@@ -316,6 +371,12 @@ export default function Home() {
         (text) =>
           !text.includes("HN:") &&
           !text.includes("ลายมือชื่อผู้รับบริการ") &&
+          !text.includes("ลายมือชื่อผู้เข้ารับการรักษา") &&
+          !text.includes("ลายมือของผู้ป่วย") &&
+          !text.includes("ชื่อผู้เข้ารับการรักษา") &&
+          !text.includes("ชื่อแพทย์ผู้ให้การรักษา") &&
+          !text.includes("Patient Signature") &&
+          !text.includes("Physician") &&
           !text.includes("Patient's Name:") &&
           !text.includes("ข้อมูลผู้ป่วย:") &&
           !text.includes("คำถามก่อนรับบริการ") &&
@@ -324,7 +385,8 @@ export default function Home() {
           !text.includes("กำลังตั้งครรภ์") &&
           !text.includes("ยินยอมรับการทายาชา") &&
           !text.includes("หนังสือแสดงความยินยอมเข้ารับการฉีดฟิลเลอร์") &&
-          !text.includes("มิชิโกะ คลินิกเวชกรรม |"),
+          !text.includes("มิชิโกะ คลินิกเวชกรรม |") &&
+          !/[?？]|หรือไม่|[೦᪀◯]\s*(ใช่|ไม่|Yes|No)/i.test(text),
       );
   };
   const isMostlyEnglish = (text: string) =>
@@ -695,12 +757,23 @@ export default function Home() {
                 </p>
               </div>
             </div>
+            <div className="signature-once-card">
+              <div>
+                <em>ลายเซ็นหลัก / Primary signature</em>
+                <h3>ลงลายมือชื่อครั้งเดียวก่อนเลือกแบบฟอร์ม</h3>
+                <p>ระบบจะนำลายเซ็นนี้ไปใช้กับเอกสารที่ทำต่อเนื่องสำหรับผู้รับบริการรายนี้</p>
+              </div>
+              <button className={signed ? "done" : "primary"} onClick={() => setSign(true)}>
+                {signed ? "✓ บันทึกลายเซ็นแล้ว" : "✎ ลงลายมือชื่อ"}
+              </button>
+            </div>
             <div className="form-grid">
               {consentForms.map((f) => (
                 <button
                   className="form-card"
                   key={f.id}
                   onClick={() => startForm(f.id)}
+                  disabled={!signed}
                 >
                   <span className="form-icon">{f.review ? "▣" : "✦"}</span>
                   <span>
@@ -790,28 +863,29 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              {formId === "filler" && (
+              {currentQuestions.length > 0 && (
                 <div className="screening">
-                  <em>ข้อมูลเพิ่มเติมก่อนรับบริการ</em>
-                  <h2>ติ๊กคำตอบ และกรอกรายละเอียดเฉพาะเมื่อมี</h2>
-                  {screeningQuestions.map((question, i) => (
-                    <div className="screening-row" key={question}>
+                  <em>คำถามก่อนรับบริการ / Pre-treatment questions</em>
+                  <h2>เลือก “ไม่มี” เพื่อจบข้อนั้น หรือเลือก “มี” เพื่อกรอกรายละเอียด</h2>
+                  {currentQuestions.map((question, i) => (
+                    <div className="screening-row" key={question.th}>
                       <div>
-                        <b>{question}</b>
+                        <b>{question.th}</b>
+                        <small>{question.en}</small>
                         <div className="screening-buttons">
                           <button
                             className={screening[i].answer === true ? "selected" : ""}
                             onClick={() => setScreening((s) => s.map((x, j) => j === i ? {...x, answer: true} : x))}
-                          >✓ มี</button>
+                          >✓ มี / Yes</button>
                           <button
                             className={screening[i].answer === false ? "selected" : ""}
                             onClick={() => setScreening((s) => s.map((x, j) => j === i ? {answer: false, detail: ""} : x))}
-                          >✓ ไม่มี</button>
+                          >✓ ไม่มี / No</button>
                         </div>
                       </div>
                       {screening[i].answer === true && (
-                        <label>รายละเอียด (ถ้ามี)
-                          <input value={screening[i].detail} onChange={(e) => setScreening((s) => s.map((x, j) => j === i ? {...x, detail: e.target.value} : x))} placeholder="กรอกรายละเอียดเพิ่มเติม" />
+                        <label>รายละเอียดเพิ่มเติม / Details
+                          <input required value={screening[i].detail} onChange={(e) => setScreening((s) => s.map((x, j) => j === i ? {...x, detail: e.target.value} : x))} placeholder="กรอกรายละเอียดเพิ่มเติมก่อนบันทึก" />
                         </label>
                       )}
                     </div>
@@ -933,32 +1007,6 @@ export default function Home() {
                   </div>
                 ))}
               </div>
-              <div className="signbox">
-                <div>
-                  <em>{language === "th" ? "ขั้นตอนสุดท้าย" : "FINAL STEP"}</em>
-                  <h2>{language === "th" ? "ลงลายมือชื่อ" : "Signature"}</h2>
-                  <p>
-                    {language === "th"
-                      ? "ข้าพเจ้ารับรองว่าได้อ่านและเข้าใจข้อมูลข้างต้น ได้รับโอกาสซักถาม และตัดสินใจโดยสมัครใจ"
-                      : "I confirm that I have read and understood the information above, had an opportunity to ask questions, and decided voluntarily."}
-                  </p>
-                </div>
-                <button
-                  disabled={
-                    ans.some((a) => a !== true) ||
-                    (formId === "filler" && screening.some((x) => x.answer === null)) ||
-                    (currentForm.review && !idPhoto)
-                  }
-                  onClick={() => setSign(true)}
-                  className={signed ? "done" : ""}
-                >
-                  {signed
-                    ? "✓ ลงลายมือชื่อแล้ว"
-                    : language === "th"
-                      ? "✎ กดเพื่อลงลายมือชื่อ"
-                      : "✎ Tap to sign"}
-                </button>
-              </div>
               <div className="submit">
                 <span>บันทึกข้อมูลก่อน แล้วจึงเลือกปริ้นหรือบันทึก PDF ภายหลังได้</span>
                 <button
@@ -966,7 +1014,7 @@ export default function Home() {
                   disabled={
                     !signed ||
                     ans.some((a) => a !== true) ||
-                    (formId === "filler" && screening.some((x) => x.answer === null)) ||
+                    screeningIncomplete ||
                     (currentForm.review && !idPhoto)
                   }
                   onClick={submit}
@@ -1164,7 +1212,7 @@ export default function Home() {
                   <p lang="en">{row.en || "—"}</p>
                 </div>
               ))}
-              {formId === "filler" && <div className="document-screening"><b>ข้อมูลเพิ่มเติมก่อนรับบริการ</b>{screeningQuestions.map((question,i)=><div className="document-screening-row" key={question}><p>{question}</p><span className={!screening[i].answer ? "checked" : ""}>ไม่มี {!screening[i].answer ? "☑" : "☐"}</span><span className={screening[i].answer ? "checked" : ""}>มี {screening[i].answer ? "☑" : "☐"}</span>{screening[i].answer && <small>รายละเอียด: {screening[i].detail || "ไม่ได้ระบุ"}</small>}</div>)}</div>}
+              {currentQuestions.length > 0 && <div className="document-screening"><b>คำถามก่อนรับบริการ / Pre-treatment questions</b>{currentQuestions.map((question,i)=><div className="document-screening-row" key={question.th}><p>{question.th}<small>{question.en}</small></p><span className={screening[i]?.answer === false ? "checked" : ""}>ไม่มี / No {screening[i]?.answer === false ? "☑" : "☐"}</span><span className={screening[i]?.answer === true ? "checked" : ""}>มี / Yes {screening[i]?.answer === true ? "☑" : "☐"}</span>{screening[i]?.answer === true && <small>รายละเอียด / Details: {screening[i]?.detail || "ไม่ได้ระบุ"}</small>}</div>)}</div>}
             </div>
             <div className="document-signatures">
               <div>

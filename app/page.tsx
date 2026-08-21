@@ -22,6 +22,9 @@ declare global {
 }
 
 const DRIVE_FOLDER_ID = "1G-egL6keG6dadSrf5Zre4NWDUwD9N6at";
+const SUPABASE_URL = "https://ssbohutktcxshylobysr.supabase.co";
+const SUPABASE_KEY = "sb_publishable_6C8m3Uv_IY9okF2wXVr5kg_l-2-_VhV";
+const STAFF_EMAIL = "customerservice@michikoclinic.com";
 type Patient = { hn: string; name: string; birth: string };
 type Rec = Patient & {
   id: number;
@@ -209,13 +212,50 @@ export default function Home() {
     [signedAt, setSignedAt] = useState(""),
     [showDocument, setShowDocument] = useState(false),
     [activeRecordId, setActiveRecordId] = useState<number | null>(null),
-    [pdfBusy, setPdfBusy] = useState(false);
+    [pdfBusy, setPdfBusy] = useState(false),
+    [staffSession, setStaffSession] = useState<string>(""),
+    [authChecked, setAuthChecked] = useState(false),
+    [authBusy, setAuthBusy] = useState(false),
+    [authError, setAuthError] = useState("");
   const canvas = useRef<HTMLCanvasElement>(null),
     drawing = useRef(false);
   useEffect(() => {
     const s = localStorage.getItem("michiko-consents");
     if (s) setRecs(JSON.parse(s));
+    const token = localStorage.getItem("michiko-staff-session") || "";
+    if (!token) {
+      setAuthChecked(true);
+      return;
+    }
+    fetch(`${SUPABASE_URL}/auth/v1/user`, {
+      headers: { apikey: SUPABASE_KEY, Authorization: `Bearer ${token}` },
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("expired");
+        setStaffSession(token);
+      })
+      .catch(() => localStorage.removeItem("michiko-staff-session"))
+      .finally(() => setAuthChecked(true));
   }, []);
+  const signInStaff = async (password: string) => {
+    setAuthBusy(true);
+    setAuthError("");
+    try {
+      const response = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+        method: "POST",
+        headers: { apikey: SUPABASE_KEY, "Content-Type": "application/json" },
+        body: JSON.stringify({ email: STAFF_EMAIL, password }),
+      });
+      const result = (await response.json()) as { access_token?: string; error_description?: string; msg?: string };
+      if (!response.ok || !result.access_token) throw new Error(result.error_description || result.msg || "รหัสผ่านไม่ถูกต้อง");
+      localStorage.setItem("michiko-staff-session", result.access_token);
+      setStaffSession(result.access_token);
+    } catch (error) {
+      setAuthError(error instanceof Error ? error.message : "เข้าสู่ระบบไม่สำเร็จ");
+    } finally {
+      setAuthBusy(false);
+    }
+  };
   const save = (r: Rec[]) => {
     setRecs(r);
     localStorage.setItem("michiko-consents", JSON.stringify(r));
@@ -511,6 +551,29 @@ export default function Home() {
     setShowDocument(true);
   };
   const activeRecord = recs.find((record) => record.id === activeRecordId);
+  if (!authChecked) return <div className="auth-loading">กำลังตรวจสอบสิทธิ์…</div>;
+  if (!staffSession) {
+    return (
+      <main className="staff-auth-page">
+        <form className="staff-auth-card" onSubmit={(event) => {
+          event.preventDefault();
+          const data = new FormData(event.currentTarget);
+          void signInStaff(String(data.get("password") || ""));
+        }}>
+          <img src="https://michikoclinic.github.io/Michiko-Smart-Ledger/github-pages/michiko-logo.png" alt="Michiko Aesthetics" />
+          <em>MICHIKO DIGITAL CONSENT</em>
+          <h1>เข้าสู่ระบบพนักงาน</h1>
+          <p>สำหรับ Reception ของ Michiko Clinic</p>
+          <label>รหัสผ่าน
+            <input name="password" type="password" autoComplete="current-password" required autoFocus placeholder="กรอกรหัสผ่าน" />
+          </label>
+          {authError && <mark>{authError}</mark>}
+          <button className="primary" disabled={authBusy}>{authBusy ? "กำลังเข้าสู่ระบบ…" : "เข้าสู่ระบบ"}</button>
+          <small>{STAFF_EMAIL}</small>
+        </form>
+      </main>
+    );
+  }
   return (
     <div className="shell">
       <aside>
@@ -540,6 +603,10 @@ export default function Home() {
             <small>ผู้ดูแลระบบ</small>
           </span>
         </div>
+        <button className="staff-logout" onClick={() => {
+          localStorage.removeItem("michiko-staff-session");
+          setStaffSession("");
+        }}>ออกจากระบบ</button>
       </aside>
       <main>
         <header>

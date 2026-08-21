@@ -202,9 +202,10 @@ const questions: Record<string, ConsentQuestion[]> = {
     yesNo("injectable-anesthetic-allergy", "มีประวัติแพ้ยาชาชนิดฉีดหรือไม่?", "Do you have a history of allergy to injectable anesthetic?"),
   ],
   ultraformer: [
-    consentChoice("physician-procedure", "ยินยอมให้แพทย์เป็นผู้ดำเนินหัตถการหรือไม่?", "Do you consent to the physician performing the procedure?"),
-    consentChoice("photo-video-recording", "ยินยอมให้คลินิกถ่ายภาพหรือวิดีโอก่อน ระหว่าง และหลังหัตถการหรือไม่?", "Do you consent to the clinic photographing or recording video before, during, and after the procedure?"),
-    consentChoice("education-sharing", "ยินยอมให้ใช้ภาพหรือวิดีโอเพื่อการศึกษาและแบ่งปันกับแพทย์หรือเจ้าหน้าที่ของ Michiko Clinic หรือไม่?", "Do you consent to appropriate educational use and sharing with Michiko Clinic doctors and staff?"),
+    yesNo("image-education", "", "I give consent to the use of images for educational purposes or treatment records.", false),
+    yesNo("information-explained", "", "The information provided by the physician/clinic has been explained and I understand it.", false),
+    yesNo("not-coerced", "", "I have not been coerced into giving any information regarding the treatment or procedure.", false),
+    yesNo("result-reference", "", "I understand that the physician may use the images for reference regarding treatment results or facial changes.", false),
   ],
   xerf: [
     yesNo("implanted-device", "มีเครื่องกระตุ้นหัวใจหรืออุปกรณ์อิเล็กทรอนิกส์ฝังในร่างกายหรือไม่?", "Do you have a pacemaker or another implanted electronic device?"),

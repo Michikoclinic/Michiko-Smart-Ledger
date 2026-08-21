@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { consentDefinitionById, consentDefinitions, type ConsentAnswer } from "../consent-model";
 
 const samplePatient = { hn: "HN-PREVIEW-001", name: "ผู้รับบริการตัวอย่าง", birth: "1 มกราคม 2533" };
@@ -13,19 +13,21 @@ export default function ConsentPreviewPage() {
   const [attempted, setAttempted] = useState(false);
   const [signatureOpen, setSignatureOpen] = useState(false);
   const [signatureImage, setSignatureImage] = useState("");
+  const [idPhoto, setIdPhoto] = useState("");
   const [notice, setNotice] = useState("");
   const canvas = useRef<HTMLCanvasElement>(null);
   const drawing = useRef(false);
   const definition = consentDefinitionById[formId];
+  useEffect(() => () => { if (idPhoto) URL.revokeObjectURL(idPhoto); }, [idPhoto]);
   const questions = useMemo(() => definition.questions.filter((question) => !question.showWhen || answers[question.showWhen.questionId]?.value === question.showWhen.value), [answers, definition]);
   const incomplete = questions.some((question) => {
     const answer = answers[question.id];
     return (question.required && !answer?.value) || Boolean(answer?.value && question.detailWhen?.includes(answer.value) && !answer.detail?.trim());
   });
-  const signatureReady = !incomplete && agreement;
+  const signatureReady = !incomplete && (!definition.review || Boolean(idPhoto)) && agreement;
   const canSubmit = signatureReady && Boolean(signatureImage);
   const selectForm = (id: string) => {
-    setFormId(id); setAnswers({}); setAgreement(false); setAttempted(false); setSignatureImage(""); setNotice("");
+    setFormId(id); setAnswers({}); setAgreement(false); setAttempted(false); setSignatureImage(""); setIdPhoto(""); setNotice("");
     window.scrollTo({ top: 0, behavior: "smooth" });
   };
   const point = (event: React.PointerEvent<HTMLCanvasElement>) => {
@@ -48,6 +50,7 @@ export default function ConsentPreviewPage() {
       requestAnimationFrame(() => document.querySelector<HTMLElement>("[data-question-error='true']")?.scrollIntoView({ behavior: "smooth", block: "center" }));
       return false;
     }
+    if (definition.review && !idPhoto) { document.querySelector<HTMLElement>(".preview-id-attachment")?.scrollIntoView({ behavior: "smooth", block: "center" }); return false; }
     if (!agreement) { document.querySelector<HTMLElement>(".preview-agreement")?.scrollIntoView({ behavior: "smooth", block: "center" }); return false; }
     return true;
   };
@@ -71,6 +74,7 @@ export default function ConsentPreviewPage() {
             </div>;
           })}
         </div>
+        {definition.review && <div className="id-attachment preview-id-attachment"><div><em>เอกสารยืนยันตัวตน / Identity Document</em><h2>แนบภาพบัตรประชาชน <small>Upload ID Card</small></h2><p>ใช้ภาพ 1 ภาพจากกล้องหรือจากเครื่อง ภาพนี้ใช้ชั่วคราวใน Preview และจะไม่ถูกบันทึก</p><p lang="en">Use one image from the camera or device. It is temporary in Preview and will not be saved.</p></div><div className={`camera-box ${idPhoto ? "has-photo" : ""}`}>{idPhoto ? <><img src={idPhoto} alt="ตัวอย่างบัตรประชาชน" /><div className="id-card-actions"><label className="secondary-light">เปลี่ยนรูป / Replace<input type="file" accept="image/*" capture="environment" onChange={(event) => { const file = event.target.files?.[0]; if (file) setIdPhoto(URL.createObjectURL(file)); event.currentTarget.value = ""; }} /></label><button type="button" className="id-remove" onClick={() => setIdPhoto("")}>ลบรูป / Remove</button></div></> : <label className="id-upload-prompt"><b>▣ แนบภาพบัตรประชาชน</b><small>Upload ID Card</small><input type="file" accept="image/*" capture="environment" onChange={(event) => { const file = event.target.files?.[0]; if (file) setIdPhoto(URL.createObjectURL(file)); event.currentTarget.value = ""; }} /></label>}</div>{!idPhoto && <mark className="id-required">กรุณาแนบภาพบัตรประชาชนก่อนดำเนินการต่อ <small>Please attach an image of your ID card before continuing.</small></mark>}</div>}
         <div className={`confirm preview-agreement ${attempted && !agreement ? "question-invalid" : ""}`}><em>การรับทราบและยินยอม / Acknowledgement &amp; Consent</em><p>{definition.acknowledgement.th}</p><p lang="en">{definition.acknowledgement.en}</p><button type="button" aria-pressed={agreement} className={`final-agreement-button ${agreement ? "selected" : ""}`} onClick={() => { const next = !agreement; setAgreement(next); if (!next) setSignatureImage(""); }}><span>{agreement ? "✓ ยืนยันแล้ว — ข้าพเจ้าได้อ่านและยอมรับ" : "ยืนยันว่าได้อ่านและยอมรับ"}</span><small>{agreement ? "Confirmed — I have read and agree" : "I have read and agree"}</small></button></div>
         <div className={`consent-signature-card ${signatureReady ? "ready" : "locked"}`}><div><em>ลายมือชื่อผู้รับบริการ / Patient Signature</em><h2>{signatureImage ? "บันทึกลายมือชื่อแล้ว" : signatureReady ? "พร้อมสำหรับลงลายมือชื่อ" : "กรุณาตอบคำถามและยืนยันการอ่านก่อน"}</h2><p>{signatureReady ? "ใช้ปากกา Stylus นิ้วมือ หรือเมาส์" : "Please complete the questions and agreement first."}</p>{signatureImage && <img src={signatureImage} alt="Signature preview" />}</div><button disabled={!signatureReady} className={signatureImage ? "secondary-light" : "primary"} onClick={() => signatureReady && setSignatureOpen(true)}>{signatureImage ? "แก้ไข / เซ็นใหม่" : "✎ ลงลายมือชื่อ"}</button></div>
         <div className="submit"><span>Preview นี้ไม่บันทึกข้อมูลจริง</span><button disabled={!canSubmit} className="primary consent-submit" onClick={() => { if (!validate() || !signatureImage) return; setNotice("ตรวจสอบสำเร็จ — Preview Mode ไม่ได้สร้าง Consent record"); }}>ยืนยันและส่งแบบฟอร์ม <small>Confirm &amp; Submit</small></button></div>{notice && <div className="preview-notice">{notice}</div>}

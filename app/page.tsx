@@ -49,6 +49,8 @@ type Rec = Patient & {
   screening?: Array<{ answer: boolean | null; detail: string }>;
   answers?: Record<string, ConsentAnswer>;
   consentVersion?: string;
+  idCardFileId?: string;
+  idCardDriveUrl?: string;
 };
 const patients: Patient[] = [
   { hn: "HN01284", name: "สมหญิง ใจดี", birth: "12 มี.ค. 2533" },
@@ -79,6 +81,7 @@ export default function Home() {
     [formId, setFormId] = useState("filler"),
     [language, setLanguage] = useState<"th" | "en">("th"),
     [idPhoto, setIdPhoto] = useState<string>(""),
+    [idPhotoFile, setIdPhotoFile] = useState<File | null>(null),
     [signatureImage, setSignatureImage] = useState(""),
     [signedAt, setSignedAt] = useState(""),
     [showDocument, setShowDocument] = useState(false),
@@ -89,7 +92,9 @@ export default function Home() {
     [authBusy, setAuthBusy] = useState(false),
     [authError, setAuthError] = useState("");
   const canvas = useRef<HTMLCanvasElement>(null),
-    drawing = useRef(false);
+    drawing = useRef(false),
+    idCardFiles = useRef(new Map<number, File>());
+  useEffect(() => () => { if (idPhoto) URL.revokeObjectURL(idPhoto); }, [idPhoto]);
   useEffect(() => {
     const s = localStorage.getItem("michiko-consents");
     if (s) setRecs(JSON.parse(s));
@@ -181,6 +186,7 @@ export default function Home() {
     setSignedAt("");
     setLanguage("th");
     setIdPhoto("");
+    setIdPhotoFile(null);
     setView("select");
     window.scrollTo(0, 0);
   };
@@ -194,7 +200,7 @@ export default function Home() {
     if (question.required && !answer?.value) return true;
     return Boolean(answer?.value && question.detailWhen?.includes(answer.value) && !answer.detail?.trim());
   });
-  const signatureReady = !screeningIncomplete && ans[0] === true;
+  const signatureReady = !screeningIncomplete && (!currentForm.review || Boolean(idPhoto)) && ans[0] === true;
   const canSubmitConsent = signatureReady && signed && Boolean(signatureImage) && (!currentForm.review || Boolean(idPhoto));
   const startForm = (id: string) => {
     setFormId(id);
@@ -206,6 +212,7 @@ export default function Home() {
     setSignatureImage("");
     setSignedAt("");
     setIdPhoto("");
+    setIdPhotoFile(null);
     setView("consent");
     window.scrollTo(0, 0);
   };
@@ -269,16 +276,23 @@ export default function Home() {
     });
   };
 
-  const createPdf = async () => {
+  const createPdf = async (idCardFile?: File) => {
     const documentElement = document.querySelector<HTMLElement>(".signed-document");
     if (!documentElement) throw new Error("ไม่พบเอกสารสำหรับสร้าง PDF");
+    const idPage = documentElement.querySelector<HTMLElement>(".document-id-page");
+    if (idPage) idPage.style.display = "none";
     const isAppleTouch = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
       (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
-    const canvasImage = await html2canvas(documentElement, {
-      scale: isAppleTouch ? 1 : Math.min(window.devicePixelRatio || 1, 1.5),
-      backgroundColor: "#ffffff",
-      useCORS: true,
-    });
+    let canvasImage: HTMLCanvasElement;
+    try {
+      canvasImage = await html2canvas(documentElement, {
+        scale: isAppleTouch ? 1 : Math.min(window.devicePixelRatio || 1, 1.5),
+        backgroundColor: "#ffffff",
+        useCORS: true,
+      });
+    } finally {
+      if (idPage) idPage.style.display = "flex";
+    }
     const pdf = new jsPDF("p", "mm", "a4");
     const width = 210;
     const pageHeight = 297;
@@ -294,7 +308,28 @@ export default function Home() {
       pdf.addImage(image, "JPEG", 0, y, width, height);
       remaining -= pageHeight;
     }
+    if (idCardFile && idPage) {
+      const idCanvas = await html2canvas(idPage, {
+        scale: isAppleTouch ? 1 : Math.min(window.devicePixelRatio || 1, 1.5),
+        backgroundColor: "#ffffff",
+        useCORS: true,
+      });
+      const idImage = idCanvas.toDataURL("image/jpeg", 0.94);
+      pdf.addPage();
+      const idHeight = Math.min((idCanvas.height * width) / idCanvas.width, pageHeight);
+      pdf.addImage(idImage, "JPEG", 0, 0, width, idHeight);
+    }
     return pdf.output("blob");
+  };
+
+  const uploadDriveFile = async (token: string, file: Blob, name: string, mimeType: string) => {
+    const metadata = new Blob([JSON.stringify({ name, parents: [DRIVE_FOLDER_ID], mimeType })], { type: "application/json" });
+    const body = new FormData();
+    body.append("metadata", metadata);
+    body.append("file", file, name);
+    const response = await fetch("https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body });
+    if (!response.ok) throw new Error("Google Drive ปฏิเสธการอัปโหลด");
+    return response.json() as Promise<{ id: string; webViewLink?: string }>;
   };
 
   const uploadRecord = async (record: Rec) => {
@@ -303,27 +338,26 @@ export default function Home() {
     try {
       updateRecord(record.id, { status: "uploading" });
       await new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve())));
-      const [token, pdf] = await Promise.all([getDriveToken(), createPdf()]);
+      const idCardFile = idCardFiles.current.get(record.id);
+      if (record.formId && consentDefinitionById[record.formId]?.review && !idCardFile) throw new Error("ไม่พบรูปบัตรประชาชน กรุณาแนบใหม่ก่อนบันทึกเข้า Drive");
+      const [token, pdf] = await Promise.all([getDriveToken(), createPdf(idCardFile)]);
       const safeName = record.name.replace(/[\\/:*?"<>|]/g, "_");
-      const fileName = `${record.hn}_${safeName}_${record.formName || "Consent"}_${record.id}.pdf`;
-      const metadata = new Blob(
-        [JSON.stringify({ name: fileName, parents: [DRIVE_FOLDER_ID], mimeType: "application/pdf" })],
-        { type: "application/json" },
-      );
-      const body = new FormData();
-      body.append("metadata", metadata);
-      body.append("file", pdf, fileName);
-      const response = await fetch(
-        "https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart&fields=id,webViewLink",
-        { method: "POST", headers: { Authorization: `Bearer ${token}` }, body },
-      );
-      if (!response.ok) throw new Error("Google Drive ปฏิเสธการอัปโหลด");
-      const uploaded = (await response.json()) as { id: string; webViewLink?: string };
+      const dateStamp = new Date(record.id).toISOString().slice(0, 10);
+      const formSlug = (record.formId || "Consent").replace(/[^A-Za-z0-9-]/g, "_");
+      const fileName = `${record.hn}_${safeName}_${formSlug}_${dateStamp}_${record.id}.pdf`;
+      const uploaded = await uploadDriveFile(token, pdf, fileName, "application/pdf");
+      let idUpload: { id: string; webViewLink?: string } | undefined;
+      if (idCardFile) {
+        const extension = idCardFile.name.split(".").pop()?.replace(/[^A-Za-z0-9]/g, "") || "jpg";
+        idUpload = await uploadDriveFile(token, idCardFile, `${record.hn}_IDCard_${dateStamp}_${record.id}.${extension}`, idCardFile.type || "image/jpeg");
+      }
       updateRecord(record.id, {
         status: "completed",
         fileId: uploaded.id,
         driveUrl: uploaded.webViewLink || `https://drive.google.com/file/d/${uploaded.id}/view`,
+        ...(idUpload ? { idCardFileId: idUpload.id, idCardDriveUrl: idUpload.webViewLink || `https://drive.google.com/file/d/${idUpload.id}/view` } : {}),
       });
+      if (idUpload) idCardFiles.current.delete(record.id);
       setNotice("บันทึกและส่ง PDF เข้า Google Drive สำเร็จแล้ว");
     } catch (error) {
       updateRecord(record.id, { status: "upload_failed" });
@@ -357,6 +391,7 @@ export default function Home() {
       consentVersion: currentDefinition.version,
       status: "saved",
     };
+    if (currentForm.review && idPhotoFile) idCardFiles.current.set(r.id, idPhotoFile);
     save([r, ...recs]);
     setActiveRecordId(r.id);
     setNotice("บันทึกเอกสารแล้ว สามารถเลือกปริ้นหรือบันทึก PDF เข้า Drive ได้");
@@ -391,6 +426,9 @@ export default function Home() {
     setSigned(Boolean(record.signatureImage));
     setFormId(record.formId || "filler");
     setLanguage(record.language || "th");
+    const storedIdCard = idCardFiles.current.get(record.id) || null;
+    setIdPhotoFile(storedIdCard);
+    setIdPhoto(storedIdCard ? URL.createObjectURL(storedIdCard) : "");
     if (record.answers) {
       setAnswers(record.answers);
     } else if (record.screening) {
@@ -707,19 +745,14 @@ export default function Home() {
                         : "Identification data is sensitive and access must be restricted."}
                     </div>
                   </div>
-                  <label className={`camera-box ${idPhoto ? "has-photo" : ""}`}>
+                  <div className={`camera-box ${idPhoto ? "has-photo" : ""}`}>
                     {idPhoto ? (
                       <>
                         <img src={idPhoto} alt="ตัวอย่างรูปบัตรประชาชน" />
-                        <span>
-                          {language === "th"
-                            ? "กดเพื่อถ่ายใหม่"
-                            : "Tap to retake"}
-                        </span>
+                        <div className="id-card-actions"><label className="secondary-light">เปลี่ยนรูป / Replace<input type="file" accept="image/*" capture="environment" onChange={(event) => { const file = event.target.files?.[0]; if (file) { setIdPhotoFile(file); setIdPhoto(URL.createObjectURL(file)); } event.currentTarget.value = ""; }} /></label><button type="button" className="id-remove" onClick={() => { setIdPhoto(""); setIdPhotoFile(null); }}>ลบรูป / Remove</button></div>
                       </>
                     ) : (
-                      <>
-                        <b>
+                      <label className="id-upload-prompt"><b>
                           ▣{" "}
                           {language === "th"
                             ? "ถ่ายรูปบัตรประชาชน"
@@ -729,19 +762,10 @@ export default function Home() {
                           {language === "th"
                             ? "หรือเลือกรูปจากเครื่อง"
                             : "or choose from this device"}
-                        </small>
-                      </>
+                        </small><input type="file" accept="image/*" capture="environment" onChange={(event) => { const file = event.target.files?.[0]; if (file) { setIdPhotoFile(file); setIdPhoto(URL.createObjectURL(file)); } event.currentTarget.value = ""; }} /></label>
                     )}
-                    <input
-                      type="file"
-                      accept="image/*"
-                      capture="environment"
-                      onChange={(e) => {
-                        const f = e.target.files?.[0];
-                        if (f) setIdPhoto(URL.createObjectURL(f));
-                      }}
-                    />
-                  </label>
+                  </div>
+                  {!idPhoto && <mark className="id-required">กรุณาแนบภาพบัตรประชาชนก่อนดำเนินการต่อ <small>Please attach an image of your ID card before continuing.</small></mark>}
                 </div>
               )}
               <div className="confirm final-agreement"><em>การรับทราบและยินยอม / Acknowledgement &amp; Consent</em><h2>ยืนยันการอ่านเอกสาร</h2><p>{currentDefinition.acknowledgement.th}</p><p lang="en">{currentDefinition.acknowledgement.en}</p><button type="button" aria-pressed={ans[0] === true} className={`final-agreement-button ${ans[0] === true ? "selected" : ""}`} onClick={() => { const next = ans[0] === true ? null : true; setAns([next]); if (next !== true) { setSigned(false); setSignatureImage(""); setSignedAt(""); } }}><span>{ans[0] === true ? "✓ ยืนยันแล้ว — ข้าพเจ้าได้อ่านและยอมรับ" : "ยืนยันว่าได้อ่านและยอมรับ"}</span><small>{ans[0] === true ? "Confirmed — I have read and agree" : "I have read and agree"}</small></button></div>
@@ -978,6 +1002,7 @@ export default function Home() {
                 <small>ลงนามอิเล็กทรอนิกส์ {signedAt}</small>
               </div>
             </div>
+            {currentForm.review && idPhoto && <section className="document-id-page"><h2>สำเนาบัตรประชาชนผู้ให้ความยินยอม<small>Copy of ID Card of the Consent Grantor</small></h2><img src={idPhoto} alt="สำเนาบัตรประชาชนผู้ให้ความยินยอม" /></section>}
             <footer>
               มิชิโกะ คลินิกเวชกรรม &nbsp; | &nbsp; MICHIKO Aesthetics
             </footer>

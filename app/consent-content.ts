@@ -88,11 +88,6 @@ export const normalizedConsentContent: Record<string, NormalizedConsentContent> 
         item("ยังไม่ได้ทดสอบในหญิงตั้งครรภ์หรือให้นมบุตร เด็ก ผู้มีภาวะเลือดออกผิดปกติ การติดเชื้อหรือโรคผิวหนังที่กำลังเป็น เบาหวาน ลมชัก โรคหัวใจรุนแรง หรือโรคภูมิคุ้มกัน", "The system has not been tested in pregnant or breastfeeding individuals, children, or people with bleeding disorders, active infection or skin disease, diabetes, epilepsy, severe heart disease, or autoimmune disease."),
         item("หลีกเลี่ยงการสัมผัสบริเวณรักษาหรือทาผลิตภัณฑ์ดูแลผิวจนกว่าจะได้รับคำแนะนำ", "Avoid touching the treated area or applying skin-care products until instructed otherwise."),
       ]),
-      section("photo", "text", "การถ่ายภาพและวิดีโอระหว่างรักษา", "Photography and Video During Treatment", [
-        item("ข้าพเจ้ายินยอมให้แพทย์เป็นผู้ทำหัตถการ", "I consent to the physician performing the procedure."),
-        item("ข้าพเจ้ายินยอมให้คลินิกถ่ายภาพหรือวิดีโอก่อน ระหว่าง และหลังทำหัตถการ", "I consent to the clinic taking photographs or video before, during, and after the procedure."),
-        item("ข้าพเจ้ารับทราบว่าภาพหรือวิดีโออาจใช้เพื่อการศึกษาและการพัฒนาการรักษา และอาจแบ่งปันกับแพทย์และเจ้าหน้าที่ของ Michiko Clinic", "I understand that photographs or videos may be used for education and treatment development and may be shared with Michiko Clinic physicians and staff."),
-      ]),
     ],
     acknowledgement: item("ข้าพเจ้าได้อ่านและเข้าใจข้อมูลเกี่ยวกับ Ultraformer III และมีโอกาสซักถามก่อนตัดสินใจ", "I have read and understood the information about Ultraformer III and have had an opportunity to ask questions before deciding."),
     reviewNotes: ["The file labelled TH contains English-only content. Thai counterparts were translated directly from that source and require clinical/legal review."],

@@ -224,12 +224,7 @@ const questions: Record<string, ConsentQuestion[]> = {
     { id: "previous-filler-amount", label: { th: "ปริมาณที่เคยฉีด (cc)", en: "Previously injected amount (cc)" }, type: "number", required: true },
     { id: "previous-filler-date", label: { th: "วันที่หรือช่วงเวลาที่เคยฉีด", en: "Date or period of previous injection" }, type: "date", required: true },
   ],
-  ultraformer: [
-    yesNo("image-education", "ยินยอมให้ใช้ภาพเพื่อการศึกษาหรือเป็นบันทึกการรักษาหรือไม่?", "Do you consent to the use of images for educational purposes or treatment records?", false),
-    yesNo("information-explained", "แพทย์หรือคลินิกได้อธิบายข้อมูลและท่านเข้าใจแล้วใช่หรือไม่?", "Has the information provided by the physician or clinic been explained and understood?", false),
-    yesNo("not-coerced", "ท่านยืนยันว่าไม่ได้ถูกบังคับเกี่ยวกับการให้ข้อมูลหรือการตัดสินใจรับหัตถการใช่หรือไม่?", "Do you confirm that you have not been coerced regarding the information or treatment decision?", false),
-    yesNo("result-reference", "ยินยอมให้แพทย์ใช้ภาพเพื่ออ้างอิงผลการรักษาหรือการเปลี่ยนแปลงของใบหน้าหรือไม่?", "Do you consent to the physician using images as a reference for treatment results or facial changes?", false),
-  ],
+  ultraformer: [],
   xerf: [
     yesNo("implanted-device", "มีเครื่องกระตุ้นหัวใจหรืออุปกรณ์อิเล็กทรอนิกส์ฝังในร่างกายหรือไม่?", "Do you have a pacemaker or another implanted electronic device?"),
     yesNo("cancer-history", "เคยได้รับการวินิจฉัยหรือรักษาโรคมะเร็งหรือไม่?", "Have you been diagnosed with or treated for cancer?"),

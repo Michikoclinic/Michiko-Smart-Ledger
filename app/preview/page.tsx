@@ -4,6 +4,7 @@ import { useMemo, useRef, useState } from "react";
 import { consentDefinitionById, consentDefinitions, type ConsentAnswer } from "../consent-model";
 
 const samplePatient = { hn: "HN-PREVIEW-001", name: "ผู้รับบริการตัวอย่าง", birth: "1 มกราคม 2533" };
+const consentDate = new Intl.DateTimeFormat("th-TH", { day: "numeric", month: "long", year: "numeric" }).format(new Date());
 
 export default function ConsentPreviewPage() {
   const [formId, setFormId] = useState(consentDefinitions[0].id);
@@ -53,7 +54,7 @@ export default function ConsentPreviewPage() {
   return <main className="preview-page">
     <header className="preview-banner"><div><b>PREVIEW MODE</b><span>ข้อมูลตัวอย่างเท่านั้น · ไม่มีการสร้าง Consent record</span></div><label>เลือกแบบฟอร์ม<select value={formId} onChange={(event) => selectForm(event.target.value)}>{consentDefinitions.map((item) => <option key={item.id} value={item.id}>{item.title.en}</option>)}</select></label></header>
     <section className="consent preview-consent">
-      <div className="patientbar"><div><i>ผ</i><span><small>ผู้รับบริการ</small><b>{samplePatient.name}</b></span></div><span><small>HN</small><b>{samplePatient.hn}</b></span><span><small>วันเกิด</small><b>{samplePatient.birth}</b></span><span><small>เอกสาร</small><b>{definition.title.th}</b></span></div>
+      <div className="patientbar"><div><i>ผ</i><span><small>ผู้รับบริการ / Patient</small><b>{samplePatient.name}</b></span></div><span><small>HN</small><b>{samplePatient.hn}</b></span><span><small>วันเกิด / Date of Birth</small><b>{samplePatient.birth}</b></span><span><small>วันที่ยินยอม / Consent Date</small><b>{consentDate}</b></span><span><small>เอกสาร / Document</small><b>{definition.title.th}<small>{definition.title.en}</small></b></span></div>
       <div className="paper"><div className="title"><b>CONSENT PREVIEW</b><h2>{definition.title.th}</h2><p>{definition.title.en}</p></div>
         <div className="source-content">{definition.sections.map((section) => <section className={`consent-section ${section.type}`} key={section.id}><header>{section.title.th && <h3>{section.title.th}</h3>}{section.title.en && <p lang="en">{section.title.en}</p>}</header><div className="consent-section-items">{section.items.map((item, index) => <article className="bilingual-item" key={`${section.id}-${index}`}>{item.th && <b lang="th">{item.th}</b>}{item.en && <p lang="en">{item.en}</p>}</article>)}</div></section>)}</div>
         <div className="screening"><em>คำถามก่อนรับบริการ / Pre-treatment questions</em><h2>กรุณาตอบคำถามที่กำหนดให้ครบก่อนดำเนินการต่อ</h2>
@@ -61,7 +62,7 @@ export default function ConsentPreviewPage() {
             const answer = answers[question.id];
             const invalid = attempted && question.required && (!answer?.value || Boolean(question.detailWhen?.includes(answer.value) && !answer.detail?.trim()));
             return <div className={`screening-row ${invalid ? "question-invalid" : ""}`} key={question.id} data-question-error={invalid || undefined}><div><b>{question.label.th}{question.required && " *"}</b><small>{question.label.en}</small>
-              {(question.type === "date" || question.type === "text") && <input className="question-direct-input" type={question.type} value={answer?.value || ""} onChange={(event) => setAnswers((current) => ({ ...current, [question.id]: { value: event.target.value } }))} />}
+              {(question.type === "date" || question.type === "text" || question.type === "number") && <input className="question-direct-input" type={question.type} min={question.type === "number" ? "0" : undefined} step={question.type === "number" ? "0.1" : undefined} value={answer?.value || ""} onChange={(event) => setAnswers((current) => ({ ...current, [question.id]: { value: event.target.value } }))} />}
               <div className="screening-buttons">{(question.options ?? []).map((option) => <button type="button" aria-pressed={answer?.value === option.value} key={option.value} className={`answer-choice ${answer?.value === option.value ? "selected" : ""}`} onClick={() => setAnswers((current) => {
                 const next = { ...current, [question.id]: { value: option.value, detail: question.detailWhen?.includes(option.value) ? current[question.id]?.detail || "" : "" } };
                 definition.questions.filter((candidate) => candidate.showWhen?.questionId === question.id && candidate.showWhen.value !== option.value).forEach((candidate) => delete next[candidate.id]); return next;

@@ -187,6 +187,7 @@ export default function Home() {
   const currentForm =
     consentForms.find((f) => f.id === formId) ?? consentForms[0];
   const currentDefinition = consentDefinitionById[currentForm.id] ?? consentDefinitions[0];
+  const consentDate = new Intl.DateTimeFormat("th-TH", { day: "numeric", month: "long", year: "numeric" }).format(new Date());
   const currentQuestions = currentDefinition.questions.filter((question) => !question.showWhen || answers[question.showWhen.questionId]?.value === question.showWhen.value);
   const screeningIncomplete = currentQuestions.some((question) => {
     const answer = answers[question.id];
@@ -196,9 +197,8 @@ export default function Home() {
   const signatureReady = !screeningIncomplete && ans[0] === true;
   const canSubmitConsent = signatureReady && signed && Boolean(signatureImage) && (!currentForm.review || Boolean(idPhoto));
   const startForm = (id: string) => {
-    const f = consentForms.find((x) => x.id === id);
     setFormId(id);
-    setLanguage(f?.thFile ? "th" : "en");
+    setLanguage("th");
     setAns([null]);
     setAnswers({});
     setValidationAttempted(false);
@@ -578,7 +578,7 @@ export default function Home() {
             <div className="consent-tools">
               <div>
                 <small>รูปแบบเอกสาร</small>
-                <b>ภาษาไทย / English ในแถวเดียวกัน</b>
+                <b>ภาษาไทย + English ในใบเดียวกัน</b>
               </div>
               <span>ยึดรูปแบบเดียวกับแบบฟอร์ม Filler</span>
             </div>
@@ -586,7 +586,7 @@ export default function Home() {
               <div>
                 <i>{patient.name[0]}</i>
                 <span>
-                  <small>ผู้รับบริการ</small>
+                  <small>ผู้รับบริการ / Patient</small>
                   <b>{patient.name}</b>
                 </span>
               </div>
@@ -595,16 +595,13 @@ export default function Home() {
                 <b>{patient.hn}</b>
               </span>
               <span>
-                <small>วันเกิด</small>
+                <small>วันเกิด / Date of Birth</small>
                 <b>{patient.birth}</b>
               </span>
+              <span><small>วันที่ยินยอม / Consent Date</small><b>{consentDate}</b></span>
               <span>
-                <small>เอกสาร</small>
-                <b>
-                  {language === "en" && currentForm.en
-                    ? currentForm.en
-                    : currentForm.name}
-                </b>
+                <small>เอกสาร / Document</small>
+                <b>{currentDefinition.title.th}<small>{currentDefinition.title.en}</small></b>
               </span>
             </div>
             <div className="progress">
@@ -617,20 +614,12 @@ export default function Home() {
             <div className="paper">
               <div className="title">
                 <b>
-                  {language === "th"
-                    ? "แบบยินยอมการรักษา"
-                    : "TREATMENT CONSENT"}
+                  แบบยินยอมการรักษา / TREATMENT CONSENT
                 </b>
                 <h2>
-                  {language === "en" && currentForm.en
-                    ? currentForm.en
-                    : currentForm.name}
+                  {currentDefinition.title.th}
                 </h2>
-                <p>
-                  {language === "th"
-                    ? "กรุณาอ่านข้อมูลทุกส่วนให้ครบถ้วนก่อนตัดสินใจ"
-                    : "Please read all sections carefully before making your decision."}
-                </p>
+                <p>{currentDefinition.title.en}</p>
               </div>
               <div className="source-content">
                 {currentDefinition.sections.map((section) => (
@@ -662,10 +651,12 @@ export default function Home() {
                       <div>
                         <b>{question.label.th}{question.required && " *"}</b>
                         <small>{question.label.en}</small>
-                        {(question.type === "date" || question.type === "text") && (
+                        {(question.type === "date" || question.type === "text" || question.type === "number") && (
                           <input
                             className="question-direct-input"
                             type={question.type}
+                            min={question.type === "number" ? "0" : undefined}
+                            step={question.type === "number" ? "0.1" : undefined}
                             value={answer?.value || ""}
                             onChange={(event) => setAnswers((current) => ({
                               ...current,

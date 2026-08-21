@@ -1,7 +1,8 @@
 import consentDocuments from "../extracted_consents.json" with { type: "json" };
+import { normalizedConsentContent } from "./consent-content";
 
 export type BilingualText = { th: string; en: string };
-export type ConsentQuestionType = "yes_no" | "single_choice" | "text" | "date";
+export type ConsentQuestionType = "yes_no" | "single_choice" | "text" | "date" | "number";
 export type ConsentOption = { value: string; label: BilingualText };
 export type ConsentQuestion = {
   id: string;
@@ -11,7 +12,7 @@ export type ConsentQuestion = {
   options?: ConsentOption[];
   detailWhen?: string[];
   detailLabel?: BilingualText;
-  detailType?: "text" | "date";
+  detailType?: "text" | "date" | "number";
   showWhen?: { questionId: string; value: string };
 };
 export type ConsentSection = {
@@ -62,7 +63,8 @@ const metadata: ConsentMetadata[] = [
 ];
 
 const questionLine = /[?？]|หรือไม่(?:\s*$|\s*[೦᪀◯☐])|[೦᪀◯☐]\s*(ใช่|ไม่|Yes|No)/i;
-const metadataLine = /HN[:：]|Patient['’]?s Name|Patient Name|ชื่อ-สกุล|ข้อมูลผู้ป่วย|Contact Number|หมายเลขโทรศัพท์|Identity card|ลายมือชื่อ|Signature|Date:\s*_+|มิชิโกะ คลินิกเวชกรรม|หนังสือแสดงความยินยอม/i;
+const metadataLine = /HN[:：_]|Patient['’]?s Name|Patient Name|ชื่อ-สกุล|ชื่อผู้เข้ารับการรักษา|ข้อมูลผู้ป่วย|Patient Information|Contact Number|หมายเลขโทรศัพท์|Identity card|ลายมือชื่อ|Signature|ชื่อแพทย์ผู้ให้การรักษา|Physician Name|Doctor\/Nurse|Date:\s*_+|วันที่[.。…_]{3,}|มิชิโกะ คลินิกเวชกรรม|หนังสือแสดงความยินยอม|โปรดอ่านรายละเอียดเพิ่มเติม|Please read additional details/i;
+const paperFieldLine = /[.…_]{5,}|\.{5,}|_{5,}|\b(?:Name|Date|Amount|Value)\s*[:：]\s*[_\.]/i;
 const headingLine = /^(การยินยอม|Consent|ความเสี่ยง|Possible Risks|ข้อปฏิบัติ|Post-Treatment|About|How it works|After effects|Temporary effects|Risks|Effectiveness|Possible side effects|Contraindications|Precautions|คำเตือน|ข้อควรระวัง|การดูแล|ผลลัพธ์|วัตถุประสงค์)/i;
 
 function sourceLines(file?: string) {
@@ -76,7 +78,7 @@ function sourceLines(file?: string) {
 }
 
 function contentLines(file?: string) {
-  return sourceLines(file).filter((line) => !metadataLine.test(line) && !questionLine.test(line));
+  return sourceLines(file).filter((line) => !metadataLine.test(line) && !questionLine.test(line) && !paperFieldLine.test(line));
 }
 
 function pairedInline(lines: string[]) {
@@ -217,12 +219,16 @@ const questions: Record<string, ConsentQuestion[]> = {
     yesNo("allergy-test", "ต้องการทดสอบการแพ้ก่อนฉีดหรือไม่?", "Would you like an allergy test before injection?", false),
     yesNo("topical-anesthesia", "ยินยอมรับการทายาระงับความรู้สึกก่อนหรือระหว่างการรักษาหรือไม่?", "Do you consent to topical numbing cream before or during treatment?", false),
     yesNo("injectable-anesthetic-allergy", "มีประวัติแพ้ยาชาชนิดฉีดหรือไม่?", "Do you have a history of allergy to injectable anesthetic?"),
+    { id: "previous-filler-area", label: { th: "บริเวณที่เคยฉีดฟิลเลอร์", en: "Area of previous filler injection" }, type: "text", required: true },
+    { id: "previous-filler-brand", label: { th: "ยี่ห้อหรือประเภทสารที่เคยฉีด", en: "Brand or type of previously injected substance" }, type: "text", required: true },
+    { id: "previous-filler-amount", label: { th: "ปริมาณที่เคยฉีด (cc)", en: "Previously injected amount (cc)" }, type: "number", required: true },
+    { id: "previous-filler-date", label: { th: "วันที่หรือช่วงเวลาที่เคยฉีด", en: "Date or period of previous injection" }, type: "date", required: true },
   ],
   ultraformer: [
-    yesNo("image-education", "", "I give consent to the use of images for educational purposes or treatment records.", false),
-    yesNo("information-explained", "", "The information provided by the physician/clinic has been explained and I understand it.", false),
-    yesNo("not-coerced", "", "I have not been coerced into giving any information regarding the treatment or procedure.", false),
-    yesNo("result-reference", "", "I understand that the physician may use the images for reference regarding treatment results or facial changes.", false),
+    yesNo("image-education", "ยินยอมให้ใช้ภาพเพื่อการศึกษาหรือเป็นบันทึกการรักษาหรือไม่?", "Do you consent to the use of images for educational purposes or treatment records?", false),
+    yesNo("information-explained", "แพทย์หรือคลินิกได้อธิบายข้อมูลและท่านเข้าใจแล้วใช่หรือไม่?", "Has the information provided by the physician or clinic been explained and understood?", false),
+    yesNo("not-coerced", "ท่านยืนยันว่าไม่ได้ถูกบังคับเกี่ยวกับการให้ข้อมูลหรือการตัดสินใจรับหัตถการใช่หรือไม่?", "Do you confirm that you have not been coerced regarding the information or treatment decision?", false),
+    yesNo("result-reference", "ยินยอมให้แพทย์ใช้ภาพเพื่ออ้างอิงผลการรักษาหรือการเปลี่ยนแปลงของใบหน้าหรือไม่?", "Do you consent to the physician using images as a reference for treatment results or facial changes?", false),
   ],
   xerf: [
     yesNo("implanted-device", "มีเครื่องกระตุ้นหัวใจหรืออุปกรณ์อิเล็กทรอนิกส์ฝังในร่างกายหรือไม่?", "Do you have a pacemaker or another implanted electronic device?"),
@@ -249,24 +255,54 @@ const questions: Record<string, ConsentQuestion[]> = {
 };
 
 export const consentDefinitions: ConsentDefinition[] = metadata.map((item) => {
+  const normalized = normalizedConsentContent[item.id];
   const paired = pairContent(item.th, item.en);
   const acknowledgementPattern = /ขอรับรอง|ได้อ่าน|ยินยอมรับการรักษา|I (?:hereby )?(?:certify|acknowledge|have read)|agree and consent/i;
   const acknowledgementIndex = paired.items.findLastIndex((text) => acknowledgementPattern.test(`${text.th} ${text.en}`));
   const acknowledgement = paired.items[acknowledgementIndex] ?? { th: "ข้าพเจ้าได้อ่านและเข้าใจข้อความข้างต้น", en: "I have read and understood the information above." };
   const sectionItems = paired.items.filter((_, index) => index !== acknowledgementIndex);
-  return {
+  const definition: ConsentDefinition = {
     id: item.id,
     version: "2026-08",
     title: item.title,
     group: item.group,
     review: item.review ?? false,
     sources: { th: item.th, ...(item.en ? { en: item.en } : {}) },
-    sections: toSections(sectionItems),
+    sections: normalized?.sections ?? toSections(sectionItems),
     questions: questions[item.id] ?? [],
-    acknowledgement,
-    translationReviewRequired: paired.review,
-    contentConflicts: paired.conflicts,
+    acknowledgement: normalized?.acknowledgement ?? acknowledgement,
+    translationReviewRequired: Boolean(normalized) || paired.review,
+    contentConflicts: normalized?.reviewNotes ?? paired.conflicts,
   };
+  return definition;
 });
+
+export type BilingualAuditResult = { form: string; missing: string[]; suspiciousLengthPairs: number; productionReady: boolean };
+export function auditBilingualConsent(definition: ConsentDefinition): BilingualAuditResult {
+  const missing: string[] = [];
+  let suspiciousLengthPairs = 0;
+  const inspect = (value: BilingualText, path: string) => {
+    if (!value.th.trim()) missing.push(`${path}.th`);
+    if (!value.en.trim()) missing.push(`${path}.en`);
+    if (value.th.trim() && value.en.trim()) {
+      const shorter = Math.max(1, Math.min(value.th.length, value.en.length));
+      if (Math.max(value.th.length, value.en.length) / shorter > 4) suspiciousLengthPairs += 1;
+    }
+  };
+  inspect(definition.title, "title");
+  definition.sections.forEach((section, sectionIndex) => {
+    inspect(section.title, `sections.${sectionIndex}.title`);
+    section.items.forEach((value, itemIndex) => inspect(value, `sections.${sectionIndex}.items.${itemIndex}`));
+  });
+  definition.questions.forEach((question, questionIndex) => {
+    inspect(question.label, `questions.${questionIndex}.label`);
+    question.options?.forEach((option, optionIndex) => inspect(option.label, `questions.${questionIndex}.options.${optionIndex}`));
+    if (question.detailLabel) inspect(question.detailLabel, `questions.${questionIndex}.detailLabel`);
+  });
+  inspect(definition.acknowledgement, "acknowledgement");
+  return { form: definition.id, missing, suspiciousLengthPairs, productionReady: missing.length === 0 && suspiciousLengthPairs === 0 };
+}
+
+export const bilingualConsentAudit = consentDefinitions.map(auditBilingualConsent);
 
 export const consentDefinitionById = Object.fromEntries(consentDefinitions.map((definition) => [definition.id, definition])) as Record<string, ConsentDefinition>;

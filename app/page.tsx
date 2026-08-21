@@ -1,8 +1,12 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import consentDocuments from "../extracted_consents.json";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
+import {
+  consentDefinitionById,
+  consentDefinitions,
+  type ConsentAnswer,
+} from "./consent-model";
 
 declare global {
   interface Window {
@@ -43,228 +47,36 @@ type Rec = Patient & {
   language?: "th" | "en";
   signatureImage?: string;
   screening?: Array<{ answer: boolean | null; detail: string }>;
+  answers?: Record<string, ConsentAnswer>;
+  consentVersion?: string;
+  physicianSignatureImage?: string;
 };
 const patients: Patient[] = [
   { hn: "HN01284", name: "สมหญิง ใจดี", birth: "12 มี.ค. 2533" },
   { hn: "HN00849", name: "ณัฐชา พิมพ์ใจ", birth: "28 พ.ย. 2528" },
 ];
-const consentForms: {
-  id: string;
-  name: string;
-  en?: string;
-  group: string;
-  bilingual: boolean;
-  review?: boolean;
-  thFile?: string;
-  enFile?: string;
-}[] = [
-  {
-    id: "filler",
-    name: "ฉีดฟิลเลอร์",
-    en: "Filler Injection",
-    group: "หัตถการฉีด",
-    bilingual: true,
-    thFile: "01_ฉีดฟิลเลอร์_Filler_3.docx",
-  },
-  {
-    id: "filler-permanent",
-    name: "ฉีดฟิลเลอร์ — กรณีมีสารไม่สลาย",
-    en: "Filler Injection with Existing Permanent Filler",
-    group: "หัตถการฉีด",
-    bilingual: true,
-    thFile:
-      "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดฟิลเลอร์ (กรณีคนไข้มีสารไม่สลายอยู่บนใบหน้า).docx",
-  },
-  {
-    id: "botox",
-    name: "ฉีดโบท็อก",
-    en: "Botulinum Toxin Injection",
-    group: "หัตถการฉีด",
-    bilingual: true,
-    thFile: "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดโบท็อก.docx",
-    enFile: "(ENG) แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดโบท็อก.docx",
-  },
-  {
-    id: "sculptra",
-    name: "ฉีด Sculptra",
-    en: "Sculptra Injection",
-    group: "หัตถการฉีด",
-    bilingual: true,
-    thFile: "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีด Sculptra.docx",
-    enFile: "(ENG) แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีด Sculptra.docx",
-  },
-  {
-    id: "dissolve",
-    name: "ฉีดสลายฟิลเลอร์",
-    en: "Filler Dissolving Injection",
-    group: "หัตถการฉีด",
-    bilingual: true,
-    thFile: "แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดสลายฟิลเลอร์.docx",
-    enFile: "(Eng) แบบฟอร์มแสดงความยินยอมเข้ารับบริการฉีดสลายฟิลเลอร์.docx",
-  },
-  {
-    id: "ultraformer",
-    name: "Ultraformer III",
-    en: "Ultraformer III Treatment",
-    group: "เครื่องมือยกกระชับ",
-    bilingual: true,
-    thFile: "(TH) แบบฟอร์มการเข้ารับการรักษาด้วย Ultraformer III.docx",
-    enFile: "(ENG) แบบฟอร์มการเข้ารับการรักษาด้วย Ultraformer III.docx",
-  },
-  {
-    id: "xerf",
-    name: "Xerf",
-    en: "Xerf Treatment",
-    group: "เครื่องมือยกกระชับ",
-    bilingual: true,
-    enFile: "(Eng) Xerf-แบบฟอร์มแสดงความยินยอมเข้ารับบริการ.docx",
-  },
-  {
-    id: "nose-thread",
-    name: "ร้อยไหมจมูก",
-    en: "Nose Thread Lift",
-    group: "หัตถการร้อยไหม",
-    bilingual: true,
-    thFile: "ร้อยไหมจมูก-แบบฟอร์มแสดงความยินยอม.docx",
-  },
-  {
-    id: "full-review",
-    name: "ยินยอมเป็นเคสรีวิว — แบบเต็ม",
-    en: "Full Review Consent",
-    group: "การใช้ภาพและรีวิว",
-    bilingual: true,
-    review: true,
-    thFile: "แบบฟอร์มการยินยอมเป็นเคสรีวิว (Full review).docx",
-    enFile: "(ENG) แบบฟอร์มการยินยอมเป็นเคสรีวิว (Full review).docx",
-  },
-  {
-    id: "photo-review",
-    name: "ยินยอมเป็นเคสรีวิว — เฉพาะภาพ",
-    en: "Photo Review Consent",
-    group: "การใช้ภาพและรีวิว",
-    bilingual: true,
-    review: true,
-    thFile: "แบบฟอร์มการยินยอมเป็นเคสรีวิว (เฉพาะภาพ).docx",
-  },
-];
-const sections = [
-  [
-    "เกี่ยวกับการรักษา",
-    "ข้าพเจ้ายินยอมให้แพทย์ตรวจ รักษา และฉีดสารเติมเต็ม (Filler) โดยได้รับทราบรายละเอียดผลิตภัณฑ์ ข้อบ่งใช้ บริเวณและปริมาณที่ใช้ รวมถึงค่าใช้จ่ายก่อนรับการรักษา",
-  ],
-  [
-    "ความเสี่ยงที่ควรทราบ",
-    "การฉีดสารเติมเต็มอาจเกิดการอุดตันของหลอดเลือด หากสารเข้าสู่หลอดเลือดอาจทำให้เนื้อเยื่อขาดเลือด เนื้อตาย การมองเห็นผิดปกติ ตาบอด หรือเกิดภาวะแทรกซ้อนต่อสมองได้ แม้พบได้น้อย ผู้รับบริการต้องแจ้งอาการปวดรุนแรง ผิวซีดคล้ำ หรือการมองเห็นเปลี่ยนแปลงแก่แพทย์ทันที",
-  ],
-  [
-    "อาการที่อาจเกิดหลังฉีด",
-    "อาจมีอาการปวด บวม แดง ช้ำ คัน ตึง เป็นก้อน หรือไม่สมมาตร รวมถึงการอักเสบหรือติดเชื้อซึ่งอาจเกิดขึ้นภายหลัง หากมีอาการผิดปกติควรติดต่อคลินิกทันที",
-  ],
-  [
-    "ยาชาและการรักษา",
-    "ผลิตภัณฑ์บางชนิดมี Lidocaine 0.3% และอาจมีการทาหรือฉีดยาระงับความรู้สึกก่อนทำหัตถการ ยาชาอาจทำให้ระคายเคือง แพ้ยา หรือเกิดการอักเสบของเส้นประสาทชั่วคราวหรือถาวรได้",
-  ],
-  [
-    "ผลลัพธ์ของการรักษา",
-    "ผลการรักษาแตกต่างกันในแต่ละบุคคล โดยทั่วไปอาจคงอยู่ประมาณ 6–18 เดือน ขึ้นกับชนิดผลิตภัณฑ์ ตำแหน่งที่ฉีด การเผาผลาญ และการดูแลตนเอง และไม่สามารถรับประกันผลการรักษาได้",
-  ],
-  [
-    "การดูแลหลังฉีด",
-    "1. หลีกเลี่ยงการกด นวด หรือสัมผัสบริเวณที่ฉีดโดยไม่จำเป็น\n2. งดออกกำลังกายหนัก ความร้อนจัด ซาวน่า และแอลกอฮอล์ 24–48 ชั่วโมง\n3. หลีกเลี่ยงเลเซอร์หรือหัตถการอื่นตามระยะเวลาที่แพทย์แนะนำ\n4. ดื่มน้ำและพักผ่อนให้เพียงพอ\n5. รับประทานยาและปฏิบัติตามคำแนะนำแพทย์\n6. หากปวดมาก ผิวซีดคล้ำ หรือการมองเห็นผิดปกติ ให้ติดต่อคลินิกทันที",
-  ],
-  [
-    "ประวัติการรักษาที่เกี่ยวข้อง",
-    "ข้าพเจ้าได้แจ้งประวัติการแพ้ยา โรคประจำตัว การตั้งครรภ์หรือให้นมบุตร ยาที่ใช้อยู่ รวมถึงประวัติหัตถการและสารที่เคยฉีดบริเวณที่จะรักษาแก่แพทย์ตามความเป็นจริง",
-  ],
-  [
-    "ข้อควรทราบก่อนยินยอม",
-    "ข้าพเจ้ามีโอกาสซักถามข้อสงสัยและได้รับคำอธิบายถึงประโยชน์ ทางเลือก ข้อจำกัด และความเสี่ยงแล้ว เข้าใจว่าไม่สามารถรับประกันผลการรักษา และสามารถเปลี่ยนใจได้ก่อนเริ่มหัตถการ",
-  ],
-];
-const confirms = [
-  {
-    h: "รับทราบและเข้าใจข้อมูล / Information acknowledged",
-    p: "ข้าพเจ้าได้อ่านและเข้าใจข้อความในแบบฟอร์มฉบับนี้ครบถ้วน และได้รับโอกาสซักถามข้อสงสัย / I have read and understood this form in full and had an opportunity to ask questions.",
-    yes: "รับทราบและเข้าใจ",
-  },
-  {
-    h: "แสดงความยินยอม / Consent decision",
-    p: "ข้าพเจ้ายืนยันการตัดสินใจตามรายละเอียดและเงื่อนไขที่ระบุในแบบฟอร์มฉบับนี้โดยสมัครใจ / I voluntarily confirm my decision under the details and conditions stated in this form.",
-    yes: "ยินยอมตามแบบฟอร์ม",
-  },
-];
-type ScreeningQuestion = { th: string; en: string };
-const questionsByForm: Record<string, ScreeningQuestion[]> = {
-  filler: [
-    { th: "มีโรคผิวหนัง สิว เริม หรือแผลบนใบหน้าหรือไม่?", en: "Do you have an active skin condition, acne, herpes, or a facial wound?" },
-    { th: "กำลังตั้งครรภ์หรือให้นมบุตรหรือไม่?", en: "Are you pregnant or breastfeeding?" },
-    { th: "มีประวัติแพ้ยา ยาชา หรือผลิตภัณฑ์ที่ใช้รักษาหรือไม่?", en: "Do you have an allergy to medication, anesthetic, or treatment products?" },
-  ],
-  "filler-permanent": [
-    { th: "เคยฉีดสารไม่สลาย ซิลิโคนเหลว หรือสารอื่นบริเวณที่จะรักษาหรือไม่?", en: "Have you received permanent filler, liquid silicone, or another substance in the treatment area?" },
-    { th: "มีประวัติอักเสบ ติดเชื้อ หรือเป็นก้อนจากสารเดิมหรือไม่?", en: "Have you had inflammation, infection, or nodules from the existing material?" },
-    { th: "ต้องการใช้ยาชาก่อนหรือระหว่างการรักษาหรือไม่?", en: "Would you like anesthesia before or during treatment?" },
-  ],
-  botox: [
-    { th: "เคยฉีดโบท็อกซ์มาก่อนหรือไม่?", en: "Have you previously received botulinum toxin injections?" },
-    { th: "รับประทานวิตามิน E น้ำมันปลา โอเมก้า 3 วิตามินรวม หรือใบแป๊ะก๊วยเป็นประจำหรือไม่?", en: "Do you regularly take vitamin E, fish oil, omega-3, multivitamins, or ginkgo?" },
-    { th: "รับประทานแอสไพริน ไอบูโพรเฟน หรือยาต้านการแข็งตัวของเลือดหรือไม่?", en: "Do you take aspirin, ibuprofen, or blood-thinning medication?" },
-    { th: "อยู่ในช่วงวางแผนตั้งครรภ์หรือไม่?", en: "Are you planning a pregnancy?" },
-    { th: "มีโรคผิวหนังหรือกำลังใช้ยารักษาผิวบริเวณใบหน้าหรือไม่?", en: "Do you have a facial skin condition or use medication for it?" },
-    { th: "ต้องการใช้ยาชาก่อนหรือระหว่างการรักษาหรือไม่?", en: "Would you like anesthesia before or during treatment?" },
-  ],
-  sculptra: [
-    { th: "มีประวัติแพ้ส่วนประกอบของ Sculptra ยา หรือยาชาหรือไม่?", en: "Are you allergic to Sculptra ingredients, medication, or anesthetic?" },
-    { th: "รับประทานวิตามิน E น้ำมันปลา โอเมก้า 3 วิตามินรวม หรือใบแป๊ะก๊วยเป็นประจำหรือไม่?", en: "Do you regularly take vitamin E, fish oil, omega-3, multivitamins, or ginkgo?" },
-    { th: "รับประทานแอสไพรินหรือยาต้านการแข็งตัวของเลือดหรือไม่?", en: "Do you take aspirin or blood-thinning medication?" },
-    { th: "อยู่ในช่วงวางแผนตั้งครรภ์หรือไม่?", en: "Are you planning a pregnancy?" },
-    { th: "มีโรคผิวหนังหรือกำลังใช้ยารักษาผิวบริเวณใบหน้าหรือไม่?", en: "Do you have a facial skin condition or use medication for it?" },
-    { th: "ต้องการใช้ยาชาก่อนหรือระหว่างการรักษาหรือไม่?", en: "Would you like anesthesia before or during treatment?" },
-  ],
-  dissolve: [
-    { th: "เคยฉีดฟิลเลอร์ปลอม ซิลิโคนเหลว หรือสารที่ไม่ใช่ Hyaluronic Acid หรือไม่?", en: "Have you received fake filler, liquid silicone, or a non-HA substance?" },
-    { th: "มีประวัติแพ้สาร Hyaluronidase หรือไม่?", en: "Do you have a history of allergy to hyaluronidase?" },
-    { th: "ต้องการทดสอบการแพ้ก่อนฉีดหรือไม่?", en: "Would you like an allergy patch test before injection?" },
-    { th: "มีประวัติแพ้ยาชาชนิดฉีดหรือไม่?", en: "Do you have a history of allergy to injectable anesthetic?" },
-    { th: "ต้องการใช้ยาชาก่อนหรือระหว่างการรักษาหรือไม่?", en: "Would you like anesthesia before or during treatment?" },
-  ],
-  ultraformer: [],
-  xerf: [
-    { th: "มีเครื่องกระตุ้นหัวใจหรืออุปกรณ์อิเล็กทรอนิกส์ฝังในร่างกายหรือไม่?", en: "Do you have a pacemaker or another implanted electronic device?" },
-    { th: "เคยได้รับการวินิจฉัยหรือรักษาโรคมะเร็งหรือไม่?", en: "Have you been diagnosed with or treated for cancer?" },
-    { th: "รับประทานยากลุ่มอนุพันธ์วิตามินเอในช่วง 6 เดือนที่ผ่านมาหรือไม่?", en: "Have you taken vitamin A derivative medication within the past six months?" },
-    { th: "กำลังตั้งครรภ์หรือไม่?", en: "Are you currently pregnant?" },
-  ],
-  "nose-thread": [
-    { th: "เคยผ่าตัดหรือทำหัตถการบริเวณจมูกหรือใบหน้าหรือไม่?", en: "Have you had surgery or a procedure on your nose or face?" },
-    { th: "มีโรคภูมิคุ้มกันหรือภาวะที่กระทบต่อการหายของแผลหรือไม่?", en: "Do you have an immune condition or a condition affecting wound healing?" },
-    { th: "มีแผนเสริมจมูกด้วยซิลิโคนในอนาคตหรือไม่?", en: "Do you plan to have a silicone nose implant in the future?" },
-    { th: "อยู่ในช่วงวางแผนตั้งครรภ์หรือไม่?", en: "Are you planning a pregnancy?" },
-  ],
-  "full-review": [
-    { th: "ยินยอมให้ใช้ภาพและวิดีโอเพื่อประเมินและบันทึกผลการรักษาหรือไม่?", en: "Do you consent to photos and videos for treatment evaluation and records?" },
-    { th: "ยินยอมให้ใช้เพื่อการศึกษาและฝึกอบรมหรือไม่?", en: "Do you consent to use for education and training?" },
-    { th: "ยินยอมให้เผยแพร่เป็นเคสรีวิวและสื่อการตลาดหรือไม่?", en: "Do you consent to public review and marketing use?" },
-  ],
-  "photo-review": [
-    { th: "ยินยอมให้ใช้ภาพเพื่อประเมินและบันทึกผลการรักษาหรือไม่?", en: "Do you consent to photos for treatment evaluation and records?" },
-    { th: "ยินยอมให้ใช้ภาพเพื่อการศึกษาและฝึกอบรมหรือไม่?", en: "Do you consent to photo use for education and training?" },
-    { th: "ยินยอมให้เผยแพร่ภาพเป็นเคสรีวิวและสื่อการตลาดหรือไม่?", en: "Do you consent to publishing photos for reviews and marketing?" },
-  ],
-};
+const consentForms = consentDefinitions.map((definition) => ({
+  id: definition.id,
+  name: definition.title.th,
+  en: definition.title.en,
+  group: definition.group,
+  bilingual: true,
+  review: definition.review,
+  thFile: definition.sources.th,
+  enFile: definition.sources.en,
+}));
 export default function Home() {
   const [view, setView] = useState("patients"),
     [q, setQ] = useState(""),
     [patient, setPatient] = useState<Patient | null>(null),
-    [ans, setAns] = useState<(boolean | null)[]>([null, null]),
-    [screening, setScreening] = useState<
-      Array<{ answer: boolean | null; detail: string }>
-    >(questionsByForm.filler.map(() => ({ answer: null, detail: "" }))),
+    [ans, setAns] = useState<(boolean | null)[]>([null]),
+    [answers, setAnswers] = useState<Record<string, ConsentAnswer>>({}),
     [add, setAdd] = useState(false),
     [sign, setSign] = useState(false),
     [signed, setSigned] = useState(false),
     [recs, setRecs] = useState<Rec[]>([]),
     [notice, setNotice] = useState(""),
+    [validationAttempted, setValidationAttempted] = useState(false),
     [formId, setFormId] = useState("filler"),
     [language, setLanguage] = useState<"th" | "en">("th"),
     [idPhoto, setIdPhoto] = useState<string>(""),
@@ -362,8 +174,9 @@ export default function Home() {
   };
   const choose = (p: Patient) => {
     setPatient(p);
-    setAns([null, null]);
-    setScreening(questionsByForm.filler.map(() => ({ answer: null, detail: "" })));
+    setAns([null]);
+    setAnswers({});
+    setValidationAttempted(false);
     setSigned(false);
     setSignatureImage("");
     setSignedAt("");
@@ -374,117 +187,34 @@ export default function Home() {
   };
   const currentForm =
     consentForms.find((f) => f.id === formId) ?? consentForms[0];
-  const currentQuestions = questionsByForm[currentForm.id] || [];
-  const screeningIncomplete = currentQuestions.length > 0 && screening.some(
-    (item) => item.answer === null || (item.answer === true && !item.detail.trim()),
-  );
+  const currentDefinition = consentDefinitionById[currentForm.id] ?? consentDefinitions[0];
+  const currentConfirms = [
+    {
+      h: "การรับทราบและยินยอม / Acknowledgement & Consent",
+      p: `${currentDefinition.acknowledgement.th} / ${currentDefinition.acknowledgement.en}`,
+      yes: "ข้าพเจ้าได้อ่านและยอมรับข้อความข้างต้น",
+    },
+  ];
+  const currentQuestions = currentDefinition.questions.filter((question) => !question.showWhen || answers[question.showWhen.questionId]?.value === question.showWhen.value);
+  const screeningIncomplete = currentQuestions.some((question) => {
+    const answer = answers[question.id];
+    if (question.required && !answer?.value) return true;
+    return Boolean(answer?.value && question.detailWhen?.includes(answer.value) && !answer.detail?.trim());
+  });
   const startForm = (id: string) => {
     const f = consentForms.find((x) => x.id === id);
     setFormId(id);
     setLanguage(f?.thFile ? "th" : "en");
-    setAns([null, null]);
-    setScreening((questionsByForm[id] || []).map(() => ({ answer: null, detail: "" })));
+    setAns([null]);
+    setAnswers({});
+    setValidationAttempted(false);
+    setSigned(false);
+    setSignatureImage("");
+    setSignedAt("");
     setIdPhoto("");
     setView("consent");
     window.scrollTo(0, 0);
   };
-  const paragraphsFor = (file?: string) => {
-    const document = consentDocuments.find((item) => item.file === file);
-    const blocks = (document?.blocks ?? []) as Array<{
-      type: string;
-      text?: string;
-      rows?: string[][];
-    }>;
-    return blocks
-      .flatMap((block) =>
-        block.type === "paragraph" && block.text
-          ? [block.text]
-          : block.type === "table"
-            ? (block.rows ?? []).map((row) => row.filter(Boolean).join(" · "))
-            : [],
-      )
-      .filter((text, index, all) => text && all.indexOf(text) === index)
-      .filter(
-        (text) =>
-          !text.includes("HN:") &&
-          !text.includes("ลายมือชื่อผู้รับบริการ") &&
-          !text.includes("ลายมือชื่อผู้เข้ารับการรักษา") &&
-          !text.includes("ลายมือของผู้ป่วย") &&
-          !text.includes("ชื่อผู้เข้ารับการรักษา") &&
-          !text.includes("ชื่อแพทย์ผู้ให้การรักษา") &&
-          !text.includes("Patient Signature") &&
-          !text.includes("Physician") &&
-          !text.includes("Patient's Name:") &&
-          !text.includes("ข้อมูลผู้ป่วย:") &&
-          !text.includes("คำถามก่อนรับบริการ") &&
-          !text.includes("Pre-Treatment Questions") &&
-          !text.includes("มีโรคผิวหนัง") &&
-          !text.includes("กำลังตั้งครรภ์") &&
-          !text.includes("ยินยอมรับการทายาชา") &&
-          !text.includes("หนังสือแสดงความยินยอมเข้ารับการฉีดฟิลเลอร์") &&
-          !text.includes("มิชิโกะ คลินิกเวชกรรม |") &&
-          !/[?？]|หรือไม่|[೦᪀◯]\s*(ใช่|ไม่|Yes|No)/i.test(text),
-      );
-  };
-  const isMostlyEnglish = (text: string) =>
-    (text.match(/[A-Za-z]/g)?.length ?? 0) > text.length * 0.45;
-  const makeReferenceRows = (paragraphs: string[]) => {
-    const rows: Array<{ th: string; en: string }> = [];
-    for (let index = 0; index < paragraphs.length; index += 1) {
-      const text = paragraphs[index];
-      const englishDivider = /\s\/\s(?=[A-Za-z])/.exec(text);
-      const slash = englishDivider?.index ?? -1;
-      if (slash > -1) {
-        rows.push({ th: text.slice(0, slash), en: text.slice(slash + 3) });
-      } else if (!isMostlyEnglish(text) && isMostlyEnglish(paragraphs[index + 1] || "")) {
-        rows.push({ th: text, en: paragraphs[index + 1] });
-        index += 1;
-      } else {
-        rows.push(isMostlyEnglish(text) ? { th: "", en: text } : { th: text, en: "" });
-      }
-    }
-    return rows;
-  };
-  const thaiParagraphs = paragraphsFor(currentForm.thFile);
-  const englishParagraphs = paragraphsFor(currentForm.enFile);
-  const bilingualRows = currentForm.id === "filler"
-    ? makeReferenceRows(thaiParagraphs)
-    : Array.from(
-        { length: Math.max(thaiParagraphs.length, englishParagraphs.length) },
-        (_, index) => ({
-          th: thaiParagraphs[index] || "",
-          en: englishParagraphs[index] || "",
-        }),
-      );
-  const hasCompleteBilingualSource = currentForm.id === "filler" ||
-    Boolean(currentForm.thFile && currentForm.enFile);
-  const documentFile = language === "en" ? currentForm.enFile : currentForm.thFile;
-  const currentDocument = consentDocuments.find((d) => d.file === documentFile);
-  const rawBlocks = (currentDocument?.blocks ?? []) as Array<{
-    type: string;
-    text?: string;
-    rows?: string[][];
-  }>;
-  const documentParagraphs = rawBlocks
-    .flatMap((block) =>
-      block.type === "paragraph" && block.text
-        ? [block.text]
-        : block.type === "table"
-          ? (block.rows ?? []).map((row) => row.filter(Boolean).join(" · "))
-          : [],
-    )
-    .filter((text, index, all) => text && all.indexOf(text) === index);
-  const visibleParagraphs = documentParagraphs.filter(
-    (text) =>
-      !text.includes("HN:") &&
-      !text.includes("ลายมือชื่อผู้รับบริการ") &&
-      !text.includes("คำถามก่อนรับบริการ") &&
-      !text.includes("Pre-Treatment Questions") &&
-      !text.includes("มีโรคผิวหนัง") &&
-      !text.includes("กำลังตั้งครรภ์") &&
-      !text.includes("ยินยอมรับการทายาชา") &&
-      !text.includes("หนังสือแสดงความยินยอมเข้ารับการฉีดฟิลเลอร์"),
-  );
   const pos = (e: React.PointerEvent<HTMLCanvasElement>) => {
     const r = e.currentTarget.getBoundingClientRect();
     return {
@@ -629,7 +359,8 @@ export default function Home() {
       language,
       signedAt: time,
       signatureImage,
-      screening,
+      answers,
+      consentVersion: currentDefinition.version,
       status: "saved",
     };
     save([r, ...recs]);
@@ -639,13 +370,44 @@ export default function Home() {
     setShowDocument(true);
     window.scrollTo(0, 0);
   };
+  const submitConsent = () => {
+    setValidationAttempted(true);
+    if (screeningIncomplete) {
+      requestAnimationFrame(() => document.querySelector<HTMLElement>("[data-question-error='true']")?.scrollIntoView({ behavior: "smooth", block: "center" }));
+      return;
+    }
+    if (ans.some((answer) => answer !== true)) {
+      document.querySelector<HTMLElement>(".confirm")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    if (!signed || !signatureImage) {
+      setSign(true);
+      return;
+    }
+    if (currentForm.review && !idPhoto) {
+      document.querySelector<HTMLElement>(".id-attachment")?.scrollIntoView({ behavior: "smooth", block: "center" });
+      return;
+    }
+    submit();
+  };
   const openSavedDocument = (record: Rec) => {
     setPatient({ hn: record.hn, name: record.name, birth: record.birth });
     setSignedAt(record.signedAt);
     setSignatureImage(record.signatureImage || "");
+    setSigned(Boolean(record.signatureImage));
     setFormId(record.formId || "filler");
     setLanguage(record.language || "th");
-    if (record.screening) setScreening(record.screening);
+    if (record.answers) {
+      setAnswers(record.answers);
+    } else if (record.screening) {
+      const definition = consentDefinitionById[record.formId || "filler"];
+      setAnswers(Object.fromEntries(record.screening.map((item, index) => [
+        definition?.questions[index]?.id || `legacy-question-${index + 1}`,
+        { value: item.answer === true ? "yes" : item.answer === false ? "no" : "", detail: item.detail },
+      ])));
+    } else {
+      setAnswers({});
+    }
     setActiveRecordId(record.id);
     setShowDocument(true);
   };
@@ -795,23 +557,12 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="signature-once-card">
-              <div>
-                <em>ลายเซ็นหลัก / Primary signature</em>
-                <h3>ลงลายมือชื่อครั้งเดียวก่อนเลือกแบบฟอร์ม</h3>
-                <p>ระบบจะนำลายเซ็นนี้ไปใช้กับเอกสารที่ทำต่อเนื่องสำหรับผู้รับบริการรายนี้</p>
-              </div>
-              <button className={signed ? "done" : "primary"} onClick={() => setSign(true)}>
-                {signed ? "✓ บันทึกลายเซ็นแล้ว" : "✎ ลงลายมือชื่อ"}
-              </button>
-            </div>
             <div className="form-grid">
               {consentForms.map((f) => (
                 <button
                   className="form-card"
                   key={f.id}
                   onClick={() => startForm(f.id)}
-                  disabled={!signed}
                 >
                   <span className="form-icon">{f.review ? "▣" : "✦"}</span>
                   <span>
@@ -888,56 +639,60 @@ export default function Home() {
                 </p>
               </div>
               <div className="source-content">
-                {!hasCompleteBilingualSource && (
+                {currentDefinition.translationReviewRequired && (
                   <div className="translation-review-note">
-                    ยังไม่มีต้นฉบับภาษาคู่ที่คลินิกตรวจรับรอง — แสดงเฉพาะข้อความต้นฉบับเพื่อป้องกันความคลาดเคลื่อน
+                    เนื้อหาบางส่วนมีต้นฉบับเพียงภาษาเดียว คำแปลต้องได้รับการตรวจรับรองทางการแพทย์และกฎหมายก่อนใช้งานจริง
                   </div>
                 )}
-                {currentForm.id === "filler" ? bilingualRows.map((row, i) => (
-                  <div className="bilingual-row" key={`${i}-${row.th.slice(0, 20)}`}>
-                    <p lang="th">{row.th || "—"}</p>
-                    <p lang="en">{row.en || "—"}</p>
-                  </div>
-                )) : (
-                  <div className="language-columns">
-                    <section lang="th">
-                      <h3>ภาษาไทย</h3>
-                      {thaiParagraphs.length ? thaiParagraphs.map((text, i) => <p key={i}>{text}</p>) : <p className="language-missing">ยังไม่มีต้นฉบับภาษาไทยที่ผ่านการตรวจรับรอง</p>}
-                    </section>
-                    <section lang="en">
-                      <h3>English</h3>
-                      {englishParagraphs.length ? englishParagraphs.map((text, i) => <p key={i}>{text}</p>) : <p className="language-missing">Approved English source is not yet available.</p>}
-                    </section>
-                  </div>
-                )}
+                {currentDefinition.sections.map((section) => (
+                  <section className={`consent-section ${section.type}`} key={section.id}>
+                    <header>
+                      <h3>{section.title.th}</h3>
+                      <p lang="en">{section.title.en}</p>
+                    </header>
+                    <div className="consent-section-items">
+                      {section.items.map((item, index) => (
+                        <article className="bilingual-item" key={`${section.id}-${index}`}>
+                          <b lang="th">{item.th}</b>
+                          <p lang="en">{item.en}</p>
+                        </article>
+                      ))}
+                    </div>
+                  </section>
+                ))}
               </div>
               {currentQuestions.length > 0 && (
                 <div className="screening">
                   <em>คำถามก่อนรับบริการ / Pre-treatment questions</em>
-                  <h2>เลือก “ไม่มี” เพื่อจบข้อนั้น หรือเลือก “มี” เพื่อกรอกรายละเอียด</h2>
-                  {currentQuestions.map((question, i) => (
-                    <div className="screening-row" key={question.th}>
+                  <h2>กรุณาตอบคำถามที่กำหนดให้ครบก่อนดำเนินการต่อ</h2>
+                  {currentQuestions.map((question) => {
+                    const answer = answers[question.id];
+                    const invalid = validationAttempted && question.required && (!answer?.value || Boolean(answer.value && question.detailWhen?.includes(answer.value) && !answer.detail?.trim()));
+                    return (
+                    <div className={`screening-row ${invalid ? "question-invalid" : ""}`} key={question.id} data-question-error={invalid || undefined}>
                       <div>
-                        <b>{question.th}</b>
-                        <small>{question.en}</small>
+                        <b>{question.label.th}{question.required && " *"}</b>
+                        <small>{question.label.en}</small>
                         <div className="screening-buttons">
-                          <button
-                            className={screening[i].answer === true ? "selected" : ""}
-                            onClick={() => setScreening((s) => s.map((x, j) => j === i ? {...x, answer: true} : x))}
-                          >✓ มี / Yes</button>
-                          <button
-                            className={screening[i].answer === false ? "selected" : ""}
-                            onClick={() => setScreening((s) => s.map((x, j) => j === i ? {answer: false, detail: ""} : x))}
-                          >✓ ไม่มี / No</button>
+                          {(question.options ?? []).map((option) => (
+                            <button key={option.value} className={answer?.value === option.value ? "selected" : ""} onClick={() => setAnswers((current) => {
+                              const next = { ...current, [question.id]: { value: option.value, detail: question.detailWhen?.includes(option.value) ? current[question.id]?.detail || "" : "" } };
+                              currentDefinition.questions.filter((candidate) => candidate.showWhen?.questionId === question.id && candidate.showWhen.value !== option.value).forEach((candidate) => delete next[candidate.id]);
+                              return next;
+                            })}>
+                              {option.label.th}<small>{option.label.en}</small>
+                            </button>
+                          ))}
                         </div>
+                        {invalid && <mark>กรุณาตอบคำถามนี้ก่อนดำเนินการต่อ <small>Please answer this question before continuing.</small></mark>}
                       </div>
-                      {screening[i].answer === true && (
-                        <label>รายละเอียดเพิ่มเติม / Details
-                          <input required value={screening[i].detail} onChange={(e) => setScreening((s) => s.map((x, j) => j === i ? {...x, detail: e.target.value} : x))} placeholder="กรอกรายละเอียดเพิ่มเติมก่อนบันทึก" />
+                      {answer?.value && question.detailWhen?.includes(answer.value) && (
+                        <label>{question.detailLabel?.th} / {question.detailLabel?.en}
+                          <input type={question.detailType || "text"} required value={answer.detail || ""} onChange={(event) => setAnswers((current) => ({ ...current, [question.id]: { ...current[question.id], value: answer.value, detail: event.target.value } }))} placeholder="กรอกรายละเอียดเพิ่มเติมก่อนบันทึก" />
                         </label>
                       )}
                     </div>
-                  ))}
+                  )})}
                 </div>
               )}
               {currentForm.review && (
@@ -1014,7 +769,7 @@ export default function Home() {
                     ? "อ่านข้อความให้ครบก่อนเลือก การเลือก “ไม่ยินยอม” จะหยุดขั้นตอนและแจ้งเจ้าหน้าที่"
                     : "Read each statement before selecting. Choosing decline will stop the process and notify staff."}
                 </p>
-                {confirms.map((c, i) => (
+                {currentConfirms.map((c, i) => (
                   <div
                     className={`choice ${ans[i] === false ? "declined" : ""}`}
                     key={c.h}
@@ -1055,19 +810,33 @@ export default function Home() {
                   </div>
                 ))}
               </div>
+              <div className="consent-signature-card">
+                <div>
+                  <em>ลายมือชื่อผู้รับบริการ / Patient Signature</em>
+                  <h2>{signed ? "บันทึกลายมือชื่อแล้ว" : "ลงลายมือชื่อหลังอ่านและยอมรับข้อมูล"}</h2>
+                  <p>รองรับนิ้วมือ เมาส์ Stylus และ Apple Pencil</p>
+                  {signatureImage && <img src={signatureImage} alt="ตัวอย่างลายมือชื่อผู้รับบริการ" />}
+                </div>
+                <button className={signed ? "secondary-light" : "primary"} onClick={() => {
+                  setValidationAttempted(true);
+                  if (screeningIncomplete) {
+                    requestAnimationFrame(() => document.querySelector<HTMLElement>("[data-question-error='true']")?.scrollIntoView({ behavior: "smooth", block: "center" }));
+                    return;
+                  }
+                  if (ans.some((answer) => answer !== true)) {
+                    document.querySelector<HTMLElement>(".confirm")?.scrollIntoView({ behavior: "smooth", block: "center" });
+                    return;
+                  }
+                  setSign(true);
+                }}>{signed ? "แก้ไข / เซ็นใหม่" : "✎ ลงลายมือชื่อ"}</button>
+              </div>
               <div className="submit">
                 <span>บันทึกข้อมูลก่อน แล้วจึงเลือกปริ้นหรือบันทึก PDF ภายหลังได้</span>
                 <button
                   className="primary"
-                  disabled={
-                    !signed ||
-                    ans.some((a) => a !== true) ||
-                    screeningIncomplete ||
-                    (currentForm.review && !idPhoto)
-                  }
-                  onClick={submit}
+                  onClick={submitConsent}
                 >
-                  {language === "th" ? "บันทึกเอกสาร" : "Save document"}{" "}
+                  ยืนยันและส่งแบบฟอร์ม <small>Confirm &amp; Submit</small>{" "}
                   ›
                 </button>
               </div>
@@ -1254,18 +1023,14 @@ export default function Home() {
               </span>
             </div>
             <div className="document-body">
-              {currentForm.id === "filler" ? bilingualRows.map((row, i) => (
-                  <div className="document-bilingual-row" key={i}>
-                    <p lang="th">{row.th || "—"}</p>
-                    <p lang="en">{row.en || "—"}</p>
-                  </div>
-                )) : (
-                  <div className="document-language-columns">
-                    <section lang="th"><h3>ภาษาไทย</h3>{thaiParagraphs.map((text, i) => <p key={i}>{text}</p>)}</section>
-                    <section lang="en"><h3>English</h3>{englishParagraphs.map((text, i) => <p key={i}>{text}</p>)}</section>
-                  </div>
-                )}
-              {currentQuestions.length > 0 && <div className="document-screening"><b>คำถามก่อนรับบริการ / Pre-treatment questions</b>{currentQuestions.map((question,i)=><div className="document-screening-row" key={question.th}><p>{question.th}<small>{question.en}</small></p><span className={screening[i]?.answer === false ? "checked" : ""}>ไม่มี / No {screening[i]?.answer === false ? "☑" : "☐"}</span><span className={screening[i]?.answer === true ? "checked" : ""}>มี / Yes {screening[i]?.answer === true ? "☑" : "☐"}</span>{screening[i]?.answer === true && <small>รายละเอียด / Details: {screening[i]?.detail || "ไม่ได้ระบุ"}</small>}</div>)}</div>}
+              {currentDefinition.sections.map((section) => (
+                <section className="document-consent-section" key={section.id}>
+                  <h3>{section.title.th}<small>{section.title.en}</small></h3>
+                  {section.items.map((item, index) => <div className="document-bilingual-item" key={`${section.id}-${index}`}><p lang="th">{item.th}</p><p lang="en">{item.en}</p></div>)}
+                </section>
+              ))}
+              {currentQuestions.length > 0 && <div className="document-screening"><b>คำถามก่อนรับบริการ / Pre-treatment questions</b>{currentQuestions.map((question)=><div className="document-screening-row" key={question.id}><p>{question.label.th}<small>{question.label.en}</small></p><strong>{question.options?.find((option) => option.value === answers[question.id]?.value)?.label.th || "—"}<small>{question.options?.find((option) => option.value === answers[question.id]?.value)?.label.en}</small></strong>{answers[question.id]?.detail && <small>{question.detailLabel?.th} / {question.detailLabel?.en}: {answers[question.id].detail}</small>}</div>)}</div>}
+              <div className="document-agreement"><b>การรับทราบและยินยอม / Acknowledgement &amp; Consent</b><p>{currentDefinition.acknowledgement.th}</p><p lang="en">{currentDefinition.acknowledgement.en}</p></div>
             </div>
             <div className="document-signatures">
               <div>
@@ -1276,6 +1041,7 @@ export default function Home() {
                 <span>{patient.name}</span>
                 <small>ลงนามอิเล็กทรอนิกส์ {signedAt}</small>
               </div>
+              {currentDefinition.physicianSignature === "supported" && <div className="physician-signature-placeholder"><b>ลายมือชื่อแพทย์หรือพยาบาล / Physician or Nurse Signature</b><span>สำหรับเจ้าหน้าที่ผู้ให้การรักษา</span><small>Staff completion required where applicable</small></div>}
             </div>
             <footer>
               มิชิโกะ คลินิกเวชกรรม &nbsp; | &nbsp; MICHIKO Aesthetics

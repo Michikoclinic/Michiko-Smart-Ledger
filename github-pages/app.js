@@ -74,9 +74,8 @@ ledgerDate.value=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2
 try{const lastView=JSON.parse(localStorage.getItem(viewStorageKey)||"{}");const branch=document.querySelector("#branch");if([...branch.options].some(option=>option.value===lastView.branch))branch.value=lastView.branch;if(/^\d{4}-\d{2}-\d{2}$/.test(lastView.date||""))ledgerDate.value=lastView.date;document.querySelector("#branchName").textContent=branch.value}catch{}
 function updateDate(value){
  const date=new Date(`${value}T12:00:00`);
- const [year,month,day]=value.split("-");
- document.querySelector("#dateDisplay strong").textContent=`${day}/${month}/${year}`;
  const full=new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(date);
+ document.querySelector("#dateDisplay strong").textContent=full;
  const weekday=new Intl.DateTimeFormat("th-TH",{weekday:"long"}).format(date);
  document.querySelector("#weekdayLabel").textContent=weekday;
  document.querySelector("#dailyDate").textContent=full;
@@ -181,7 +180,7 @@ function chooseEntryBranch(branchName){const branch=document.querySelector("#bra
 branchGate.querySelectorAll("[data-branch-choice]").forEach(button=>button.addEventListener("click",()=>chooseEntryBranch(button.dataset.branchChoice)));
 function openLedgerSection(selector="#top"){appGate.hidden=true;requestAnimationFrame(()=>document.querySelector(selector)?.scrollIntoView({behavior:"smooth",block:"start"}))}
 document.querySelector("#openLedger").addEventListener("click",()=>openLedgerSection("#top"));
-document.querySelector("#openSummary").addEventListener("click",()=>{openLedgerSection("#top");document.querySelector("#addButton").click();setTimeout(()=>document.querySelector('#entryForm [name="hn"]')?.focus(),50)});
+document.querySelector("#openSummary").addEventListener("click",()=>openLedgerSection("#daily"));
 document.querySelector("#homeLogoutButton").addEventListener("click",()=>document.querySelector("#logoutButton").click());
 document.querySelector("#changeBranch").addEventListener("click",()=>{try{sessionStorage.removeItem(branchSessionKey)}catch{}appGate.hidden=true;branchGate.hidden=false});
 document.querySelector("#mainMenuButton").addEventListener("click",event=>{event.preventDefault();showAppGate()});
@@ -219,7 +218,7 @@ function loadDailyPaymentRecord(){const branchName=selectedPaymentBranch()||docu
 function saveDailyPaymentRecord(){const data=readDailyPaymentForm();try{const key=dailyPaymentKey();localStorage.setItem(key,JSON.stringify(data));if(typeof queueCloudSave==="function")queueCloudSave(key);renderDailyPaymentMonthToDate();dailyPaymentStatus.textContent="บันทึกข้อมูลเรียบร้อยแล้ว"}catch{dailyPaymentStatus.textContent="บันทึกไม่สำเร็จ กรุณาลองใหม่"}}
 function openDailyPayment(historyMode=false,dateValue=ledgerDate.value){const branchName=document.querySelector("#branch").value;appGate.hidden=true;dailyPaymentPage.hidden=false;dailyPaymentDate.value=dateValue;setPaymentBranch(branchName);loadDailyPaymentRecord()}
 document.querySelector("#openDailyPayment").addEventListener("click",()=>openDailyPayment(false));
-document.querySelector("#openPaymentHistory").addEventListener("click",()=>{appGate.hidden=true;paymentHistoryDate.value=ledgerDate.value;paymentHistoryModal.hidden=false;setTimeout(()=>paymentHistoryDate.focus(),30)});
+document.querySelector("#openPaymentHistory").addEventListener("click",()=>openLedgerSection("#top"));
 function closePaymentHistory(returnHome=true){paymentHistoryModal.hidden=true;if(returnHome)showAppGate()}
 document.querySelector("#closePaymentHistory").addEventListener("click",()=>closePaymentHistory());
 document.querySelector("#cancelPaymentHistory").addEventListener("click",()=>closePaymentHistory());

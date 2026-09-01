@@ -162,7 +162,7 @@ pdfRangeForm.addEventListener("submit",event=>{
   rangeReport.innerHTML=dates.map(date=>buildRangePage(branch,date,rowsForDate(branch,date))).join("")+Object.entries(monthCutoffs).map(([month,cutoff])=>buildMonthlyRangeSummary(branch,month,cutoff)).join("");
   closePdfRange();document.body.classList.add("range-print");rangeReport.setAttribute("aria-hidden","false");setTimeout(()=>window.print(),50);
 });
-window.addEventListener("afterprint",()=>{document.body.classList.remove("range-print");rangeReport.setAttribute("aria-hidden","true")});
+window.addEventListener("afterprint",()=>{document.body.classList.remove("range-print","daily-payment-print");rangeReport.setAttribute("aria-hidden","true")});
 updateDate(ledgerDate.value);
 loadSavedLedger();
 renderPhrases();
@@ -172,22 +172,56 @@ render();
 
 const branchGate=document.querySelector("#branchGate");
 const appGate=document.querySelector("#appGate");
-const branchSessionKey="michiko-branch-chosen-session-v1";
-function showAppGate(){const branchName=document.querySelector("#branch").value;document.querySelector("#chosenBranchLabel").textContent=`สาขา ${branchName}`;document.querySelector("#openConsent").href=`https://michiko-digital-consent.michiko-9481.chatgpt.site/?branch=${encodeURIComponent(branchName)}`;branchGate.hidden=true;appGate.hidden=false}
+const branchSessionKey="michiko-branch-chosen-session-v2";
+function thaiHomeDate(){return new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(new Date())}
+function showAppGate(){const branchName=document.querySelector("#branch").value;document.querySelector("#chosenBranchLabel").textContent=`${branchName} · สาขา ${branchName==="EmSphere"?"2":"1"}`;document.querySelector("#homeDate").textContent=thaiHomeDate();document.querySelector("#openConsent").href=`https://michiko-digital-consent.michiko-9481.chatgpt.site/?branch=${encodeURIComponent(branchName)}`;try{sessionStorage.setItem(branchSessionKey,branchName)}catch{}branchGate.hidden=true;appGate.hidden=false}
 function chooseEntryBranch(branchName){const branch=document.querySelector("#branch");branch.value=branchName;document.querySelector("#branchName").textContent=branchName;updateBranchPaymentLabels();saveLastView();loadSavedLedger();render();showAppGate()}
 branchGate.querySelectorAll("[data-branch-choice]").forEach(button=>button.addEventListener("click",()=>chooseEntryBranch(button.dataset.branchChoice)));
-document.querySelector("#openLedger").addEventListener("click",()=>{try{sessionStorage.setItem(branchSessionKey,"1")}catch{}appGate.hidden=true});
-document.querySelector("#changeBranch").addEventListener("click",()=>{appGate.hidden=true;branchGate.hidden=false});
+function openLedgerSection(selector="#top"){appGate.hidden=true;requestAnimationFrame(()=>document.querySelector(selector)?.scrollIntoView({behavior:"smooth",block:"start"}))}
+document.querySelector("#openLedger").addEventListener("click",()=>openLedgerSection("#top"));
+document.querySelector("#openSummary").addEventListener("click",()=>openLedgerSection("#daily"));
+document.querySelector("#openPhrases").addEventListener("click",()=>{openLedgerSection("#top");document.querySelector("#addButton").click();setTimeout(()=>document.querySelector("#phraseInput")?.focus(),50)});
+document.querySelector("#openStaff").addEventListener("click",()=>{openLedgerSection("#top");document.querySelector("#addButton").click();setTimeout(()=>document.querySelector('#entryForm [name="doctor"]')?.focus(),50)});
+document.querySelector("#homeLogoutButton").addEventListener("click",()=>document.querySelector("#logoutButton").click());
+document.querySelector("#changeBranch").addEventListener("click",()=>{try{sessionStorage.removeItem(branchSessionKey)}catch{}appGate.hidden=true;branchGate.hidden=false});
 document.querySelector("#mainMenuButton").addEventListener("click",event=>{event.preventDefault();showAppGate()});
-try{branchGate.hidden=sessionStorage.getItem(branchSessionKey)==="1"}catch{branchGate.hidden=false}
+function restoreEntryBranch(){let saved="";try{saved=sessionStorage.getItem(branchSessionKey)||""}catch{}if(["พหลโยธิน 21","EmSphere"].includes(saved))chooseEntryBranch(saved);else{appGate.hidden=true;branchGate.hidden=false}}
+
+const dailyPaymentPage=document.querySelector("#dailyPaymentPage");
+const dailyPaymentForm=document.querySelector("#dailyPaymentForm");
+const dailyPaymentDate=document.querySelector("#dailyPaymentDate");
+const dailyPaymentStatus=document.querySelector("#dailyPaymentStatus");
+const dailyPaymentTotal=document.querySelector("#dailyPaymentTotal");
+const dailyPaymentFields=["cash","transfer1","transfer2","transfer3","creditCard"];
+let dailyPaymentTotalIsManual=false;
+function selectedPaymentBranch(){return dailyPaymentForm.elements.paymentBranch.value||document.querySelector("#branch").value}
+function dailyPaymentKey(){return `michiko-daily-payment-summary-v1:${encodeURIComponent(selectedPaymentBranch())}:${dailyPaymentDate.value}`}
+function setPaymentBranch(branchName){dailyPaymentForm.querySelectorAll('[name="paymentBranch"]').forEach(input=>input.checked=input.value===branchName);document.querySelector("#paymentPageBranch").textContent=`สาขา ${branchName}`}
+function updateDailyPaymentTotal(){if(dailyPaymentTotalIsManual)return;const total=dailyPaymentFields.reduce((sum,name)=>sum+parseMoney(dailyPaymentForm.elements[name].value),0);dailyPaymentTotal.value=total?calculationMoney(total):""}
+function readDailyPaymentForm(){const data={};Array.from(dailyPaymentForm.elements).forEach(field=>{if(!field.name)return;if(field.type==="radio"){if(field.checked)data[field.name]=field.value}else if(field.type==="checkbox")data[field.name]=field.checked;else data[field.name]=field.value});data.totalIsManual=dailyPaymentTotalIsManual;return data}
+function applyDailyPaymentData(data,dateValue,branchName){dailyPaymentForm.reset();dailyPaymentDate.value=dateValue;setPaymentBranch(data.paymentBranch||branchName);Array.from(dailyPaymentForm.elements).forEach(field=>{if(!field.name||field.name==="date"||field.name==="paymentBranch")return;if(field.type==="checkbox")field.checked=Boolean(data[field.name]);else if(data[field.name]!==undefined)field.value=String(data[field.name])});dailyPaymentTotalIsManual=Boolean(data.totalIsManual);updateDailyPaymentTotal()}
+function loadDailyPaymentRecord(){const branchName=selectedPaymentBranch()||document.querySelector("#branch").value;const dateValue=dailyPaymentDate.value||ledgerDate.value;let saved=null;try{saved=JSON.parse(localStorage.getItem(`michiko-daily-payment-summary-v1:${encodeURIComponent(branchName)}:${dateValue}`)||"null")}catch{}applyDailyPaymentData(saved||{},dateValue,branchName);dailyPaymentStatus.textContent=saved?"เปิดข้อมูลที่บันทึกไว้แล้ว":"ยังไม่มีข้อมูลที่บันทึกสำหรับวันนี้"}
+function saveDailyPaymentRecord(){const data=readDailyPaymentForm();try{const key=dailyPaymentKey();localStorage.setItem(key,JSON.stringify(data));if(typeof queueCloudSave==="function")queueCloudSave(key);dailyPaymentStatus.textContent="บันทึกข้อมูลเรียบร้อยแล้ว"}catch{dailyPaymentStatus.textContent="บันทึกไม่สำเร็จ กรุณาลองใหม่"}}
+function openDailyPayment(historyMode=false){const branchName=document.querySelector("#branch").value;appGate.hidden=true;dailyPaymentPage.hidden=false;dailyPaymentDate.value=ledgerDate.value;setPaymentBranch(branchName);loadDailyPaymentRecord();if(historyMode)setTimeout(()=>dailyPaymentDate.focus(),30)}
+document.querySelector("#openDailyPayment").addEventListener("click",()=>openDailyPayment(false));
+document.querySelector("#openPaymentHistory").addEventListener("click",()=>openDailyPayment(true));
+document.querySelector("#closeDailyPayment").addEventListener("click",()=>{dailyPaymentPage.hidden=true;showAppGate()});
+document.querySelector("#saveDailyPayment").addEventListener("click",saveDailyPaymentRecord);
+dailyPaymentDate.addEventListener("change",loadDailyPaymentRecord);
+dailyPaymentForm.querySelectorAll('[name="paymentBranch"]').forEach(input=>input.addEventListener("change",()=>{document.querySelector("#paymentPageBranch").textContent=`สาขา ${selectedPaymentBranch()}`;loadDailyPaymentRecord()}));
+dailyPaymentFields.forEach(name=>dailyPaymentForm.elements[name].addEventListener("input",event=>{event.target.value=formatMoneyInput(event.target.value);updateDailyPaymentTotal()}));
+dailyPaymentTotal.addEventListener("input",event=>{dailyPaymentTotalIsManual=true;event.target.value=formatMoneyInput(event.target.value)});
+dailyPaymentForm.elements.difference.addEventListener("input",event=>event.target.value=formatMoneyInput(event.target.value));
+document.querySelector("#printDailyPayment").addEventListener("click",()=>{saveDailyPaymentRecord();document.body.classList.add("daily-payment-print");setTimeout(()=>window.print(),50)});
 
 const backupPrefix="michiko-";
 function exportLedgerData(){const data={format:"michiko-smart-ledger-backup",version:1,exportedAt:new Date().toISOString(),items:{}};for(let index=0;index<localStorage.length;index++){const key=localStorage.key(index);if(key?.startsWith(backupPrefix))data.items[key]=localStorage.getItem(key)}const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const link=document.createElement("a");const stamp=new Date().toISOString().slice(0,10);link.href=url;link.download=`michiko-smart-ledger-backup-${stamp}.json`;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 async function importLedgerData(file){let backup;try{backup=JSON.parse(await file.text())}catch{alert("ไฟล์สำรองไม่ถูกต้อง");return}if(backup?.format!=="michiko-smart-ledger-backup"||!backup.items||typeof backup.items!=="object"){alert("ไฟล์นี้ไม่ใช่ข้อมูลสำรองของ Michiko Smart Ledger");return}const keys=Object.keys(backup.items).filter(key=>key.startsWith(backupPrefix)&&typeof backup.items[key]==="string");if(!keys.length){alert("ไม่พบข้อมูลสำหรับนำเข้า");return}if(!confirm(`นำเข้าข้อมูล ${keys.length} ชุด ข้อมูลชื่อเดียวกันในเครื่องนี้จะถูกแทนที่ ยืนยันหรือไม่?`))return;try{keys.forEach(key=>localStorage.setItem(key,backup.items[key]));alert("นำเข้าข้อมูลเรียบร้อย ระบบจะโหลดหน้าใหม่");location.reload()}catch{alert("พื้นที่จัดเก็บไม่เพียงพอ ไม่สามารถนำเข้าข้อมูลได้")}}
 document.querySelector("#exportDataButton").addEventListener("click",exportLedgerData);
+document.querySelector("#homeBackup").addEventListener("click",exportLedgerData);
 const importDataFile=document.querySelector("#importDataFile");document.querySelector("#importDataButton").addEventListener("click",()=>{importDataFile.value="";importDataFile.click()});importDataFile.addEventListener("change",()=>{const file=importDataFile.files?.[0];if(file)importLedgerData(file)});
 
-const cloudStoragePrefixes=[ledgerStoragePrefix,monthStoragePrefix,phraseStorageKey,phraseUsageKey,staffStorageKey,patientStorageKey];
+const cloudStoragePrefixes=[ledgerStoragePrefix,monthStoragePrefix,phraseStorageKey,phraseUsageKey,staffStorageKey,patientStorageKey,"michiko-daily-payment-summary-v1"];
 const syncStatus=document.querySelector("#syncStatus");
 const isCloudKey=key=>cloudStoragePrefixes.some(prefix=>key===prefix||key.startsWith(`${prefix}:`));
 function setSyncStatus(message,state=""){if(!syncStatus)return;syncStatus.textContent=message;syncStatus.className=`sync-status ${state}`.trim()}
@@ -241,7 +275,7 @@ const authError=document.querySelector("#authError");
 const logoutButton=document.querySelector("#logoutButton");
 const receptionEmail="customerservice@michikoclinic.com";
 function showAuthError(message){authError.textContent=message;authError.hidden=!message}
-function setSignedIn(signedIn){authGate.hidden=signedIn;logoutButton.hidden=!signedIn;if(!signedIn){branchGate.hidden=true;appGate.hidden=true;setTimeout(()=>loginPassword.focus(),0)}}
+function setSignedIn(signedIn){authGate.hidden=signedIn;logoutButton.hidden=!signedIn;if(!signedIn){branchGate.hidden=true;appGate.hidden=true;dailyPaymentPage.hidden=true;setTimeout(()=>loginPassword.focus(),0)}}
 async function initializeAuth(){
   const config=window.MICHIKO_SUPABASE;
   if(!config?.url||!config?.publishableKey||!window.supabase?.createClient){showAuthError("เชื่อมต่อระบบเข้าสู่ระบบไม่ได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วรีเฟรชหน้า");setSignedIn(false);return}
@@ -249,7 +283,7 @@ async function initializeAuth(){
   const {data,error}=await supabaseClient.auth.getSession();
   if(error){showAuthError("ตรวจสอบการเข้าสู่ระบบไม่สำเร็จ กรุณาลองใหม่");setSignedIn(false);return}
   setSignedIn(Boolean(data.session));
-  if(data.session){try{branchGate.hidden=sessionStorage.getItem(branchSessionKey)==="1"}catch{branchGate.hidden=false}await startCloudSync()}
+  if(data.session){restoreEntryBranch();await startCloudSync()}
   supabaseClient.auth.onAuthStateChange((_event,session)=>{setSignedIn(Boolean(session));if(session)startCloudSync();else stopCloudSync()});
 }
 loginForm.addEventListener("submit",async event=>{

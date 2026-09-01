@@ -182,8 +182,6 @@ branchGate.querySelectorAll("[data-branch-choice]").forEach(button=>button.addEv
 function openLedgerSection(selector="#top"){appGate.hidden=true;requestAnimationFrame(()=>document.querySelector(selector)?.scrollIntoView({behavior:"smooth",block:"start"}))}
 document.querySelector("#openLedger").addEventListener("click",()=>openLedgerSection("#top"));
 document.querySelector("#openSummary").addEventListener("click",()=>{openLedgerSection("#top");document.querySelector("#addButton").click();setTimeout(()=>document.querySelector('#entryForm [name="hn"]')?.focus(),50)});
-document.querySelector("#openPhrases").addEventListener("click",()=>{openLedgerSection("#top");document.querySelector("#addButton").click();setTimeout(()=>document.querySelector("#phraseInput")?.focus(),50)});
-document.querySelector("#openStaff").addEventListener("click",()=>{openLedgerSection("#top");document.querySelector("#addButton").click();setTimeout(()=>document.querySelector('#entryForm [name="doctor"]')?.focus(),50)});
 document.querySelector("#homeLogoutButton").addEventListener("click",()=>document.querySelector("#logoutButton").click());
 document.querySelector("#changeBranch").addEventListener("click",()=>{try{sessionStorage.removeItem(branchSessionKey)}catch{}appGate.hidden=true;branchGate.hidden=false});
 document.querySelector("#mainMenuButton").addEventListener("click",event=>{event.preventDefault();showAppGate()});
@@ -194,25 +192,41 @@ const dailyPaymentForm=document.querySelector("#dailyPaymentForm");
 const dailyPaymentDate=document.querySelector("#dailyPaymentDate");
 const dailyPaymentStatus=document.querySelector("#dailyPaymentStatus");
 const dailyPaymentTotal=document.querySelector("#dailyPaymentTotal");
-const dailyPaymentFields=["cash","transfer1","transfer2","transfer3","creditCard"];
+const dailyPaymentMonthTotals=document.querySelector("#dailyPaymentMonthTotals");
+const dailyPaymentMonthRange=document.querySelector("#dailyPaymentMonthRange");
+const paymentHistoryModal=document.querySelector("#paymentHistoryModal");
+const paymentHistoryForm=document.querySelector("#paymentHistoryForm");
+const paymentHistoryDate=document.querySelector("#paymentHistoryDate");
+const dailyPaymentFields=[...keys];
+const dailyPaymentLabels=["เงินสด","SCB บริษัทมิชิโกะ 456","SCB มณี Shop","บัตร KBank","บัตร BBL","บัตร KTC","Member"];
+const receivedPaymentFields=dailyPaymentFields.filter(name=>name!=="member");
 let dailyPaymentTotalIsManual=false;
 function selectedPaymentBranch(){return dailyPaymentForm.elements.paymentBranch.value||document.querySelector("#branch").value}
 function dailyPaymentKey(){return `michiko-daily-payment-summary-v1:${encodeURIComponent(selectedPaymentBranch())}:${dailyPaymentDate.value}`}
-function setPaymentBranch(branchName){dailyPaymentForm.querySelectorAll('[name="paymentBranch"]').forEach(input=>input.checked=input.value===branchName);document.querySelector("#paymentPageBranch").textContent=`สาขา ${branchName}`}
-function updateDailyPaymentTotal(){if(dailyPaymentTotalIsManual)return;const total=dailyPaymentFields.reduce((sum,name)=>sum+parseMoney(dailyPaymentForm.elements[name].value),0);dailyPaymentTotal.value=total?calculationMoney(total):""}
+function dailyPaymentRecord(branchName,dateValue){try{return JSON.parse(localStorage.getItem(`michiko-daily-payment-summary-v1:${encodeURIComponent(branchName)}:${dateValue}`)||"null")}catch{return null}}
+function dailyPaymentAmounts(data={}){const amounts={cash:parseMoney(data.cash),scb:parseMoney(data.scb??data.transfer1),lp:parseMoney(data.lp??data.transfer2),cardKbank:parseMoney(data.cardKbank),cardBbl:parseMoney(data.cardBbl),cardKtc:parseMoney(data.cardKtc),member:parseMoney(data.member)};const calculated=receivedPaymentFields.reduce((sum,name)=>sum+amounts[name],0);return {...amounts,total:data.total!==undefined&&data.total!==""?parseMoney(data.total):calculated}}
+function setPaymentBranch(branchName){dailyPaymentForm.querySelectorAll('[name="paymentBranch"]').forEach(input=>input.checked=input.value===branchName);document.querySelector("#paymentPageBranch").textContent=`สาขา ${branchName}`;document.querySelectorAll("[data-daily-payment-label]").forEach(label=>{const index=keys.indexOf(label.dataset.dailyPaymentLabel);if(index>=0)label.textContent=dailyPaymentLabels[index]})}
+function updateDailyPaymentTotal(){if(dailyPaymentTotalIsManual)return;const total=receivedPaymentFields.reduce((sum,name)=>sum+parseMoney(dailyPaymentForm.elements[name].value),0);dailyPaymentTotal.value=total?calculationMoney(total):""}
 function readDailyPaymentForm(){const data={};Array.from(dailyPaymentForm.elements).forEach(field=>{if(!field.name)return;if(field.type==="radio"){if(field.checked)data[field.name]=field.value}else if(field.type==="checkbox")data[field.name]=field.checked;else data[field.name]=field.value});data.totalIsManual=dailyPaymentTotalIsManual;return data}
-function applyDailyPaymentData(data,dateValue,branchName){dailyPaymentForm.reset();dailyPaymentDate.value=dateValue;setPaymentBranch(data.paymentBranch||branchName);Array.from(dailyPaymentForm.elements).forEach(field=>{if(!field.name||field.name==="date"||field.name==="paymentBranch")return;if(field.type==="checkbox")field.checked=Boolean(data[field.name]);else if(data[field.name]!==undefined)field.value=String(data[field.name])});dailyPaymentTotalIsManual=Boolean(data.totalIsManual);updateDailyPaymentTotal()}
-function loadDailyPaymentRecord(){const branchName=selectedPaymentBranch()||document.querySelector("#branch").value;const dateValue=dailyPaymentDate.value||ledgerDate.value;let saved=null;try{saved=JSON.parse(localStorage.getItem(`michiko-daily-payment-summary-v1:${encodeURIComponent(branchName)}:${dateValue}`)||"null")}catch{}applyDailyPaymentData(saved||{},dateValue,branchName);dailyPaymentStatus.textContent=saved?"เปิดข้อมูลที่บันทึกไว้แล้ว":"ยังไม่มีข้อมูลที่บันทึกสำหรับวันนี้"}
-function saveDailyPaymentRecord(){const data=readDailyPaymentForm();try{const key=dailyPaymentKey();localStorage.setItem(key,JSON.stringify(data));if(typeof queueCloudSave==="function")queueCloudSave(key);dailyPaymentStatus.textContent="บันทึกข้อมูลเรียบร้อยแล้ว"}catch{dailyPaymentStatus.textContent="บันทึกไม่สำเร็จ กรุณาลองใหม่"}}
-function openDailyPayment(historyMode=false){const branchName=document.querySelector("#branch").value;appGate.hidden=true;dailyPaymentPage.hidden=false;dailyPaymentDate.value=ledgerDate.value;setPaymentBranch(branchName);loadDailyPaymentRecord();if(historyMode)setTimeout(()=>dailyPaymentDate.focus(),30)}
-document.querySelector("#openDailyPayment").addEventListener("click",()=>openLedgerSection("#daily"));
-document.querySelector("#openPaymentHistory").addEventListener("click",()=>openLedgerSection("#top"));
+function applyDailyPaymentData(data,dateValue,branchName){dailyPaymentForm.reset();dailyPaymentDate.value=dateValue;const normalized={...data,scb:data.scb??data.transfer1??"",lp:data.lp??data.transfer2??""};setPaymentBranch(normalized.paymentBranch||branchName);Array.from(dailyPaymentForm.elements).forEach(field=>{if(!field.name||field.name==="date"||field.name==="paymentBranch")return;if(field.type==="checkbox")field.checked=Boolean(normalized[field.name]);else if(normalized[field.name]!==undefined)field.value=String(normalized[field.name])});dailyPaymentFields.forEach(name=>dailyPaymentForm.elements[name].value=formatMoneyInput(dailyPaymentForm.elements[name].value));dailyPaymentTotal.value=formatMoneyInput(dailyPaymentTotal.value);dailyPaymentForm.elements.difference.value=formatMoneyInput(dailyPaymentForm.elements.difference.value);dailyPaymentTotalIsManual=Boolean(normalized.totalIsManual);updateDailyPaymentTotal()}
+function dailyPaymentSourceForDate(branchName,dateValue){return dailyPaymentRecord(branchName,dateValue)||{}}
+function renderDailyPaymentMonthToDate(){const branchName=selectedPaymentBranch();const dateValue=dailyPaymentDate.value;if(!branchName||!/\d{4}-\d{2}-\d{2}/.test(dateValue))return;const totals={...Object.fromEntries(dailyPaymentFields.map(name=>[name,0])),total:0};const month=dateValue.slice(0,7);const cursor=new Date(`${month}-01T12:00:00`);const last=new Date(`${dateValue}T12:00:00`);while(cursor<=last){const day=`${cursor.getFullYear()}-${String(cursor.getMonth()+1).padStart(2,"0")}-${String(cursor.getDate()).padStart(2,"0")}`;const source=day===dateValue?readDailyPaymentForm():dailyPaymentSourceForDate(branchName,day);const amounts=dailyPaymentAmounts(source);dailyPaymentFields.forEach(name=>totals[name]+=amounts[name]);totals.total+=amounts.total;cursor.setDate(cursor.getDate()+1)}dailyPaymentMonthTotals.innerHTML=[["ยอดรับรวม",totals.total],...dailyPaymentFields.map((name,index)=>[dailyPaymentLabels[index],totals[name]])].map(([label,value],index)=>`<article${index===0?' class="grand"':""}><span>${esc(label)}</span><strong>${money(value)}</strong><small>บาท</small></article>`).join("");const chosenDate=new Date(`${dateValue}T12:00:00`);dailyPaymentMonthRange.textContent=`รวมวันที่ 1–${chosenDate.getDate()} ${new Intl.DateTimeFormat("th-TH",{month:"long",year:"numeric"}).format(chosenDate)} · ${branchName}`}
+function loadDailyPaymentRecord(){const branchName=selectedPaymentBranch()||document.querySelector("#branch").value;const dateValue=dailyPaymentDate.value||ledgerDate.value;const saved=dailyPaymentRecord(branchName,dateValue);applyDailyPaymentData(saved||{paymentBranch:branchName},dateValue,branchName);renderDailyPaymentMonthToDate();dailyPaymentStatus.textContent=saved?"เปิดข้อมูลที่บันทึกไว้แล้ว":"ยังไม่มีใบรับชำระสำหรับวันนี้ กรุณากรอกยอดวันนี้"}
+function saveDailyPaymentRecord(){const data=readDailyPaymentForm();try{const key=dailyPaymentKey();localStorage.setItem(key,JSON.stringify(data));if(typeof queueCloudSave==="function")queueCloudSave(key);renderDailyPaymentMonthToDate();dailyPaymentStatus.textContent="บันทึกข้อมูลเรียบร้อยแล้ว"}catch{dailyPaymentStatus.textContent="บันทึกไม่สำเร็จ กรุณาลองใหม่"}}
+function openDailyPayment(historyMode=false,dateValue=ledgerDate.value){const branchName=document.querySelector("#branch").value;appGate.hidden=true;dailyPaymentPage.hidden=false;dailyPaymentDate.value=dateValue;setPaymentBranch(branchName);loadDailyPaymentRecord();if(historyMode)setTimeout(()=>dailyPaymentDate.focus(),30)}
+document.querySelector("#openDailyPayment").addEventListener("click",()=>openDailyPayment(false));
+document.querySelector("#openPaymentHistory").addEventListener("click",()=>{appGate.hidden=true;paymentHistoryDate.value=ledgerDate.value;paymentHistoryModal.hidden=false;setTimeout(()=>paymentHistoryDate.focus(),30)});
+function closePaymentHistory(returnHome=true){paymentHistoryModal.hidden=true;if(returnHome)showAppGate()}
+document.querySelector("#closePaymentHistory").addEventListener("click",()=>closePaymentHistory());
+document.querySelector("#cancelPaymentHistory").addEventListener("click",()=>closePaymentHistory());
+paymentHistoryModal.addEventListener("click",event=>{if(event.target===paymentHistoryModal)closePaymentHistory()});
+paymentHistoryForm.addEventListener("submit",event=>{event.preventDefault();const selectedDate=paymentHistoryDate.value;if(!selectedDate)return;closePaymentHistory(false);openDailyPayment(true,selectedDate)});
 document.querySelector("#closeDailyPayment").addEventListener("click",()=>{dailyPaymentPage.hidden=true;showAppGate()});
 document.querySelector("#saveDailyPayment").addEventListener("click",saveDailyPaymentRecord);
 dailyPaymentDate.addEventListener("change",loadDailyPaymentRecord);
 dailyPaymentForm.querySelectorAll('[name="paymentBranch"]').forEach(input=>input.addEventListener("change",()=>{document.querySelector("#paymentPageBranch").textContent=`สาขา ${selectedPaymentBranch()}`;loadDailyPaymentRecord()}));
-dailyPaymentFields.forEach(name=>dailyPaymentForm.elements[name].addEventListener("input",event=>{event.target.value=formatMoneyInput(event.target.value);updateDailyPaymentTotal()}));
-dailyPaymentTotal.addEventListener("input",event=>{dailyPaymentTotalIsManual=true;event.target.value=formatMoneyInput(event.target.value)});
+dailyPaymentFields.forEach(name=>dailyPaymentForm.elements[name].addEventListener("input",event=>{event.target.value=formatMoneyInput(event.target.value);updateDailyPaymentTotal();renderDailyPaymentMonthToDate()}));
+dailyPaymentTotal.addEventListener("input",event=>{dailyPaymentTotalIsManual=true;event.target.value=formatMoneyInput(event.target.value);renderDailyPaymentMonthToDate()});
 dailyPaymentForm.elements.difference.addEventListener("input",event=>event.target.value=formatMoneyInput(event.target.value));
 document.querySelector("#printDailyPayment").addEventListener("click",()=>{saveDailyPaymentRecord();clearDailyPaymentPrintPage();const pageStyle=document.createElement("style");pageStyle.id="dailyPaymentPrintPageSize";pageStyle.media="print";pageStyle.textContent="@page{size:A5 portrait;margin:0}";document.head.appendChild(pageStyle);document.body.classList.add("daily-payment-print");setTimeout(()=>window.print(),80)});
 
@@ -243,7 +257,7 @@ function refreshSharedState(){
   try{phraseUsage=JSON.parse(localStorage.getItem(phraseUsageKey)||"{}")}catch{phraseUsage={}}
   try{const saved=JSON.parse(localStorage.getItem(staffStorageKey)||"{}");staffNames.doctors=Array.isArray(saved.doctors)?saved.doctors:[];staffNames.assistants=Array.isArray(saved.assistants)?saved.assistants:[]}catch{staffNames={doctors:[],assistants:[]}}
   try{const saved=JSON.parse(localStorage.getItem(patientStorageKey)||"{}");patientDirectory=saved&&typeof saved==="object"&&!Array.isArray(saved)?saved:{}}catch{patientDirectory={}}
-  loadSavedLedger();renderPhrases();renderStaffNames();render();
+  loadSavedLedger();renderPhrases();renderStaffNames();render();if(!dailyPaymentPage.hidden)loadDailyPaymentRecord();
 }
 async function startCloudSync(){
   if(!supabaseClient||cloudSyncActive||cloudSyncStarting)return;
@@ -277,7 +291,7 @@ const authError=document.querySelector("#authError");
 const logoutButton=document.querySelector("#logoutButton");
 const receptionEmail="customerservice@michikoclinic.com";
 function showAuthError(message){authError.textContent=message;authError.hidden=!message}
-function setSignedIn(signedIn){authGate.hidden=signedIn;logoutButton.hidden=!signedIn;if(!signedIn){branchGate.hidden=true;appGate.hidden=true;dailyPaymentPage.hidden=true;setTimeout(()=>loginPassword.focus(),0)}}
+function setSignedIn(signedIn){authGate.hidden=signedIn;logoutButton.hidden=!signedIn;if(!signedIn){branchGate.hidden=true;appGate.hidden=true;dailyPaymentPage.hidden=true;paymentHistoryModal.hidden=true;setTimeout(()=>loginPassword.focus(),0)}}
 async function initializeAuth(){
   const config=window.MICHIKO_SUPABASE;
   if(!config?.url||!config?.publishableKey||!window.supabase?.createClient){showAuthError("เชื่อมต่อระบบเข้าสู่ระบบไม่ได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วรีเฟรชหน้า");setSignedIn(false);return}

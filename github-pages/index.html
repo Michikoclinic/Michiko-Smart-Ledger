@@ -29,7 +29,7 @@
         <div class="home-menu-grid">
           <button class="home-menu home-menu-primary" id="openDailyPayment" type="button">
             <span class="home-menu-icon" aria-hidden="true">▤</span><span class="home-menu-arrow" aria-hidden="true">↗</span>
-            <span><strong>สรุปยอดประจำวัน</strong><small>ใบรับชำระรายวัน จำนวนลูกค้า<br>และยอดสะสมประจำเดือน</small></span>
+            <span><strong>สรุปยอดประจำวัน</strong><small>รายงานยอดรับชำระรายวัน จำนวนลูกค้า<br>และยอดสะสมประจำเดือน</small></span>
           </button>
           <button class="home-menu" id="openPaymentHistory" type="button">
             <span class="home-menu-icon" aria-hidden="true">◴</span><span class="home-menu-arrow" aria-hidden="true">↗</span>
@@ -109,14 +109,14 @@
   <section class="daily-payment-page" id="dailyPaymentPage" hidden>
     <header class="payment-page-bar">
       <button type="button" id="closeDailyPayment">← หน้าหลัก</button>
-      <div><strong>ใบรับชำระรายวัน</strong><small id="paymentPageBranch">สาขา</small></div>
+      <div><strong>รายงานยอดรับชำระรายวัน</strong><small id="paymentPageBranch">สาขา</small></div>
       <div><button type="button" id="saveDailyPayment">บันทึก</button><button class="payment-print-button" type="button" id="printDailyPayment">ปริ้น / PDF</button></div>
     </header>
     <form class="a5-payment-sheet" id="dailyPaymentForm">
-      <header class="a5-heading"><img src="michiko-logo.png" alt="Michiko Aesthetics"><div><h2>ใบรับชำระรายวัน</h2><p>DAILY PAYMENT SUMMARY</p></div></header>
+      <header class="a5-heading"><img src="michiko-logo.png" alt="Michiko Aesthetics"><div><h2>รายงานยอดรับชำระรายวัน</h2><p>DAILY PAYMENT SUMMARY</p></div></header>
       <section class="a5-document-context" aria-label="ข้อมูลเอกสาร">
-        <div><span>วันที่</span><strong id="dailyPaymentDateDisplay">—</strong><input id="dailyPaymentDate" name="date" type="hidden"></div>
-        <div><span>สาขา</span><strong id="dailyPaymentBranchDisplay">—</strong><input name="paymentBranch" type="hidden"></div>
+        <div class="a5-date-card"><span>วันที่</span><strong id="dailyPaymentDateDisplay">—</strong><input id="dailyPaymentDate" name="date" type="hidden"></div>
+        <div class="a5-branch-card"><span>สาขา</span><strong id="dailyPaymentBranchDisplay">—</strong><input name="paymentBranch" type="hidden"></div>
       </section>
       <section class="a5-box a5-customer"><h3>ข้อมูลประจำวัน</h3><label>วันนี้มีลูกค้าเข้ารับบริการทั้งหมด <input name="customerCount" type="number" min="0" inputmode="numeric"> คน</label></section>
       <section class="a5-box a5-summary-box">

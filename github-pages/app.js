@@ -40,7 +40,8 @@ function calculateAdditions(text,requireEquals=false){return String(text).split(
 function additionPreviews(text){const results=[];String(text).replace(/(\d[\d,]*(?:\.\d+)?)\s*-\s*(\d+(?:\.\d+)?)\s*%/g,(expression,baseText,percentText)=>{const base=calculationNumber(baseText);const percent=Number(percentText);results.push(`${calculationMoney(base)} - ${percentText}% = ${calculationMoney(base-(base*percent/100))}`);return expression}).replace(/((?:\d[\d,]*(?:\.\d+)?\s*[+\-*/xX×÷]\s*)+\d[\d,]*(?:\.\d+)?)/g,expression=>{const result=evaluateBasicExpression(expression);if(result!==null)results.push(`${tidyExpression(expression)} = ${calculationMoney(result)}`);return expression});return [...new Set(results)]}
 function renderDetailContent(line){const formatted=formatNumbersInText(line);if(/หักจาก(?:เครดิต|วงเงินสลายฟิลเลอร์)/u.test(formatted))return `<strong class="credit-deduction-text">${esc(formatted)}</strong>`;if(/หัก(?:จาก)?มัดจำ/u.test(formatted))return `<strong class="deposit-deduction-line">${esc(formatted)}</strong>`;let content=esc(formatted).replace(/support/gi,match=>`<strong class="support-text">${match}</strong>`).replace(/ค้างชำระ(?:\s*[:=]?\s*[\d,]+(?:\.\d+)?(?:\s*บาท)?)?/g,match=>`<strong class="outstanding-text">${match}</strong>`);return content}
 function formatDetails(text){return String(text).split(/\r?\n/).flatMap(line=>{const marker=line.indexOf("รวมยอดชำระ");return marker>0?[line.slice(0,marker).trimEnd(),line.slice(marker)]:[line]})}
-function saveLastView(){try{localStorage.setItem(viewStorageKey,JSON.stringify({branch:document.querySelector("#branch")?.value||"",date:document.querySelector("#ledgerDate")?.value||""}))}catch{}}
+function localDateKey(date=new Date()){return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,"0")}-${String(date.getDate()).padStart(2,"0")}`}
+function saveLastView(){try{localStorage.setItem(viewStorageKey,JSON.stringify({branch:document.querySelector("#branch")?.value||"",date:document.querySelector("#ledgerDate")?.value||"",viewDay:localDateKey()}))}catch{}}
 function ledgerContext(){const branch=document.querySelector("#branch")?.value||"default";const date=document.querySelector("#ledgerDate")?.value||"";return {branch,date}}
 function ledgerStorageKey(){const {branch,date}=ledgerContext();return `${ledgerStoragePrefix}:${encodeURIComponent(branch)}:${date}`}
 function monthStorageKey(){const {branch,date}=ledgerContext();return `${monthStoragePrefix}:${encodeURIComponent(branch)}:${date.slice(0,7)}`}
@@ -72,8 +73,9 @@ document.querySelector("#search").addEventListener("input",render);
 document.querySelector("#branch").addEventListener("change",e=>{document.querySelector("#branchName").textContent=e.target.value;updateBranchPaymentLabels();saveLastView();loadSavedLedger();render()});
 const ledgerDate=document.querySelector("#ledgerDate");
 const today=new Date();
-ledgerDate.value=`${today.getFullYear()}-${String(today.getMonth()+1).padStart(2,"0")}-${String(today.getDate()).padStart(2,"0")}`;
-try{const lastView=JSON.parse(localStorage.getItem(viewStorageKey)||"{}");const branch=document.querySelector("#branch");if([...branch.options].some(option=>option.value===lastView.branch))branch.value=lastView.branch;if(/^\d{4}-\d{2}-\d{2}$/.test(lastView.date||""))ledgerDate.value=lastView.date;document.querySelector("#branchName").textContent=branch.value}catch{}
+const todayKey=localDateKey(today);
+ledgerDate.value=todayKey;
+try{const lastView=JSON.parse(localStorage.getItem(viewStorageKey)||"{}");const branch=document.querySelector("#branch");if([...branch.options].some(option=>option.value===lastView.branch))branch.value=lastView.branch;if(lastView.viewDay===todayKey&&/^\d{4}-\d{2}-\d{2}$/.test(lastView.date||""))ledgerDate.value=lastView.date;document.querySelector("#branchName").textContent=branch.value}catch{}
 function updateDate(value){
  const date=new Date(`${value}T12:00:00`);
  const full=new Intl.DateTimeFormat("th-TH",{day:"numeric",month:"long",year:"numeric"}).format(date);

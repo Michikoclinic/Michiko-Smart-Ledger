@@ -180,7 +180,7 @@ function chooseEntryBranch(branchName){const branch=document.querySelector("#bra
 branchGate.querySelectorAll("[data-branch-choice]").forEach(button=>button.addEventListener("click",()=>chooseEntryBranch(button.dataset.branchChoice)));
 function openLedgerSection(selector="#top"){appGate.hidden=true;requestAnimationFrame(()=>document.querySelector(selector)?.scrollIntoView({behavior:"smooth",block:"start"}))}
 document.querySelector("#openLedger").addEventListener("click",()=>openLedgerSection("#top"));
-document.querySelector("#openSummary").addEventListener("click",()=>openLedgerSection("#daily"));
+document.querySelector("#openSummary").addEventListener("click",()=>{openLedgerSection("#top");document.querySelector("#addButton").click();setTimeout(()=>document.querySelector('#entryForm [name="hn"]')?.focus(),50)});
 document.querySelector("#openPhrases").addEventListener("click",()=>{openLedgerSection("#top");document.querySelector("#addButton").click();setTimeout(()=>document.querySelector("#phraseInput")?.focus(),50)});
 document.querySelector("#openStaff").addEventListener("click",()=>{openLedgerSection("#top");document.querySelector("#addButton").click();setTimeout(()=>document.querySelector('#entryForm [name="doctor"]')?.focus(),50)});
 document.querySelector("#homeLogoutButton").addEventListener("click",()=>document.querySelector("#logoutButton").click());
@@ -204,8 +204,8 @@ function applyDailyPaymentData(data,dateValue,branchName){dailyPaymentForm.reset
 function loadDailyPaymentRecord(){const branchName=selectedPaymentBranch()||document.querySelector("#branch").value;const dateValue=dailyPaymentDate.value||ledgerDate.value;let saved=null;try{saved=JSON.parse(localStorage.getItem(`michiko-daily-payment-summary-v1:${encodeURIComponent(branchName)}:${dateValue}`)||"null")}catch{}applyDailyPaymentData(saved||{},dateValue,branchName);dailyPaymentStatus.textContent=saved?"เปิดข้อมูลที่บันทึกไว้แล้ว":"ยังไม่มีข้อมูลที่บันทึกสำหรับวันนี้"}
 function saveDailyPaymentRecord(){const data=readDailyPaymentForm();try{const key=dailyPaymentKey();localStorage.setItem(key,JSON.stringify(data));if(typeof queueCloudSave==="function")queueCloudSave(key);dailyPaymentStatus.textContent="บันทึกข้อมูลเรียบร้อยแล้ว"}catch{dailyPaymentStatus.textContent="บันทึกไม่สำเร็จ กรุณาลองใหม่"}}
 function openDailyPayment(historyMode=false){const branchName=document.querySelector("#branch").value;appGate.hidden=true;dailyPaymentPage.hidden=false;dailyPaymentDate.value=ledgerDate.value;setPaymentBranch(branchName);loadDailyPaymentRecord();if(historyMode)setTimeout(()=>dailyPaymentDate.focus(),30)}
-document.querySelector("#openDailyPayment").addEventListener("click",()=>openDailyPayment(false));
-document.querySelector("#openPaymentHistory").addEventListener("click",()=>openDailyPayment(true));
+document.querySelector("#openDailyPayment").addEventListener("click",()=>openLedgerSection("#daily"));
+document.querySelector("#openPaymentHistory").addEventListener("click",()=>openLedgerSection("#top"));
 document.querySelector("#closeDailyPayment").addEventListener("click",()=>{dailyPaymentPage.hidden=true;showAppGate()});
 document.querySelector("#saveDailyPayment").addEventListener("click",saveDailyPaymentRecord);
 dailyPaymentDate.addEventListener("change",loadDailyPaymentRecord);

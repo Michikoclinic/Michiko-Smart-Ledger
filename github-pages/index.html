@@ -29,15 +29,15 @@
         <div class="home-menu-grid">
           <button class="home-menu home-menu-primary" id="openDailyPayment" type="button">
             <span class="home-menu-icon" aria-hidden="true">▤</span><span class="home-menu-arrow" aria-hidden="true">↗</span>
-            <span><strong>ใบรับชำระรายวัน</strong><small>กรอกและพิมพ์เอกสาร A5<br>เริ่มรายการใหม่ได้จากตรงนี้</small></span>
+            <span><strong>สรุปยอดประจำวัน</strong><small>ยอดรับชำระ จำนวนลูกค้า<br>และยอดสะสมประจำเดือน</small></span>
           </button>
           <button class="home-menu" id="openPaymentHistory" type="button">
             <span class="home-menu-icon" aria-hidden="true">◴</span><span class="home-menu-arrow" aria-hidden="true">↗</span>
-            <span><strong>ประวัติเอกสาร</strong><small>เลือกวันที่เพื่อดู แก้ไข และพิมพ์ย้อนหลัง</small></span>
+            <span><strong>ประวัติรายการ</strong><small>เลือกวันที่เพื่อดู แก้ไข และพิมพ์ย้อนหลัง</small></span>
           </button>
           <button class="home-menu home-menu-summary" id="openSummary" type="button">
             <span class="home-menu-icon" aria-hidden="true">⌁</span><span class="home-menu-arrow" aria-hidden="true">↗</span>
-            <span><strong>สรุปยอด</strong><small>รายวันและประจำเดือน</small></span>
+            <span><strong>เพิ่มรายการรับชำระ</strong><small>กรอก HN รายละเอียด และวิธีชำระเงิน</small></span>
           </button>
           <button class="home-menu" id="openPhrases" type="button">
             <span class="home-menu-icon" aria-hidden="true">T</span><span class="home-menu-arrow" aria-hidden="true">↗</span>
@@ -52,7 +52,7 @@
           <span>เครื่องมือเพิ่มเติม</span>
           <div>
             <a id="openConsent" href="https://michiko-digital-consent.michiko-9481.chatgpt.site/">เอกสารยินยอม</a>
-            <button type="button" id="openLedger">สมุดรายวันเดิม</button>
+            <button type="button" id="openLedger">ดูรายการทั้งหมด</button>
             <button type="button" id="homeBackup">สำรองข้อมูล</button>
             <button type="button" id="changeBranch">เปลี่ยนสาขา</button>
           </div>
@@ -134,7 +134,7 @@
   </section>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js?v=20260813a"></script>
-  <script src="app.js?v=20260901b"></script>
+  <script src="app.js?v=20260901e"></script>
 </body>
 </html>
 

@@ -163,7 +163,8 @@ pdfRangeForm.addEventListener("submit",event=>{
   rangeReport.innerHTML=dates.map(date=>buildRangePage(branch,date,rowsForDate(branch,date))).join("")+Object.entries(monthCutoffs).map(([month,cutoff])=>buildMonthlyRangeSummary(branch,month,cutoff)).join("");
   closePdfRange();document.body.classList.add("range-print");rangeReport.setAttribute("aria-hidden","false");setTimeout(()=>window.print(),50);
 });
-window.addEventListener("afterprint",()=>{document.body.classList.remove("range-print","daily-payment-print");rangeReport.setAttribute("aria-hidden","true")});
+function clearDailyPaymentPrintPage(){document.querySelector("#dailyPaymentPrintPageSize")?.remove()}
+window.addEventListener("afterprint",()=>{document.body.classList.remove("range-print","daily-payment-print");rangeReport.setAttribute("aria-hidden","true");clearDailyPaymentPrintPage()});
 updateDate(ledgerDate.value);
 loadSavedLedger();
 renderPhrases();
@@ -213,7 +214,7 @@ dailyPaymentForm.querySelectorAll('[name="paymentBranch"]').forEach(input=>input
 dailyPaymentFields.forEach(name=>dailyPaymentForm.elements[name].addEventListener("input",event=>{event.target.value=formatMoneyInput(event.target.value);updateDailyPaymentTotal()}));
 dailyPaymentTotal.addEventListener("input",event=>{dailyPaymentTotalIsManual=true;event.target.value=formatMoneyInput(event.target.value)});
 dailyPaymentForm.elements.difference.addEventListener("input",event=>event.target.value=formatMoneyInput(event.target.value));
-document.querySelector("#printDailyPayment").addEventListener("click",()=>{saveDailyPaymentRecord();document.body.classList.add("daily-payment-print");setTimeout(()=>window.print(),50)});
+document.querySelector("#printDailyPayment").addEventListener("click",()=>{saveDailyPaymentRecord();clearDailyPaymentPrintPage();const pageStyle=document.createElement("style");pageStyle.id="dailyPaymentPrintPageSize";pageStyle.media="print";pageStyle.textContent="@page{size:A5 portrait;margin:0}";document.head.appendChild(pageStyle);document.body.classList.add("daily-payment-print");setTimeout(()=>window.print(),80)});
 
 const backupPrefix="michiko-";
 function exportLedgerData(){const data={format:"michiko-smart-ledger-backup",version:1,exportedAt:new Date().toISOString(),items:{}};for(let index=0;index<localStorage.length;index++){const key=localStorage.key(index);if(key?.startsWith(backupPrefix))data.items[key]=localStorage.getItem(key)}const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const link=document.createElement("a");const stamp=new Date().toISOString().slice(0,10);link.href=url;link.download=`michiko-smart-ledger-backup-${stamp}.json`;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}

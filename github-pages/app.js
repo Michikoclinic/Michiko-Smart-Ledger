@@ -224,11 +224,13 @@ function openDailyPayment(historyMode=false,dateValue=ledgerDate.value){const br
 document.querySelector("#openDailyPayment").addEventListener("click",()=>openDailyPayment(false));
 document.querySelector("#addDailySummaryButton").addEventListener("click",()=>openDailyPayment(false,ledgerDate.value));
 document.querySelector("#openPaymentHistory").addEventListener("click",()=>openLedgerSection("#top"));
-function closePaymentHistory(returnHome=true){paymentHistoryModal.hidden=true;if(returnHome)showAppGate()}
+function openDailyPaymentDatePicker(){paymentHistoryDate.value=dailyPaymentDate.value||ledgerDate.value;paymentHistoryModal.hidden=false;setTimeout(()=>paymentHistoryDate.focus(),0)}
+document.querySelector("#chooseDailyPaymentDate").addEventListener("click",openDailyPaymentDatePicker);
+function closePaymentHistory(){paymentHistoryModal.hidden=true}
 document.querySelector("#closePaymentHistory").addEventListener("click",()=>closePaymentHistory());
 document.querySelector("#cancelPaymentHistory").addEventListener("click",()=>closePaymentHistory());
 paymentHistoryModal.addEventListener("click",event=>{if(event.target===paymentHistoryModal)closePaymentHistory()});
-paymentHistoryForm.addEventListener("submit",event=>{event.preventDefault();const selectedDate=paymentHistoryDate.value;if(!selectedDate)return;closePaymentHistory(false);openDailyPayment(true,selectedDate)});
+paymentHistoryForm.addEventListener("submit",event=>{event.preventDefault();const selectedDate=paymentHistoryDate.value;if(!selectedDate)return;closePaymentHistory();openDailyPayment(true,selectedDate)});
 document.querySelector("#closeDailyPayment").addEventListener("click",()=>{dailyPaymentPage.hidden=true;showAppGate()});
 document.querySelector("#saveDailyPayment").addEventListener("click",saveDailyPaymentRecord);
 dailyPaymentFields.forEach(name=>{const input=dailyPaymentForm.elements[name];input.addEventListener("focus",()=>{if(input.value==="0")input.select()});input.addEventListener("input",event=>{event.target.value=formatMoneyInput(event.target.value);updateDailyPaymentTotal();renderDailyPaymentMonthToDate()});input.addEventListener("blur",()=>{if(!input.value)input.value="0";updateDailyPaymentTotal();renderDailyPaymentMonthToDate()})});

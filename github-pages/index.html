@@ -7,7 +7,7 @@
   <title>Michiko Smart Ledger</title>
   <link rel="icon" type="image/png" href="accounting-icon.png?v=20260813d">
   <link rel="apple-touch-icon" href="accounting-icon.png?v=20260813d">
-  <link rel="stylesheet" href="styles.css?v=20260901g">
+  <link rel="stylesheet" href="styles.css?v=20260902a">
 </head>
 <body>
   <div class="auth-gate" id="authGate"><section class="auth-card" role="dialog" aria-modal="true" aria-labelledby="authTitle"><img src="michiko-logo.png" alt="Michiko Aesthetics"><p class="eyebrow">MICHIKO SMART LEDGER</p><h1 id="authTitle">เข้าสู่ระบบ Reception</h1><p>กรอกรหัสผ่านเพื่อเปิดสมุดรายวัน</p><form id="loginForm"><label><span>รหัสผ่าน</span><input id="loginPassword" type="password" autocomplete="current-password" required></label><p class="auth-error" id="authError" role="alert" hidden></p><button class="primary" id="loginButton" type="submit">เข้าสู่ระบบ</button></form></section></div>
@@ -104,7 +104,7 @@
     <label><span>Member</span><input name="member" type="number" min="0" step="0.01"></label>
   </div><div class="form-actions"><button type="button" id="cancelMonthButton">ยกเลิก</button><button class="primary" type="submit">บันทึกยอดเดือน</button></div></form></section></div>
   <div class="modal" id="pdfRangeModal" hidden><section class="dialog pdf-range-dialog"><button class="close" id="closePdfRangeButton" aria-label="ปิด">×</button><p class="eyebrow">PDF DATE RANGE</p><h2>เลือกช่วงวันที่สำหรับ PDF</h2><p class="month-helper">ระบบจะแยกข้อมูลแต่ละวันเป็นคนละหน้า สำหรับสาขาที่เลือกอยู่</p><form id="pdfRangeForm"><div class="form-grid"><label><span>ตั้งแต่วันที่</span><input id="pdfStartDate" name="startDate" type="date" required></label><label><span>ถึงวันที่</span><input id="pdfEndDate" name="endDate" type="date" required></label></div><div class="form-actions"><button type="button" id="cancelPdfRangeButton">ยกเลิก</button><button class="primary" type="submit">สร้าง PDF</button></div></form></section></div>
-  <div class="modal" id="paymentHistoryModal" hidden><section class="dialog history-dialog"><button class="close" id="closePaymentHistory" aria-label="ปิด">×</button><p class="eyebrow">PAYMENT HISTORY</p><h2>ประวัติรายการ</h2><p class="month-helper">เลือกวันที่เพื่อเปิด แก้ไข หรือพิมพ์ใบรับชำระย้อนหลังของสาขานี้</p><form id="paymentHistoryForm"><label><span>วันที่เอกสาร</span><input id="paymentHistoryDate" name="historyDate" type="date" required></label><div class="form-actions"><button type="button" id="cancelPaymentHistory">ยกเลิก</button><button class="primary" type="submit">เปิดเอกสาร</button></div></form></section></div>
+  <div class="modal" id="paymentHistoryModal" hidden><section class="dialog history-dialog"><button class="close" id="closePaymentHistory" aria-label="ปิด">×</button><p class="eyebrow">SELECT REPORT DATE</p><h2>เลือกวันที่รายงาน</h2><p class="month-helper">เปิด ดู แก้ไข หรือพิมพ์รายงานยอดรับชำระย้อนหลังของสาขานี้</p><form id="paymentHistoryForm"><label><span>วันที่รายงาน</span><input id="paymentHistoryDate" name="historyDate" type="date" required></label><div class="form-actions"><button type="button" id="cancelPaymentHistory">ยกเลิก</button><button class="primary" type="submit">เปิดวันที่นี้</button></div></form></section></div>
   <section class="range-report" id="rangeReport" aria-hidden="true"></section>
   <section class="daily-payment-page" id="dailyPaymentPage" hidden>
     <header class="payment-page-bar">
@@ -115,7 +115,7 @@
     <form class="a5-payment-sheet" id="dailyPaymentForm">
       <header class="a5-heading"><img src="michiko-logo.png" alt="Michiko Aesthetics"><div><h2>รายงานยอดรับชำระรายวัน</h2><p>DAILY PAYMENT SUMMARY</p></div></header>
       <section class="a5-document-context" aria-label="ข้อมูลเอกสาร">
-        <div class="a5-date-card"><span>วันที่</span><strong id="dailyPaymentDateDisplay">—</strong><input id="dailyPaymentDate" name="date" type="hidden"></div>
+        <div class="a5-date-card"><span>วันที่</span><div class="a5-date-value"><strong id="dailyPaymentDateDisplay">—</strong><button class="a5-date-picker-button" id="chooseDailyPaymentDate" type="button">เลือกวันที่</button></div><input id="dailyPaymentDate" name="date" type="hidden"></div>
         <div class="a5-branch-card"><span>สาขา</span><strong id="dailyPaymentBranchDisplay">—</strong><input name="paymentBranch" type="hidden"></div>
       </section>
       <section class="a5-box a5-customer"><h3>ข้อมูลประจำวัน</h3><label>วันนี้มีลูกค้าเข้ารับบริการทั้งหมด <input name="customerCount" type="number" min="0" inputmode="numeric"> คน</label></section>
@@ -145,7 +145,7 @@
   </section>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js?v=20260813a"></script>
-  <script src="app.js?v=20260901k"></script>
+  <script src="app.js?v=20260902a"></script>
 </body>
 </html>
 

@@ -7,7 +7,7 @@
   <title>Michiko Smart Ledger</title>
   <link rel="icon" type="image/png" href="accounting-icon.png?v=20260813d">
   <link rel="apple-touch-icon" href="accounting-icon.png?v=20260813d">
-  <link rel="stylesheet" href="styles.css?v=20260902a">
+  <link rel="stylesheet" href="styles.css?v=20260902b">
 </head>
 <body>
   <div class="auth-gate" id="authGate"><section class="auth-card" role="dialog" aria-modal="true" aria-labelledby="authTitle"><img src="michiko-logo.png" alt="Michiko Aesthetics"><p class="eyebrow">MICHIKO SMART LEDGER</p><h1 id="authTitle">เข้าสู่ระบบ Reception</h1><p>กรอกรหัสผ่านเพื่อเปิดสมุดรายวัน</p><form id="loginForm"><label><span>รหัสผ่าน</span><input id="loginPassword" type="password" autocomplete="current-password" required></label><p class="auth-error" id="authError" role="alert" hidden></p><button class="primary" id="loginButton" type="submit">เข้าสู่ระบบ</button></form></section></div>
@@ -38,6 +38,10 @@
           <button class="home-menu home-menu-summary" id="openSummary" type="button">
             <span class="home-menu-icon" aria-hidden="true">⌁</span><span class="home-menu-arrow" aria-hidden="true">↗</span>
             <span><strong>สรุปยอด</strong><small>ดูยอดรายวันและยอดสะสมประจำเดือน</small></span>
+          </button>
+          <button class="home-menu home-menu-cash" id="openCashReceipt" type="button">
+            <span class="home-menu-icon" aria-hidden="true">฿</span><span class="home-menu-arrow" aria-hidden="true">↗</span>
+            <span><strong>รับเงินสดพร้อมลายเซ็น</strong><small>บันทึก HN ชื่อ จำนวนเงิน และลายเซ็นผู้รับ</small></span>
           </button>
         </div>
         <div class="home-secondary">
@@ -143,9 +147,29 @@
       <p class="payment-save-status" id="dailyPaymentStatus" aria-live="polite"></p>
     </form>
   </section>
+  <section class="cash-receipt-page" id="cashReceiptPage" hidden>
+    <header class="payment-page-bar cash-receipt-bar">
+      <button type="button" id="closeCashReceipt">← หน้าหลัก</button>
+      <div><strong>รับเงินสดพร้อมลายเซ็น</strong><small id="cashReceiptBranch">สาขา</small></div>
+      <div><button class="payment-print-button" type="button" id="addCashReceipt">＋ เพิ่มรายการ</button></div>
+    </header>
+    <main class="cash-receipt-workspace">
+      <section class="cash-receipt-heading">
+        <div><p class="eyebrow">IMMUTABLE CASH RECEIPT</p><h1>สมุดรับเงินสดพร้อมลายเซ็น</h1><p>ตรวจสอบข้อมูลก่อนบันทึก เมื่อยืนยันแล้วรายการจะไม่สามารถแก้ไขหรือลบได้</p></div>
+        <label><span>เลือกวันที่</span><input id="cashReceiptDate" type="date"></label>
+      </section>
+      <div class="cash-receipt-meta"><span id="cashReceiptDateLabel">วันที่</span><strong id="cashReceiptCount">0 รายการ</strong></div>
+      <section class="cash-receipt-ledger">
+        <div class="table-scroll"><table class="cash-receipt-table"><thead><tr><th>ลำดับ</th><th>เวลาบันทึก</th><th>HN</th><th>ชื่อ นามสกุล</th><th>รายละเอียด</th><th>จำนวนเงินสด</th><th>ลายเซ็นผู้รับ</th></tr></thead><tbody id="cashReceiptRows"></tbody></table></div>
+      </section>
+      <p class="cash-receipt-lock-note">🔒 รายการที่ยืนยันแล้วเป็นข้อมูลถาวร ระบบไม่มีปุ่มแก้ไขหรือลบ</p>
+    </main>
+  </section>
+  <div class="modal cash-receipt-modal" id="cashReceiptModal" hidden><section class="dialog cash-receipt-dialog"><button class="close" id="closeCashReceiptModal" aria-label="ปิด">×</button><p class="eyebrow">NEW CASH RECEIPT</p><h2>เพิ่มรายการรับเงินสด</h2><p class="month-helper" id="cashReceiptFormContext">วันที่และสาขา</p><form id="cashReceiptForm"><div class="form-grid"><label><span>HN *</span><input name="hn" autocomplete="off" required></label><label><span>ชื่อ นามสกุล *</span><input name="patient" autocomplete="name" required></label></div><label><span>รายละเอียด *</span><textarea name="detail" rows="4" required></textarea></label><label><span>จำนวนเงินสด (บาท) *</span><input name="cash" inputmode="decimal" required></label><fieldset class="signature-field"><legend>ลายเซ็นผู้รับ *</legend><p>เซ็นภายในช่องด้านล่างด้วยนิ้ว ปากกา หรือเมาส์</p><canvas id="cashSignatureCanvas" width="900" height="260" aria-label="ช่องลายเซ็นผู้รับ"></canvas><div><span id="cashSignatureStatus">ยังไม่ได้เซ็น</span><button type="button" id="clearCashSignature">ล้างลายเซ็น</button></div></fieldset><div class="form-actions"><button type="button" id="cancelCashReceipt">ยกเลิก</button><button class="primary" type="submit">ตรวจสอบก่อนบันทึก</button></div></form></section></div>
+  <div class="modal cash-receipt-review-modal" id="cashReceiptReviewModal" hidden><section class="dialog cash-review-dialog"><button class="close" id="closeCashReceiptReview" aria-label="ปิด">×</button><p class="eyebrow">FINAL REVIEW</p><h2>ตรวจสอบก่อนบันทึกถาวร</h2><p class="cash-review-warning">โปรดตรวจสอบให้ถูกต้อง เมื่อบันทึกแล้วจะไม่สามารถแก้ไขหรือลบได้</p><dl class="cash-review-list"><div><dt>วันที่ / สาขา</dt><dd id="reviewCashContext">—</dd></div><div><dt>HN</dt><dd id="reviewCashHn">—</dd></div><div><dt>ชื่อ นามสกุล</dt><dd id="reviewCashPatient">—</dd></div><div><dt>รายละเอียด</dt><dd id="reviewCashDetail">—</dd></div><div><dt>จำนวนเงินสด</dt><dd id="reviewCashAmount">—</dd></div><div><dt>ลายเซ็นผู้รับ</dt><dd><img id="reviewCashSignature" alt="ลายเซ็นผู้รับ"></dd></div></dl><label class="cash-review-confirm"><input id="confirmCashReceipt" type="checkbox"> ตรวจสอบข้อมูลถูกต้องและยืนยันบันทึกถาวร</label><div class="form-actions"><button type="button" id="backToCashReceiptForm">กลับไปแก้ก่อนบันทึก</button><button class="primary" type="button" id="saveCashReceiptPermanent" disabled>ยืนยันบันทึกถาวร</button></div></section></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js?v=20260813a"></script>
-  <script src="app.js?v=20260902a"></script>
+  <script src="app.js?v=20260902b"></script>
 </body>
 </html>
 

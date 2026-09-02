@@ -6,6 +6,7 @@ let cloudChannel=null;
 const ledgerStoragePrefix="michiko-ledger-rows-v1";
 const monthStoragePrefix="michiko-month-base-v1";
 const viewStorageKey="michiko-ledger-last-view-v1";
+const cashReceiptStoragePrefix="michiko-cash-receipt-v1";
 const keys=["cash","scb","lp","cardKbank","cardBbl","cardKtc","member"];
 const labels=["เงินสด","โอน · SCB","โอน · LP","บัตร · กสิกร","บัตร · กรุงเทพ","บัตร · KTC","ใช้ Member"];
 function paymentLabels(branch=document.querySelector("#branch")?.value){return branch==="EmSphere"?["เงินสด","SCB บริษัทมิชิโกะ 456","SCB มณี Shop","บัตร · กสิกร","บัตร · กรุงเทพ","บัตร · KTC","ใช้ Member"]:labels}
@@ -240,6 +241,53 @@ dailyPaymentTotal.addEventListener("blur",()=>{if(!dailyPaymentTotal.value)daily
 dailyPaymentForm.elements.difference.addEventListener("input",event=>event.target.value=formatMoneyInput(event.target.value));
 document.querySelector("#printDailyPayment").addEventListener("click",()=>{saveDailyPaymentRecord();clearDailyPaymentPrintPage();const pageStyle=document.createElement("style");pageStyle.id="dailyPaymentPrintPageSize";pageStyle.media="print";pageStyle.textContent="@page{size:A5 portrait;margin:0}";document.head.appendChild(pageStyle);document.body.classList.add("daily-payment-print");setTimeout(()=>window.print(),80)});
 
+const cashReceiptPage=document.querySelector("#cashReceiptPage");
+const cashReceiptDate=document.querySelector("#cashReceiptDate");
+const cashReceiptRows=document.querySelector("#cashReceiptRows");
+const cashReceiptModal=document.querySelector("#cashReceiptModal");
+const cashReceiptReviewModal=document.querySelector("#cashReceiptReviewModal");
+const cashReceiptForm=document.querySelector("#cashReceiptForm");
+const cashSignatureCanvas=document.querySelector("#cashSignatureCanvas");
+const cashSignatureContext=cashSignatureCanvas.getContext("2d");
+const confirmCashReceipt=document.querySelector("#confirmCashReceipt");
+const saveCashReceiptPermanent=document.querySelector("#saveCashReceiptPermanent");
+let cashSignatureHasInk=false;
+let cashSignatureDrawing=false;
+let pendingCashReceipt=null;
+function cashReceiptBranchName(){return document.querySelector("#branch").value}
+function cashReceiptDatePrefix(branchName,dateValue){return `${cashReceiptStoragePrefix}:${encodeURIComponent(branchName)}:${dateValue}:`}
+function cashReceiptRecords(branchName,dateValue){const prefix=cashReceiptDatePrefix(branchName,dateValue),records=[];for(let index=0;index<localStorage.length;index++){const key=localStorage.key(index);if(!key?.startsWith(prefix))continue;try{const record=JSON.parse(localStorage.getItem(key)||"null");if(record&&record.locked===true)records.push(record)}catch{}}return records.sort((a,b)=>String(a.createdAt).localeCompare(String(b.createdAt)))}
+function renderCashReceiptRows(){if(!cashReceiptDate.value)return;const records=cashReceiptRecords(cashReceiptBranchName(),cashReceiptDate.value);document.querySelector("#cashReceiptDateLabel").textContent=rangeDateLabel(cashReceiptDate.value);document.querySelector("#cashReceiptCount").textContent=`${records.length} รายการ`;cashReceiptRows.innerHTML=records.map((record,index)=>`<tr><td>${index+1}</td><td>${new Intl.DateTimeFormat("th-TH",{hour:"2-digit",minute:"2-digit"}).format(new Date(record.createdAt))}</td><td><b>${esc(record.hn)}</b></td><td>${esc(record.patient)}</td><td>${esc(record.detail)}</td><td>${money(record.cash)} บาท</td><td><img class="cash-signature-image" src="${esc(record.signature)}" alt="ลายเซ็นผู้รับรายการที่ ${index+1}"></td></tr>`).join("")||'<tr><td class="cash-receipt-empty" colspan="7">ยังไม่มีรายการรับเงินสดสำหรับวันนี้</td></tr>'}
+function openCashReceiptPage(){appGate.hidden=true;cashReceiptPage.hidden=false;cashReceiptDate.value=ledgerDate.value;document.querySelector("#cashReceiptBranch").textContent=paymentBranchLabel(cashReceiptBranchName());renderCashReceiptRows()}
+function closeCashReceiptPage(){cashReceiptPage.hidden=true;showAppGate()}
+document.querySelector("#openCashReceipt").addEventListener("click",openCashReceiptPage);
+document.querySelector("#closeCashReceipt").addEventListener("click",closeCashReceiptPage);
+cashReceiptDate.addEventListener("change",renderCashReceiptRows);
+function clearCashSignature(){cashSignatureContext.clearRect(0,0,cashSignatureCanvas.width,cashSignatureCanvas.height);cashSignatureContext.lineCap="round";cashSignatureContext.lineJoin="round";cashSignatureContext.strokeStyle="#5e1721";cashSignatureContext.lineWidth=5;cashSignatureHasInk=false;document.querySelector("#cashSignatureStatus").textContent="ยังไม่ได้เซ็น"}
+function cashSignaturePoint(event){const rect=cashSignatureCanvas.getBoundingClientRect();return {x:(event.clientX-rect.left)*(cashSignatureCanvas.width/rect.width),y:(event.clientY-rect.top)*(cashSignatureCanvas.height/rect.height)}}
+cashSignatureCanvas.addEventListener("pointerdown",event=>{event.preventDefault();cashSignatureDrawing=true;cashSignatureCanvas.setPointerCapture(event.pointerId);const point=cashSignaturePoint(event);cashSignatureContext.beginPath();cashSignatureContext.arc(point.x,point.y,2.5,0,Math.PI*2);cashSignatureContext.fillStyle="#5e1721";cashSignatureContext.fill();cashSignatureContext.beginPath();cashSignatureContext.moveTo(point.x,point.y);cashSignatureHasInk=true;document.querySelector("#cashSignatureStatus").textContent="เซ็นแล้ว"});
+cashSignatureCanvas.addEventListener("pointermove",event=>{if(!cashSignatureDrawing)return;event.preventDefault();const point=cashSignaturePoint(event);cashSignatureContext.lineTo(point.x,point.y);cashSignatureContext.stroke();cashSignatureHasInk=true;document.querySelector("#cashSignatureStatus").textContent="เซ็นแล้ว"});
+function endCashSignature(event){if(!cashSignatureDrawing)return;cashSignatureDrawing=false;if(cashSignatureCanvas.hasPointerCapture(event.pointerId))cashSignatureCanvas.releasePointerCapture(event.pointerId)}
+cashSignatureCanvas.addEventListener("pointerup",endCashSignature);cashSignatureCanvas.addEventListener("pointercancel",endCashSignature);
+document.querySelector("#clearCashSignature").addEventListener("click",clearCashSignature);
+function resetCashReceiptForm(){cashReceiptForm.reset();pendingCashReceipt=null;confirmCashReceipt.checked=false;saveCashReceiptPermanent.disabled=true;clearCashSignature()}
+function openCashReceiptForm(){resetCashReceiptForm();document.querySelector("#cashReceiptFormContext").textContent=`${rangeDateLabel(cashReceiptDate.value)} · ${paymentBranchLabel(cashReceiptBranchName())}`;cashReceiptModal.hidden=false;setTimeout(()=>cashReceiptForm.elements.hn.focus(),0)}
+function closeCashReceiptForm(){cashReceiptModal.hidden=true;resetCashReceiptForm()}
+document.querySelector("#addCashReceipt").addEventListener("click",openCashReceiptForm);
+document.querySelector("#closeCashReceiptModal").addEventListener("click",closeCashReceiptForm);
+document.querySelector("#cancelCashReceipt").addEventListener("click",closeCashReceiptForm);
+cashReceiptModal.addEventListener("click",event=>{if(event.target===cashReceiptModal)closeCashReceiptForm()});
+cashReceiptForm.elements.hn.addEventListener("input",()=>{const remembered=patientDirectory[normalizedHn(cashReceiptForm.elements.hn.value)];if(remembered&&!cashReceiptForm.elements.patient.value.trim())cashReceiptForm.elements.patient.value=remembered});
+cashReceiptForm.elements.cash.addEventListener("input",event=>event.target.value=formatMoneyInput(event.target.value));
+cashReceiptForm.addEventListener("submit",event=>{event.preventDefault();if(!cashSignatureHasInk){alert("กรุณาให้ผู้รับเซ็นชื่อก่อนตรวจสอบ");return}const form=new FormData(cashReceiptForm);const amount=parseMoney(form.get("cash"));if(amount<=0){alert("กรุณากรอกจำนวนเงินสดให้ถูกต้อง");return}pendingCashReceipt={version:1,locked:true,branch:cashReceiptBranchName(),date:cashReceiptDate.value,hn:normalizedHn(form.get("hn")),patient:String(form.get("patient")||"").trim(),detail:String(form.get("detail")||"").trim(),cash:amount,signature:cashSignatureCanvas.toDataURL("image/png"),createdAt:new Date().toISOString()};document.querySelector("#reviewCashContext").textContent=`${rangeDateLabel(pendingCashReceipt.date)} · ${paymentBranchLabel(pendingCashReceipt.branch)}`;document.querySelector("#reviewCashHn").textContent=pendingCashReceipt.hn;document.querySelector("#reviewCashPatient").textContent=pendingCashReceipt.patient;document.querySelector("#reviewCashDetail").textContent=pendingCashReceipt.detail;document.querySelector("#reviewCashAmount").textContent=`${money(pendingCashReceipt.cash)} บาท`;document.querySelector("#reviewCashSignature").src=pendingCashReceipt.signature;confirmCashReceipt.checked=false;saveCashReceiptPermanent.disabled=true;cashReceiptModal.hidden=true;cashReceiptReviewModal.hidden=false});
+function backToCashReceiptForm(){cashReceiptReviewModal.hidden=true;cashReceiptModal.hidden=false}
+document.querySelector("#backToCashReceiptForm").addEventListener("click",backToCashReceiptForm);
+document.querySelector("#closeCashReceiptReview").addEventListener("click",backToCashReceiptForm);
+cashReceiptReviewModal.addEventListener("click",event=>{if(event.target===cashReceiptReviewModal)backToCashReceiptForm()});
+confirmCashReceipt.addEventListener("change",()=>{saveCashReceiptPermanent.disabled=!confirmCashReceipt.checked});
+function immutableCashReceiptId(){return globalThis.crypto?.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2)}`}
+saveCashReceiptPermanent.addEventListener("click",()=>{if(!pendingCashReceipt||!confirmCashReceipt.checked)return;const record={...pendingCashReceipt,id:immutableCashReceiptId()};const key=`${cashReceiptDatePrefix(record.branch,record.date)}${record.id}`;if(localStorage.getItem(key)!==null){alert("ไม่สามารถสร้างรหัสรายการได้ กรุณาลองใหม่");return}try{localStorage.setItem(key,JSON.stringify(record));queueCloudSave(key);rememberPatient(record.hn,record.patient);cashReceiptReviewModal.hidden=true;resetCashReceiptForm();renderCashReceiptRows();const notice=document.createElement("p");notice.className="cash-save-success";notice.textContent="บันทึกรายการถาวรเรียบร้อยแล้ว";document.querySelector(".cash-receipt-meta").after(notice);setTimeout(()=>notice.remove(),3500)}catch{alert("บันทึกรายการไม่สำเร็จ กรุณาตรวจสอบพื้นที่จัดเก็บแล้วลองใหม่")}});
+
 const backupPrefix="michiko-";
 function exportLedgerData(){const data={format:"michiko-smart-ledger-backup",version:1,exportedAt:new Date().toISOString(),items:{}};for(let index=0;index<localStorage.length;index++){const key=localStorage.key(index);if(key?.startsWith(backupPrefix))data.items[key]=localStorage.getItem(key)}const blob=new Blob([JSON.stringify(data,null,2)],{type:"application/json"});const url=URL.createObjectURL(blob);const link=document.createElement("a");const stamp=new Date().toISOString().slice(0,10);link.href=url;link.download=`michiko-smart-ledger-backup-${stamp}.json`;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
 async function importLedgerData(file){let backup;try{backup=JSON.parse(await file.text())}catch{alert("ไฟล์สำรองไม่ถูกต้อง");return}if(backup?.format!=="michiko-smart-ledger-backup"||!backup.items||typeof backup.items!=="object"){alert("ไฟล์นี้ไม่ใช่ข้อมูลสำรองของ Michiko Smart Ledger");return}const keys=Object.keys(backup.items).filter(key=>key.startsWith(backupPrefix)&&typeof backup.items[key]==="string");if(!keys.length){alert("ไม่พบข้อมูลสำหรับนำเข้า");return}if(!confirm(`นำเข้าข้อมูล ${keys.length} ชุด ข้อมูลชื่อเดียวกันในเครื่องนี้จะถูกแทนที่ ยืนยันหรือไม่?`))return;try{keys.forEach(key=>localStorage.setItem(key,backup.items[key]));alert("นำเข้าข้อมูลเรียบร้อย ระบบจะโหลดหน้าใหม่");location.reload()}catch{alert("พื้นที่จัดเก็บไม่เพียงพอ ไม่สามารถนำเข้าข้อมูลได้")}}
@@ -247,7 +295,7 @@ document.querySelector("#exportDataButton").addEventListener("click",exportLedge
 document.querySelector("#homeBackup").addEventListener("click",exportLedgerData);
 const importDataFile=document.querySelector("#importDataFile");document.querySelector("#importDataButton").addEventListener("click",()=>{importDataFile.value="";importDataFile.click()});importDataFile.addEventListener("change",()=>{const file=importDataFile.files?.[0];if(file)importLedgerData(file)});
 
-const cloudStoragePrefixes=[ledgerStoragePrefix,monthStoragePrefix,phraseStorageKey,phraseUsageKey,staffStorageKey,patientStorageKey,"michiko-daily-payment-summary-v1"];
+const cloudStoragePrefixes=[ledgerStoragePrefix,monthStoragePrefix,phraseStorageKey,phraseUsageKey,staffStorageKey,patientStorageKey,"michiko-daily-payment-summary-v1",cashReceiptStoragePrefix];
 const syncStatus=document.querySelector("#syncStatus");
 const isCloudKey=key=>cloudStoragePrefixes.some(prefix=>key===prefix||key.startsWith(`${prefix}:`));
 function setSyncStatus(message,state=""){if(!syncStatus)return;syncStatus.textContent=message;syncStatus.className=`sync-status ${state}`.trim()}
@@ -267,7 +315,7 @@ function refreshSharedState(){
   try{phraseUsage=JSON.parse(localStorage.getItem(phraseUsageKey)||"{}")}catch{phraseUsage={}}
   try{const saved=JSON.parse(localStorage.getItem(staffStorageKey)||"{}");staffNames.doctors=Array.isArray(saved.doctors)?saved.doctors:[];staffNames.assistants=Array.isArray(saved.assistants)?saved.assistants:[]}catch{staffNames={doctors:[],assistants:[]}}
   try{const saved=JSON.parse(localStorage.getItem(patientStorageKey)||"{}");patientDirectory=saved&&typeof saved==="object"&&!Array.isArray(saved)?saved:{}}catch{patientDirectory={}}
-  loadSavedLedger();renderPhrases();renderStaffNames();render();if(!dailyPaymentPage.hidden)loadDailyPaymentRecord();
+  loadSavedLedger();renderPhrases();renderStaffNames();render();if(!dailyPaymentPage.hidden)loadDailyPaymentRecord();if(!cashReceiptPage.hidden)renderCashReceiptRows();
 }
 async function startCloudSync(){
   if(!supabaseClient||cloudSyncActive||cloudSyncStarting)return;
@@ -301,7 +349,7 @@ const authError=document.querySelector("#authError");
 const logoutButton=document.querySelector("#logoutButton");
 const receptionEmail="customerservice@michikoclinic.com";
 function showAuthError(message){authError.textContent=message;authError.hidden=!message}
-function setSignedIn(signedIn){authGate.hidden=signedIn;logoutButton.hidden=!signedIn;if(!signedIn){branchGate.hidden=true;appGate.hidden=true;dailyPaymentPage.hidden=true;paymentHistoryModal.hidden=true;setTimeout(()=>loginPassword.focus(),0)}}
+function setSignedIn(signedIn){authGate.hidden=signedIn;logoutButton.hidden=!signedIn;if(!signedIn){branchGate.hidden=true;appGate.hidden=true;dailyPaymentPage.hidden=true;paymentHistoryModal.hidden=true;cashReceiptPage.hidden=true;cashReceiptModal.hidden=true;cashReceiptReviewModal.hidden=true;setTimeout(()=>loginPassword.focus(),0)}}
 async function initializeAuth(){
   const config=window.MICHIKO_SUPABASE;
   if(!config?.url||!config?.publishableKey||!window.supabase?.createClient){showAuthError("เชื่อมต่อระบบเข้าสู่ระบบไม่ได้ กรุณาตรวจสอบอินเทอร์เน็ตแล้วรีเฟรชหน้า");setSignedIn(false);return}

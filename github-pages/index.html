@@ -7,7 +7,7 @@
   <title>Michiko Smart Ledger</title>
   <link rel="icon" type="image/png" href="accounting-icon.png?v=20260813d">
   <link rel="apple-touch-icon" href="accounting-icon.png?v=20260813d">
-  <link rel="stylesheet" href="styles.css?v=20260903b">
+  <link rel="stylesheet" href="styles.css?v=20261014a">
 </head>
 <body>
   <div class="auth-gate" id="authGate"><section class="auth-card" role="dialog" aria-modal="true" aria-labelledby="authTitle"><img src="michiko-logo.png" alt="Michiko Aesthetics"><p class="eyebrow">MICHIKO SMART LEDGER</p><h1 id="authTitle">เข้าสู่ระบบ Reception</h1><p>กรอกรหัสผ่านเพื่อเปิดสมุดรายวัน</p><form id="loginForm"><label><span>รหัสผ่าน</span><input id="loginPassword" type="password" autocomplete="current-password" required></label><p class="auth-error" id="authError" role="alert" hidden></p><button class="primary" id="loginButton" type="submit">เข้าสู่ระบบ</button></form></section></div>
@@ -42,6 +42,10 @@
           <button class="home-menu home-menu-cash" id="openCashReceipt" type="button">
             <span class="home-menu-icon" aria-hidden="true">฿</span><span class="home-menu-arrow" aria-hidden="true">↗</span>
             <span><strong>รับเงินสดพร้อมลายเซ็น</strong><small>บันทึก HN ชื่อ จำนวนเงิน และลายเซ็นผู้รับ</small></span>
+          </button>
+          <button class="home-menu home-menu-deposit" id="openDepositService" type="button">
+            <span class="home-menu-icon" aria-hidden="true">▣</span><span class="home-menu-arrow" aria-hidden="true">↗</span>
+            <span><strong>มัดจำและเข้ารับบริการ</strong><small>ติดตามมัดจำ วันนัด และสถานะลูกค้า</small></span>
           </button>
         </div>
         <div class="home-secondary">
@@ -165,12 +169,41 @@
       <p class="cash-receipt-lock-note">HN ชื่อ–นามสกุล รายละเอียด และยอดเงินสดแก้ไขได้ แต่ไม่มีปุ่มลบรายการ ส่วนลายเซ็นบันทึกได้หนึ่งครั้งและจะล็อกทันทีพร้อมเวลาที่เซ็น</p>
     </main>
   </section>
+  <section class="deposit-service-page" id="depositServicePage" hidden>
+    <header class="payment-page-bar deposit-service-bar">
+      <button type="button" id="closeDepositService">← หน้าหลัก</button>
+      <div><strong>มัดจำและเข้ารับบริการ</strong><small id="depositServiceBranch">สาขา</small></div>
+      <div><button type="button" id="printDepositService">ปริ้น</button><button class="payment-print-button" type="button" id="addDepositService">＋ เพิ่มรายการ</button></div>
+    </header>
+    <main class="deposit-service-workspace">
+      <section class="deposit-service-heading">
+        <div><p class="eyebrow">DEPOSIT &amp; SERVICE TRACKING</p><h1>รายการมัดจำและเข้ารับบริการ</h1><p>บันทึกมัดจำ ติดตามวันนัด และอัปเดตสถานะการเข้ารับบริการแยกตามสาขา</p></div>
+        <div class="deposit-service-controls"><span>วันที่ปัจจุบัน<strong id="depositServiceToday">—</strong></span><label>สมุดประจำเดือน<input id="depositServiceMonth" type="month"></label></div>
+      </section>
+      <section class="deposit-service-summary" aria-label="สรุปรายการมัดจำประจำเดือน">
+        <article><span>จำนวนรายการ</span><strong id="depositServiceCount">0</strong><small>รายการ</small></article>
+        <article><span>ยอดมัดจำรวม</span><strong id="depositServiceTotal">0</strong><small>บาท</small></article>
+        <article><span>รับบริการแล้ว</span><strong id="depositServiceServed">0</strong><small>รายการ</small></article>
+        <article><span>รอรับบริการ</span><strong id="depositServicePending">0</strong><small>รายการ</small></article>
+      </section>
+      <div class="deposit-service-meta"><span><b id="depositServicePrintBranch">สาขา</b> · <span id="depositServiceMonthLabel">ประจำเดือน</span></span><strong id="depositServiceVisibleCount">0 รายการ</strong></div>
+      <section class="deposit-service-ledger" aria-label="ตารางรายการมัดจำและเข้ารับบริการ">
+        <table class="deposit-service-table">
+          <thead><tr><th>ลำดับ</th><th>HN</th><th>ชื่อ นามสกุล</th><th>วันที่มัดจำ</th><th>ยอดมัดจำ</th><th>ช่องทางรับเงิน</th><th>โปรแกรม / หัตถการ</th><th>แพทย์</th><th>วันนัด</th><th>วันที่รับบริการจริง</th><th>สถานะ</th><th>หมายเหตุ / จัดการ</th></tr></thead>
+          <tbody id="depositServiceRows"></tbody>
+          <tfoot><tr><td colspan="4">รวมยอดมัดจำประจำเดือน</td><td id="depositServiceTableTotal">0 บาท</td><td colspan="7"></td></tr></tfoot>
+        </table>
+      </section>
+      <p class="deposit-service-note">รายการหน้านี้ใช้ติดตามมัดจำและการเข้ารับบริการ โดยแยกจากยอดรับประจำวันเพื่อป้องกันยอดถูกนับซ้ำ</p>
+    </main>
+  </section>
+  <div class="modal deposit-service-modal" id="depositServiceModal" hidden><section class="dialog deposit-service-dialog"><button class="close" id="closeDepositServiceModal" aria-label="ปิด">×</button><p class="eyebrow">DEPOSIT RECORD</p><h2 id="depositServiceFormTitle">เพิ่มรายการมัดจำ</h2><p class="month-helper" id="depositServiceFormContext">วันที่และสาขา</p><form id="depositServiceForm"><div class="form-grid"><label><span>วันที่มัดจำ *</span><input name="depositDate" type="date" required></label><label><span>ช่องทางรับเงิน *</span><select name="paymentMethod" required></select></label><label><span>HN *</span><input name="hn" autocomplete="off" required></label><label><span>ชื่อ นามสกุล *</span><input name="patient" autocomplete="name" required></label></div><label><span>โปรแกรม / หัตถการ *</span><textarea name="program" rows="3" placeholder="ระบุโปรแกรมหรือหัตถการ" required></textarea></label><div class="form-grid"><label><span>ยอดมัดจำ (บาท) *</span><input name="amount" inputmode="decimal" required></label><label><span>แพทย์</span><input name="doctor" list="doctorNames" autocomplete="off"></label><label><span>วันนัดรับบริการ</span><input name="appointmentDate" type="date"></label><label><span>วันที่รับบริการจริง</span><input name="serviceDate" type="date"></label><label><span>สถานะ *</span><select name="status" required><option value="รอรับบริการ">รอรับบริการ</option><option value="รับบริการแล้ว">รับบริการแล้ว</option><option value="เลื่อนนัด">เลื่อนนัด</option><option value="ยกเลิก">ยกเลิก</option></select></label><label><span>หมายเหตุ</span><textarea name="note" rows="2" placeholder="รายละเอียดเพิ่มเติม (ถ้ามี)"></textarea></label></div><p class="deposit-service-helper">ข้อมูลจะบันทึกแยกตามสาขาและเดือน สามารถกลับมาแก้วันนัด วันที่รับบริการ และสถานะได้ภายหลัง</p><div class="form-actions"><button type="button" id="cancelDepositService">ยกเลิก</button><button class="primary" type="submit">บันทึกรายการ</button></div></form></section></div>
   <div class="modal cash-receipt-modal" id="cashReceiptModal" hidden><section class="dialog cash-receipt-dialog"><button class="close" id="closeCashReceiptModal" aria-label="ปิด">×</button><p class="eyebrow">CASH RECEIPT</p><h2 id="cashReceiptFormTitle">เพิ่มรายการรับเงินสด</h2><p class="month-helper" id="cashReceiptFormContext">วันที่และสาขา</p><form id="cashReceiptForm"><label><span>วันที่รับเงิน *</span><input name="date" type="date" required></label><div class="form-grid"><label><span>HN *</span><input name="hn" autocomplete="off" required></label><label><span>ชื่อ นามสกุล *</span><input name="patient" autocomplete="name" required></label></div><label><span>รายละเอียด</span><textarea name="detail" rows="3" placeholder="ระบุรายละเอียดของรายการรับเงินสด"></textarea></label><label><span>จำนวนเงินสด (บาท) *</span><input name="cash" inputmode="decimal" required></label><p class="cash-form-helper" id="cashReceiptFormHelper">เลือกวันย้อนหลังได้ แต่ไม่สามารถเลือกวันในอนาคต ลายเซ็นสามารถเซ็นภายหลังได้จากช่องท้ายตาราง</p><div class="form-actions"><button type="button" id="cancelCashReceipt">ยกเลิก</button><button class="primary" type="submit">ตรวจสอบก่อนบันทึก</button></div></form></section></div>
   <div class="modal cash-receipt-review-modal" id="cashReceiptReviewModal" hidden><section class="dialog cash-review-dialog"><button class="close" id="closeCashReceiptReview" aria-label="ปิด">×</button><p class="eyebrow">FINAL REVIEW</p><h2>ตรวจสอบก่อนบันทึก</h2><p class="cash-review-warning" id="cashReceiptReviewWarning">โปรดตรวจสอบข้อมูลให้ถูกต้องก่อนยืนยัน</p><dl class="cash-review-list"><div><dt>วันที่ / สาขา</dt><dd id="reviewCashContext">—</dd></div><div><dt>HN</dt><dd id="reviewCashHn">—</dd></div><div><dt>ชื่อ นามสกุล</dt><dd id="reviewCashPatient">—</dd></div><div><dt>รายละเอียด</dt><dd id="reviewCashDetail">—</dd></div><div><dt>จำนวนเงินสด</dt><dd id="reviewCashAmount">—</dd></div><div><dt>สถานะลายเซ็น</dt><dd id="reviewCashSignatureStatus">ยังไม่เซ็น</dd></div></dl><label class="cash-review-confirm"><input id="confirmCashReceipt" type="checkbox"> ตรวจสอบข้อมูลถูกต้องและยืนยันบันทึก</label><div class="form-actions"><button type="button" id="backToCashReceiptForm">กลับไปแก้ก่อนบันทึก</button><button class="primary" type="button" id="saveCashReceiptPermanent" disabled>ยืนยันบันทึก</button></div></section></div>
   <div class="modal cash-signature-modal" id="cashSignatureModal" hidden><section class="dialog cash-signature-dialog"><button class="close" id="closeCashSignatureModal" aria-label="ปิด">×</button><p class="eyebrow">RECEIVER SIGNATURE</p><h2>ลายเซ็นผู้รับเงินสด</h2><p class="month-helper" id="cashSignatureContext">ชื่อ HN และยอดเงิน</p><p class="cash-review-warning">ตรวจสอบผู้รับให้ถูกต้อง ลายเซ็นบันทึกได้เพียงครั้งเดียวและแก้ไขภายหลังไม่ได้</p><fieldset class="signature-field"><legend>เซ็นชื่อในช่องนี้</legend><p>ใช้ปลายนิ้ว ปากกา หรือเมาส์</p><canvas id="cashSignatureCanvas" width="900" height="260" aria-label="ช่องลายเซ็นผู้รับ"></canvas><div><span id="cashSignatureStatus">ยังไม่ได้เซ็น</span><button type="button" id="clearCashSignature">ล้างลายเซ็น</button></div></fieldset><div class="form-actions"><button type="button" id="cancelCashSignature">ยกเลิก</button><button class="primary" type="button" id="saveCashSignature">บันทึกลายเซ็นและเวลา</button></div></section></div>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="supabase-config.js?v=20260813a"></script>
-  <script src="app.js?v=20260903c"></script>
+  <script src="app.js?v=20261014b"></script>
 </body>
 </html>
 
